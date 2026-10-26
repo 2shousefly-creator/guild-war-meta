@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.26-1" />
+<meta name="page-version" content="v2026.10.26-2" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -113,6 +113,7 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .fsq.off{background:transparent;opacity:.45}
 .fsq.off.b{border:1.5px solid var(--back)}
 .fsq.off.f{border:1.5px solid var(--front)}
+.fsq.gap{background:transparent;border:1.5px solid transparent;opacity:0}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .petmini{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink2)}
 .petmini img{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--surface2)}
@@ -143,9 +144,12 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .bimg img{width:78px;height:78px;border-radius:10px;background:var(--surface);object-fit:cover}
 .bhero.front .bimg img{border:3px solid var(--front-frame)}
 .bhero.back .bimg img{border:3px solid var(--back-frame)}
-.skl-tags{flex:none;width:38px;height:78px;display:flex;flex-direction:column;justify-content:center;gap:3px;pointer-events:none}
-.bhero.back .skl-tags{align-items:flex-end;padding-right:4px}
-.bhero.front .skl-tags{align-items:flex-start;padding-left:4px}
+.skl-tags{flex:none;width:38px;height:78px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+.skl-zone{display:flex;flex-direction:column;gap:3px;min-height:19px}
+.bhero.back .skl-tags{padding-right:4px}
+.bhero.back .skl-zone{align-items:flex-end}
+.bhero.front .skl-tags{padding-left:4px}
+.bhero.front .skl-zone{align-items:flex-start}
 .skl-tag{font-size:11px;font-weight:800;background:var(--gold-bg);border:1px solid var(--gold-line);color:var(--ink);border-radius:6px;padding:1px 5px;white-space:nowrap;line-height:1.35;box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .bhn{font-size:11px;font-weight:600;color:var(--ink2);margin-top:5px;line-height:1.25;text-align:center;overflow-wrap:anywhere;width:100%}
 .lgwrap{float:right;display:inline-flex;gap:12px}
@@ -199,6 +203,7 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .overlay.closing{animation:fadeOut .18s ease both}
 .overlay.closing .sheet{animation:sheetOut .18s ease both}
 footer{margin-top:30px;color:var(--ink3);font-size:12.5px;text-align:center}
+footer .ver{display:block;margin-top:6px;font-size:10px;letter-spacing:.04em;opacity:.65}
 @media (max-width:560px){
   .grid{grid-template-columns:1fr}
   .stat{min-width:0;flex:1}
@@ -214,7 +219,6 @@ footer{margin-top:30px;color:var(--ink3);font-size:12.5px;text-align:center}
     <div class="fanpage-row">
       <span class="fp-src">Nguồn từ fanpage <b>facebook.com/7krbvn</b></span>
       <a class="fp-btn" href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7V11H8.3v3h2.4v7h2.8z"/></svg>Truy cập fanpage</a>
-      <span class="pill goldp">Phiên bản <b>v2026.10.26-1</b></span>
     </div>
   </header>
 
@@ -238,7 +242,7 @@ footer{margin-top:30px;color:var(--ink3);font-size:12.5px;text-align:center}
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> · Phiên bản v2026.10.26-1</footer>
+  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-2</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -296,15 +300,25 @@ function defSkills(team){
   return QUEUES[key] || null;
 }
 
-/* Visual formation diagram: Back-slot column (left) + Front-slot column (right),
-   squares stacked vertically; filled = occupied slot, outlined/dimmed = empty slot. */
+/* Visual formation diagram: Back-slot column (left) + Front-slot column (right).
+   Both columns share one row grid of max(frontCap, backCap) rows. Each column's
+   slot block is vertically centered in the grid, and its filled (lit) squares
+   are centered within the block — e.g. Attack (1-4) with 2 heroes in Back lights
+   the two middle blue squares, and the lone Front square sits mid-height.
+   Cells outside a column's block are invisible spacers (.fsq.gap). */
 var TEMPLATES = {"Defense (4-1)": [4, 1], "Attack (1-4)": [1, 4], "Basic (2-3)": [2, 3], "Balanced (3-2)": [3, 2]};
 function formationSquares(team){
   var name = fmtShort(team);
   var cap = TEMPLATES[name] || [team.front.length, team.back.length];
-  function col(n, filled, cls){
+  var rows = Math.max(cap[0], cap[1]);
+  function col(capN, filled, cls){
+    var start = Math.floor((rows - capN) / 2);
+    var fStart = start + Math.floor((capN - filled) / 2);
     var s = "";
-    for (var i = 0; i < n; i++) s += '<span class="fsq ' + cls + (i < filled ? "" : " off") + '"></span>';
+    for (var i = 0; i < rows; i++){
+      if (i < start || i >= start + capN) s += '<span class="fsq gap"></span>';
+      else s += '<span class="fsq ' + cls + (i >= fStart && i < fStart + filled ? "" : " off") + '"></span>';
+    }
     return '<span class="fsq-col">' + s + '</span>';
   }
   return '<span class="fmt-sq" role="img" title="' + esc(name) + '" aria-label="Đội hình ' + esc(name) + '">'
@@ -382,11 +396,15 @@ function render(){
 
 function skillTags(v){
   var tags = {};
-  (v.skills || defSkills(v) || []).forEach(function(s, i){ if (s.hero) (tags[s.hero] = tags[s.hero] || []).push(i + 1); });
+  (v.skills || defSkills(v) || []).forEach(function(s, i){ if (s.hero) (tags[s.hero] = tags[s.hero] || []).push({n: i + 1, slot: s.slot}); });
   return tags;
 }
 function boardHeroHTML(h, tags, side){
-  var t = '<span class="skl-tags">' + ((tags && tags[h.name]) ? tags[h.name].map(function(n){ return '<span class="skl-tag">⚔️' + n + '</span>'; }).join("") : "") + '</span>';
+  var list = (tags && tags[h.name]) || [];
+  var top = list.filter(function(t){ return t.slot === "Skill 1"; });
+  var bot = list.filter(function(t){ return t.slot !== "Skill 1"; });
+  function zone(arr){ return '<span class="skl-zone">' + arr.map(function(t){ return '<span class="skl-tag">⚔️' + t.n + '</span>'; }).join("") + '</span>'; }
+  var t = '<span class="skl-tags">' + zone(top) + zone(bot) + '</span>';
   return '<div class="bhero ' + side + '">' + t + '<span class="bcol"><span class="bimg"><img src="' + heroImg(h) + '" alt="' + esc(h.name) + '" /></span><span class="bhn">' + esc(h.name) + '</span></span></div>';
 }
 function formationBoardHTML(team, withTags){
@@ -420,9 +438,7 @@ function counterBlockHTML(c, idx){
     + '<span style="font-weight:700">'+v.heroes.map(function(h){return esc(h.name);}).join(", ")+'</span>'
     + '<button type="button" class="mini-open" data-counter-open="'+c+'">Chi tiết ›</button></div>'
     + '<div style="margin-top:12px">'+formationBoardHTML(v, true)+'</div>'
-    + '<div style="margin-top:12px">'+petBoxHTML(v)+'</div>'
-    + '<div class="section-t" style="margin-top:16px">3 skill mở đầu — theo thứ tự</div>'
-    + skillsHTML(v) + '</div>';
+    + '<div style="margin-top:12px">'+petBoxHTML(v)+'</div></div>';
 }
 
 function openSheet(html){
@@ -479,8 +495,6 @@ function openCounter(code){
     + '<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
     + '<div class="section-t">Sơ đồ đội hình</div>' + formationBoardHTML(v, true)
     + '<div class="section-t">Pet</div>' + petBoxHTML(v)
-    + '<div class="section-t">3 skill mở đầu — theo thứ tự</div>'
-    + '<div class="counter-block" style="margin-top:0">'+skillsHTML(v)+'</div>'
     + (beats ? '<div class="section-t">Đội hình phòng thủ bị khắc chế</div>' + beats : "")
   );
 }
