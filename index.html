@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.26-2" />
+<meta name="page-version" content="v2026.10.26-3" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -106,14 +106,13 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .fmt{font-size:12.5px;font-weight:700;background:var(--chip);border-radius:8px;padding:4px 9px}
 .fmt-sq{display:inline-flex;gap:5px;vertical-align:middle;background:var(--chip);border-radius:8px;padding:5px 8px}
 .formation-box .fmt-sq{background:var(--surface2)}
-.fsq-col{display:flex;flex-direction:column;gap:2px}
-.fsq{width:10px;height:10px;border-radius:3px;flex:none}
+.fsq-col{position:relative;width:10px;flex:none}
+.fsq{position:absolute;left:0;width:10px;height:10px;border-radius:3px}
 .fsq.b{background:var(--back)}
 .fsq.f{background:var(--front)}
 .fsq.off{background:transparent;opacity:.45}
 .fsq.off.b{border:1.5px solid var(--back)}
 .fsq.off.f{border:1.5px solid var(--front)}
-.fsq.gap{background:transparent;border:1.5px solid transparent;opacity:0}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .petmini{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink2)}
 .petmini img{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--surface2)}
@@ -242,7 +241,7 @@ footer .ver{display:block;margin-top:6px;font-size:10px;letter-spacing:.04em;opa
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-2</span></footer>
+  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-3</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -301,25 +300,37 @@ function defSkills(team){
 }
 
 /* Visual formation diagram: Back-slot column (left) + Front-slot column (right).
-   Both columns share one row grid of max(frontCap, backCap) rows. Each column's
-   slot block is vertically centered in the grid, and its filled (lit) squares
-   are centered within the block — e.g. Attack (1-4) with 2 heroes in Back lights
-   the two middle blue squares, and the lone Front square sits mid-height.
-   Cells outside a column's block are invisible spacers (.fsq.gap). */
+   Squares are placed by absolute offset against the column's TOTAL height
+   (rows = max(frontCap, backCap) cells of 12px pitch), never snapped to a
+   row: the lit (filled) squares form one contiguous group whose center is
+   exactly the column's mid-height, and the slot block is centered the same
+   way — e.g. Attack (1-4): the two lit blue squares sit in the middle, and
+   the lone orange Front square is centered on the gap between them, at
+   half-height of the whole diagram. Empty-slot outline squares ride the
+   slot block's lattice and are skipped where they would overlap the lit
+   group (odd slot/hero counts, where no outline fits without overlap). */
 var TEMPLATES = {"Defense (4-1)": [4, 1], "Attack (1-4)": [1, 4], "Basic (2-3)": [2, 3], "Balanced (3-2)": [3, 2]};
 function formationSquares(team){
   var name = fmtShort(team);
   var cap = TEMPLATES[name] || [team.front.length, team.back.length];
   var rows = Math.max(cap[0], cap[1]);
+  var colH = rows * 12 - 2;
   function col(capN, filled, cls){
-    var start = Math.floor((rows - capN) / 2);
-    var fStart = start + Math.floor((capN - filled) / 2);
+    var blockTop = (colH - (capN * 12 - 2)) / 2;
+    var fillTop = filled > 0 ? (colH - (filled * 12 - 2)) / 2 : 0;
+    var fillBot = fillTop + filled * 12 - 2;
     var s = "";
-    for (var i = 0; i < rows; i++){
-      if (i < start || i >= start + capN) s += '<span class="fsq gap"></span>';
-      else s += '<span class="fsq ' + cls + (i >= fStart && i < fStart + filled ? "" : " off") + '"></span>';
+    var i, top;
+    for (i = 0; i < capN; i++){
+      top = blockTop + i * 12;
+      if (filled > 0 && top < fillBot && top + 10 > fillTop) continue;
+      s += '<span class="fsq ' + cls + ' off" style="top:' + top + 'px"></span>';
     }
-    return '<span class="fsq-col">' + s + '</span>';
+    for (i = 0; i < filled; i++){
+      top = fillTop + i * 12;
+      s += '<span class="fsq ' + cls + '" style="top:' + top + 'px"></span>';
+    }
+    return '<span class="fsq-col" style="height:' + colH + 'px">' + s + '</span>';
   }
   return '<span class="fmt-sq" role="img" title="' + esc(name) + '" aria-label="Đội hình ' + esc(name) + '">'
     + col(cap[1], team.back.length, "b") + col(cap[0], team.front.length, "f")
