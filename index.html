@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.26-12" />
+<meta name="page-version" content="v2026.10.26-13" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -343,7 +343,7 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-12</span></footer>
+  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-13</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -558,9 +558,11 @@ function formationBoardHTML(team, petsHTML){
     return s;
   }
   function grp(names, side, capN){
-    var s = names.map(function(n){ var h = byName[n]; return h ? boardHeroHTML(h, side) : ""; }).join("");
-    if (capN != null) s += ghosts(Math.max(0, capN - names.length), side);
-    return s;
+    var heroes = names.map(function(n){ var h = byName[n]; return h ? boardHeroHTML(h, side) : ""; }).join("");
+    if (capN == null) return heroes;
+    var g = Math.max(0, capN - names.length);
+    var above = Math.floor(g / 2), below = g - above;
+    return ghosts(above, side) + heroes + ghosts(below, side);
   }
   return '<div class="formation-box"><div class="fmt-name">' + formationSquares(team)
     + '<span class="lgwrap"><span class="lg"><i class="lg-b"></i>Back</span><span class="lg"><i class="lg-f"></i>Front</span></span></div>'
