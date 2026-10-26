@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  color-scheme: light dark;
+  --bg:#eceef2; --bg2:#e2e5ec; --surface:#ffffff; --surface2:#f4f5f8; --line:#d5d9e2;
+  --ink:#181c26; --ink2:#4c5468; --ink3:#7c8499;
+  --gold:#a8740a; --gold-bg:#fdf3d7; --gold-line:#e5c76a;
+  --danger:#b3352c; --danger-bg:#fbe9e7;
+  --physical:#c2501e; --magic:#3366b8; --tank:#2e7d52; --death:#9c3d5e; --status:#9a7208; --special:#1f7a74;
+  --chip:#eef0f4;
+  --shadow:0 10px 30px rgba(20,24,40,.14);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0c0f16; --bg2:#0c0f16; --surface:#161b27; --surface2:#1d2434; --line:#2b3347;
+    --ink:#eef0f6; --ink2:#aab3c5; --ink3:#79839a;
+    --gold:#e7bc4f; --gold-bg:#2c2410; --gold-line:#6d5a1e;
+    --danger:#ff8a7a; --danger-bg:#331714;
+    --physical:#ff8a5c; --magic:#7aa5e8; --tank:#5fc78d; --death:#e07b9c; --status:#eec44f; --special:#4fd1c5;
+    --chip:#1d2434;
+    --shadow:0 14px 40px rgba(0,0,0,.5);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,sans-serif;font-size:15px;line-height:1.55}
+img{display:block}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 64px}
+
+/* ---------- header ---------- */
+header.top{padding:28px 0 6px}
+.eyebrow{font-family:"Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--gold);font-weight:700}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.12;margin:6px 0 8px;font-weight:900}
+h1 .thin{font-weight:600;color:var(--ink2)}
+.sub{color:var(--ink2);max-width:720px;margin:0 0 14px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;color:var(--ink2)}
+.pill b{color:var(--ink)}
+.pill.warn{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
+.pill.goldp{background:var(--gold-bg);border-color:var(--gold-line);color:var(--ink)}
+.fanpage-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.fp-src{color:var(--ink2);font-size:13.5px}
+.fp-src b{color:var(--ink)}
+.fp-btn{display:inline-flex;align-items:center;gap:8px;background:#1877f2;color:#fff;border-radius:10px;padding:8px 14px;font-weight:700;text-decoration:none;font-size:13.5px;transition:background .15s}
+.fp-btn:hover{background:#0f65d8}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 16px;min-width:130px}
+.stat .n{font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:700;line-height:1}
+.stat .l{font-size:12px;color:var(--ink2);font-weight:600}
+
+/* ---------- toolbar ---------- */
+.toolbar{position:sticky;top:0;z-index:30;background:var(--bg);padding:14px 0 10px;margin-top:10px}
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.search svg{flex:none;color:var(--ink3)}
+.search input{border:0;outline:0;background:transparent;color:var(--ink);font:inherit;width:100%}
+.search input::placeholder{color:var(--ink3)}
+.search .clear{border:0;background:var(--chip);color:var(--ink2);border-radius:8px;padding:4px 10px;font-size:12.5px;font-weight:700;display:none}
+.search-wrap{position:relative}
+.suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:45;display:none;max-height:344px;overflow-y:auto}
+.suggest.open{display:block;animation:fadeIn .15s ease}
+.sg-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 12px;background:none;border:0;text-align:left;color:var(--ink);font:inherit}
+.sg-item + .sg-item{border-top:1px solid var(--surface2)}
+.sg-item img{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface2)}
+.sg-item .sg-name{font-weight:700;font-size:14px}
+.sg-item .cnt{margin-left:auto;color:var(--ink3);font-size:12px;font-weight:700;white-space:nowrap}
+.sg-item.active,.sg-item:hover{background:var(--surface2)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:12px 2px 4px}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;display:inline-flex;gap:7px;align-items:center}
+.tab .cnt{font-size:11.5px;background:var(--chip);border-radius:999px;padding:1px 8px;color:var(--ink2)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab[aria-selected="true"] .cnt{background:rgba(127,127,127,.25);color:inherit}
+.tab .dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* ---------- group sections / cards ---------- */
+.group-head{display:flex;align-items:baseline;gap:10px;margin:30px 0 4px}
+.group-head h2{font-size:22px;margin:0;font-weight:800}
+.group-head .gcount{color:var(--ink3);font-weight:700;font-size:13px}
+.group-head .grule{flex:1;height:1px;background:var(--line);align-self:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;text-align:left;width:100%;color:var(--ink);transition:border-color .15s, transform .15s}
+.card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.card-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.code{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px;letter-spacing:.04em;background:var(--ink);color:var(--bg);border-radius:8px;padding:2px 10px}
+.gtag{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.card-top .arr{margin-left:auto;color:var(--ink3);font-weight:700;font-size:13px}
+.heroes{display:flex;gap:10px}
+.hero{flex:1;min-width:0;text-align:center}
+.hero img{width:100%;aspect-ratio:1;border-radius:10px;background:var(--surface2);border:1px solid var(--line);object-fit:cover}
+.hero .hn{font-size:11.5px;font-weight:600;color:var(--ink2);margin-top:5px;line-height:1.3;overflow-wrap:anywhere}
+.card-meta{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.fmt{font-size:12.5px;font-weight:700;background:var(--chip);border-radius:8px;padding:4px 9px}
+.petmini{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--ink2)}
+.petmini img{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--surface2)}
+.ccount{margin-left:auto;font-size:12.5px;color:var(--gold);font-weight:800}
+.empty{display:none;text-align:center;color:var(--ink2);padding:44px 16px;background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);margin-top:16px}
+.empty.show{display:block}
+
+/* ---------- detail overlay ---------- */
+.overlay{position:fixed;inset:0;background:rgba(5,7,12,.62);z-index:60;display:none;overflow-y:auto;padding:18px 12px 40px}
+.overlay.open{display:block}
+.sheet{max-width:860px;margin:0 auto;background:var(--bg);border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);padding:20px 18px 26px}
+.sheet-head{display:flex;align-items:flex-start;gap:12px}
+.sheet-head h2{margin:2px 0 4px;font-size:clamp(20px,4vw,27px);line-height:1.25}
+.closebtn{margin-left:auto;flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:800}
+.section-t{font-family:"Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--gold);font-weight:700;margin:22px 0 8px}
+.formation-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.fmt-name{font-weight:800;font-size:16px;margin-bottom:10px}
+.fmt-name span{color:var(--ink2);font-weight:600;font-size:13px}
+.frow{display:flex;align-items:center;gap:10px;padding:8px 0}
+.frow + .frow{border-top:1px dashed var(--line)}
+.frow .flabel{flex:none;width:52px;font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:.08em;font-size:13px;color:var(--ink2)}
+.frow .fheroes{display:flex;gap:10px;flex-wrap:wrap}
+.fhero{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:5px 10px 5px 5px}
+.fhero img{width:40px;height:40px;border-radius:8px}
+.fhero span{font-size:13px;font-weight:700}
+.board{display:flex;align-items:stretch;background:var(--surface2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bside{flex:1;min-width:0;padding:10px 12px}
+.bside-label{font-family:"Barlow Condensed",sans-serif;font-weight:700;letter-spacing:.12em;font-size:13px;margin-bottom:8px}
+.bside.back .bside-label{color:var(--magic)}
+.bside.front .bside-label{color:var(--danger);text-align:right}
+.bheroes{display:flex;gap:12px;flex-wrap:wrap}
+.bside.front .bheroes{justify-content:flex-end}
+.bdiv{flex:none;width:30px;background:var(--surface);border-left:1px dashed var(--line);border-right:1px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:12.5px;color:var(--ink3)}
+.bdiv .bsep{width:1px;height:26px;background:var(--line)}
+.bhero{display:flex;flex-direction:column;align-items:center;max-width:96px}
+.bhero-top{display:flex;align-items:flex-start;gap:4px}
+.bhero img{width:52px;height:52px;border-radius:9px;border:1px solid var(--line);background:var(--surface);object-fit:cover}
+.skl-tags{display:flex;flex-direction:column;gap:3px}
+.skl-tag{font-size:11px;font-weight:800;background:var(--gold-bg);border:1px solid var(--gold-line);color:var(--ink);border-radius:6px;padding:1px 5px;white-space:nowrap;line-height:1.35}
+.bhn{font-size:11px;font-weight:600;color:var(--ink2);margin-top:4px;line-height:1.25;text-align:center;overflow-wrap:anywhere}
+.board-cap{font-size:12.5px;color:var(--ink3);margin-top:8px}
+@media (max-width:560px){.bhero img{width:46px;height:46px}.bside{padding:8px}}
+.petbox{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+.petbox img{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);background:var(--surface2)}
+.petbox .pn{font-weight:800;font-size:16px}
+.petbox .pe{color:var(--ink2);font-size:13.5px}
+.counter-block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:12px}
+.counter-block .cb-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.prio{font-family:"Barlow Condensed",sans-serif;font-weight:700;background:var(--gold);color:#191204;border-radius:8px;padding:3px 10px;font-size:14px;letter-spacing:.03em}
+@media (prefers-color-scheme: dark){.prio{color:#191204}}
+.skills{list-style:none;margin:12px 0 0;padding:12px 0 0;border-top:1px dashed var(--line);counter-reset:sk}
+.skills li{display:flex;gap:10px;padding:7px 0;align-items:flex-start}
+.skills li + li{border-top:1px solid var(--surface2)}
+.sknum{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.skill-txt{font-size:14px}
+.skill-txt b{font-weight:800}
+.slot{display:inline-block;font-size:11px;font-weight:800;border-radius:6px;padding:1px 7px;margin:0 4px;vertical-align:1px}
+.slot.s1{background:#dcebfb;color:#144a86}
+.slot.s2{background:#fbe3c8;color:#7a4a05}
+@media (prefers-color-scheme: dark){.slot.s1{background:#173457;color:#9ec5f5}.slot.s2{background:#4a3208;color:#f5cd7e}}
+.note{margin-top:10px;font-size:13px;color:var(--ink2);background:var(--gold-bg);border:1px solid var(--gold-line);border-radius:10px;padding:9px 12px}
+.beats{margin-top:10px;font-size:13px;color:var(--ink2)}
+.beats b{color:var(--ink)}
+.beats button{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:7px;padding:2px 9px;font-weight:800;font-size:12.5px;margin:2px 2px 0 0}
+
+/* ---------- info sections ---------- */
+.info{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-top:34px}
+.info h2{margin:0 0 10px;font-size:19px}
+.info h3{margin:18px 0 6px;font-size:15.5px}
+.info p,.info li{color:var(--ink2);font-size:14px}
+.info ul{margin:6px 0;padding-left:20px}
+.info a{color:var(--gold);font-weight:600;overflow-wrap:anywhere}
+.pet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:12px}
+.pet-card{display:flex;gap:12px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.pet-card img{width:56px;height:56px;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+.pet-card .pn{font-weight:800}
+.pet-card .pe{font-size:12.5px;color:var(--ink2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes sheetIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sheetOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(14px)}}
+.card{animation:fadeUp .3s ease backwards}
+.group-head{animation:fadeUp .3s ease backwards}
+.counter-block{animation:fadeUp .38s ease backwards}
+.overlay.open{animation:fadeIn .18s ease}
+.overlay.open .sheet{animation:sheetIn .3s cubic-bezier(.2,.8,.25,1)}
+.overlay.closing{animation:fadeOut .18s ease both}
+.overlay.closing .sheet{animation:sheetOut .18s ease both}
+footer{margin-top:30px;color:var(--ink3);font-size:12.5px;text-align:center}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .stat{min-width:0;flex:1}
+  .frow .flabel{width:44px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Seven Knights: Re:BIRTH · Guild War</div>
+    <h1>Guild War Meta <span class="thin">— Major League 3v3</span></h1>
+    <p class="sub">Tra nhanh đội hình phòng thủ đang trong meta và đội hình khắc chế theo thứ tự ưu tiên giảm dần — đủ sơ đồ Trước / Sau, pet và 3 skill mở đầu cho từng đội hình khắc chế.</p>
+    <div class="meta-row">
+      <span class="pill goldp">Snapshot <b>26/10/2026</b></span>
+      <span class="pill">Tham chiếu patch <b>15/10/2026</b></span>
+      <span class="pill warn">⚠ Meta có tướng collab Demon Slayer — collab kết thúc <b>29/10/2026</b></span>
+    </div>
+    <div class="fanpage-row">
+      <span class="fp-src">Nguồn từ fanpage <b>facebook.com/7krbvn</b></span>
+      <a class="fp-btn" href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7V11H8.3v3h2.4v7h2.8z"/></svg>Truy cập fanpage</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n">82</div><div class="l">đội hình phòng thủ</div></div>
+      <div class="stat"><div class="n">24</div><div class="l">đội hình khắc chế (C1–C24)</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">nhóm đội hình</div></div>
+      <div class="stat"><div class="n">3v3</div><div class="l">chỉ Major League</div></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+      <input id="q" type="search" placeholder="Gõ tên tướng để xem gợi ý — hoặc mã team, pet…" autocomplete="off" />
+      <button class="clear" id="qclear" type="button">Xóa</button>
+    </label>
+    <div class="suggest" id="suggest" role="listbox" aria-label="Gợi ý tên tướng"></div>
+    </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Nhóm đội hình"></div>
+  </div>
+
+  <main id="list"></main>
+  <div class="empty" id="empty">Không tìm thấy đội hình nào khớp. Thử tên tướng khác hoặc xóa bộ lọc.</div>
+
+  <section class="info" id="pets">
+    <h2>Pet dùng trong meta</h2>
+    <p>Hiệu ứng pet ở 6★. Mỗi đội hình trong bảng đều ghi rõ pet đi kèm — bấm vào đội hình để xem pet trong ngữ cảnh trận đấu.</p>
+    <div class="pet-grid" id="petgrid"></div>
+  </section>
+
+  <section class="info">
+    <h2>Quy ước đọc bảng</h2>
+    <ul>
+      <li><b>Skill 1 / Skill 2:</b> theo vị trí hiển thị trong game — Skill 1 là skill nằm <b>trên</b>, Skill 2 là skill nằm <b>dưới</b>. Awakening Skill không tính vào 3 skill mở đầu.</li>
+      <li><b>Sơ đồ:</b> gồm template chọn trong game — Defense (4-1), Attack (1-4), Basic (2-3), Balanced (3-2) — kèm vị trí đặt thực tế Trước / Sau. Hàng trước dễ bị đánh hơn và được tăng Defense; hàng sau an toàn hơn và được tăng Attack.</li>
+      <li><b>Thứ tự khắc chế:</b> Ưu tiên 1 là lựa chọn tốt nhất, giảm dần xuống các lựa chọn sau.</li>
+      <li>Tên tướng và tên skill giữ nguyên tiếng Anh.</li>
+    </ul>
+    <h3>Luật Major League cần nhớ khi xếp 5 lượt tấn công</h3>
+    <ul>
+      <li>Mỗi thành viên nộp <b>5 team phòng thủ</b>, có <b>5 lượt tấn công</b>. Tổng 115 post (Main Castle 20, Fort 15×3, Defense Post 10×5). Mùa = 18 round / 6 tuần. Mở khi Guild Level 7.</li>
+      <li>Tướng đã dùng trong 1 trận tấn công thì <b>không được dùng lại ở trận kế tiếp</b> — đừng xếp 2 đội hình khắc chế liên tiếp trùng tướng.</li>
+      <li>Khi tấn công, bạn <b>nhìn thấy team địch trước</b>. Tổng Speed quyết định ai đánh trước. Skill đánh 3 mục tiêu mạnh hơn trong 3v3 so với Arena 5v5.</li>
+    </ul>
+    <h3>Lưu ý rà soát</h3>
+    <ul>
+      <li><b>Randgrid</b> trong Guild War 3v3: HP Alteration <b>không kích hoạt</b> (cần 5 tướng Attack lúc bắt đầu trận). C9 và C23 dùng Randgrid như tướng support, không tính HP Alteration.</li>
+      <li><b>Ballista</b> chỉ có Skill 2, không có Skill 1 — đội hình C24 chỉ dùng Skill 2 của Ballista.</li>
+    </ul>
+    <p>Meta xoay theo từng patch — đối chiếu lại với Popular Team Info trong game và patch note mới nhất trước khi xếp team.</p>
+  </section>
+
+  <footer>Bảng meta Major League 3v3 · Snapshot 26/10/2026 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a></footer>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+var DATA = {"defense": [{"code": "P1", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Tanjiro Kamado, Zenitsu Agatsuma", "front": ["Eileene"], "back": ["Tanjiro Kamado", "Zenitsu Agatsuma"], "pet": "Jeo", "counters": ["C1", "C2", "C3"]}, {"code": "P2", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Tanjiro Kamado | Sau: Zenitsu Agatsuma, Sunran", "front": ["Tanjiro Kamado"], "back": ["Zenitsu Agatsuma", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C3", "C18"]}, {"code": "P3", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Karl Heron", "img": "chara_475.png"}], "formation": "Attack (1-4) — Trước: Karl Heron | Sau: Tanjiro Kamado, Zenitsu Agatsuma", "front": ["Karl Heron"], "back": ["Tanjiro Kamado", "Zenitsu Agatsuma"], "pet": "Jeo", "counters": ["C1", "C2", "C3", "C18"]}, {"code": "P4", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Tanjiro Kamado | Sau: Zenitsu Agatsuma, Hayeon", "front": ["Tanjiro Kamado"], "back": ["Zenitsu Agatsuma", "Hayeon"], "pet": "Jeo", "counters": ["C1", "C2", "C3", "C19"]}, {"code": "P5", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Tanjiro Kamado | Sau: Zenitsu Agatsuma, Yoongun", "front": ["Tanjiro Kamado"], "back": ["Zenitsu Agatsuma", "Yoongun"], "pet": "Jeo", "counters": ["C1", "C2", "C3"]}, {"code": "P6", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Tanjiro Kamado, Sunran", "front": ["Eileene"], "back": ["Tanjiro Kamado", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C11"]}, {"code": "P7", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Basic (2-3) — Trước: Eileene | Sau: Zenitsu Agatsuma, Sunran", "front": ["Eileene"], "back": ["Zenitsu Agatsuma", "Sunran"], "pet": "Jeo", "counters": ["C1", "C16", "C11", "C2"]}, {"code": "P8", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Karl Heron", "img": "chara_475.png"}], "formation": "Balanced (3-2) — Trước: Karl Heron | Sau: Tanjiro Kamado, Sunran", "front": ["Karl Heron"], "back": ["Tanjiro Kamado", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C11"]}, {"code": "P9", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Karl Heron", "img": "chara_475.png"}], "formation": "Attack (1-4) — Trước: Karl Heron | Sau: Zenitsu Agatsuma, Sunran", "front": ["Karl Heron"], "back": ["Zenitsu Agatsuma", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C11"]}, {"code": "P10", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Tanjiro Kamado | Sau: Sunran, Hayeon", "front": ["Tanjiro Kamado"], "back": ["Sunran", "Hayeon"], "pet": "Jeo", "counters": ["C1", "C16", "C11", "C2"]}, {"code": "P11", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Attack (1-4) — Trước: Sunran | Sau: Zenitsu Agatsuma, Hayeon", "front": ["Sunran"], "back": ["Zenitsu Agatsuma", "Hayeon"], "pet": "Jeo", "counters": ["C1", "C2", "C11"]}, {"code": "P12", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Orkah", "img": "chara_489.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Karl Heron | Sau: Orkah, Sunran", "front": ["Karl Heron"], "back": ["Orkah", "Sunran"], "pet": "Yu", "counters": ["C1", "C2", "C11"]}, {"code": "P13", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Orkah", "img": "chara_489.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Balanced (3-2) — Trước: Karl Heron | Sau: Orkah, Eileene", "front": ["Karl Heron"], "back": ["Orkah", "Eileene"], "pet": "Yu", "counters": ["C1", "C2", "C12", "C11"]}, {"code": "P14", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Orkah", "img": "chara_489.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Karl Heron | Sau: Orkah, Hayeon", "front": ["Karl Heron"], "back": ["Orkah", "Hayeon"], "pet": "Yu", "counters": ["C1", "C2", "C12", "C11"]}, {"code": "P15", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Karl Heron, Sunran", "front": ["Eileene"], "back": ["Karl Heron", "Sunran"], "pet": "Yu", "counters": ["C1", "C2", "C11"]}, {"code": "P16", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Dellons", "img": "chara_485.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Karl Heron", "img": "chara_475.png"}], "formation": "Attack (1-4) — Trước: Karl Heron | Sau: Dellons, Sunran", "front": ["Karl Heron"], "back": ["Dellons", "Sunran"], "pet": "Yu", "counters": ["C1", "C2", "C11"]}, {"code": "P17", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Lu Bu", "img": "chara_426.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Karl Heron", "img": "chara_475.png"}], "formation": "Balanced (3-2) — Trước: Karl Heron | Sau: Lu Bu, Sunran", "front": ["Karl Heron"], "back": ["Lu Bu", "Sunran"], "pet": "Yu", "counters": ["C1", "C2", "C11"]}, {"code": "P18", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Trude", "img": "chara_384.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Defense (4-1) — Trước: Trude | Sau: Tanjiro Kamado, Sunran", "front": ["Trude"], "back": ["Tanjiro Kamado", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C13"]}, {"code": "P19", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Trude", "img": "chara_384.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Balanced (3-2) — Trước: Trude | Sau: Zenitsu Agatsuma, Eileene", "front": ["Trude"], "back": ["Zenitsu Agatsuma", "Eileene"], "pet": "Jeo", "counters": ["C1", "C2", "C13"]}, {"code": "P20", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Randgrid", "img": "chara_462.png"}, {"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}], "formation": "Attack (1-4) — Trước: Randgrid | Sau: Tanjiro Kamado, Zenitsu Agatsuma", "front": ["Randgrid"], "back": ["Tanjiro Kamado", "Zenitsu Agatsuma"], "pet": "Jeo", "counters": ["C1", "C2", "C3", "C19"]}, {"code": "P21", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Ballista", "img": "chara_120.png"}, {"name": "Hayeon", "img": "chara_525.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Sunran | Sau: Ballista, Hayeon", "front": ["Sunran"], "back": ["Ballista", "Hayeon"], "pet": "Jeo", "counters": ["C1", "C2", "C11"]}, {"code": "P22", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Ballista", "img": "chara_120.png"}, {"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Karl Heron | Sau: Ballista, Sunran", "front": ["Karl Heron"], "back": ["Ballista", "Sunran"], "pet": "Yu", "counters": ["C1", "C2", "C11"]}, {"code": "P23", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Ballista", "img": "chara_120.png"}, {"name": "Eileene", "img": "chara_527.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Ballista, Sunran", "front": ["Eileene"], "back": ["Ballista", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C11"]}, {"code": "P24", "group": "physical", "groupLabel": "Physical", "heroes": [{"name": "Ballista", "img": "chara_120.png"}, {"name": "Trude", "img": "chara_384.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Defense (4-1) — Trước: Trude | Sau: Ballista, Sunran", "front": ["Trude"], "back": ["Ballista", "Sunran"], "pet": "Jeo", "counters": ["C1", "C2", "C13"]}, {"code": "M1", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Shinobu Kocho | Sau: Dongyoung, Yoongun", "front": ["Shinobu Kocho"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "M2", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Basic (2-3) — Trước: Shinobu Kocho | Sau: Dongyoung, Sunran", "front": ["Shinobu Kocho"], "back": ["Dongyoung", "Sunran"], "pet": "Jeo", "counters": ["C4", "C7", "C6", "C5"]}, {"code": "M3", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Eileene", "img": "chara_527.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Dongyoung, Yoongun", "front": ["Eileene"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "M4", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Juri", "img": "chara_321.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Juri | Sau: Dongyoung, Yoongun", "front": ["Juri"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "M5", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Juri", "img": "chara_321.png"}], "formation": "Attack (1-4) — Trước: Shinobu Kocho | Sau: Dongyoung, Juri", "front": ["Shinobu Kocho"], "back": ["Dongyoung", "Juri"], "pet": "Yu", "counters": ["C4", "C7", "C5", "C6"]}, {"code": "M6", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Eileene", "img": "chara_527.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}], "formation": "Basic (2-3) — Trước: Eileene | Sau: Dongyoung, Shinobu Kocho", "front": ["Eileene"], "back": ["Dongyoung", "Shinobu Kocho"], "pet": "Yu", "counters": ["C4", "C7", "C6"]}, {"code": "M7", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Freyja", "img": "chara_390.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Freyja | Sau: Skuld, Yoongun", "front": ["Freyja"], "back": ["Skuld", "Yoongun"], "pet": "Yu", "counters": ["C8", "C9", "C4"]}, {"code": "M8", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Freyja", "img": "chara_390.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}], "formation": "Balanced (3-2) — Trước: Freyja | Sau: Skuld, Shinobu Kocho", "front": ["Freyja"], "back": ["Skuld", "Shinobu Kocho"], "pet": "Yu", "counters": ["C8", "C9", "C4"]}, {"code": "M9", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Shinobu Kocho | Sau: Skuld, Yoongun", "front": ["Shinobu Kocho"], "back": ["Skuld", "Yoongun"], "pet": "Yu", "counters": ["C8", "C9", "C4"]}, {"code": "M10", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Freyja", "img": "chara_390.png"}, {"name": "Dongyoung", "img": "chara_516.png"}], "formation": "Basic (2-3) — Trước: Freyja | Sau: Skuld, Dongyoung", "front": ["Freyja"], "back": ["Skuld", "Dongyoung"], "pet": "Yu", "counters": ["C8", "C9", "C4"]}, {"code": "M11", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Melia", "img": "chara_399.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Melia | Sau: Dongyoung, Yoongun", "front": ["Melia"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "counters": ["C4", "C7", "C6", "C5"]}, {"code": "M12", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Reginleif", "img": "chara_444.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}], "formation": "Attack (1-4) — Trước: Shinobu Kocho | Sau: Dongyoung, Reginleif", "front": ["Shinobu Kocho"], "back": ["Dongyoung", "Reginleif"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "M13", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Silvesta", "img": "chara_480.png"}, {"name": "Skuld", "img": "chara_479.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Basic (2-3) — Trước: Silvesta | Sau: Skuld, Yoongun", "front": ["Silvesta"], "back": ["Skuld", "Yoongun"], "pet": "Jeo", "counters": ["C8", "C9", "C4"]}, {"code": "M14", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "O'Mok", "img": "chara_472.png"}, {"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}], "formation": "Attack (1-4) — Trước: Shinobu Kocho | Sau: O'Mok, Dongyoung", "front": ["Shinobu Kocho"], "back": ["O'Mok", "Dongyoung"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "M15", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Yeonhee", "img": "chara_330.png"}, {"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Yeonhee | Sau: Dongyoung, Yoongun", "front": ["Yeonhee"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "M16", "group": "magic", "groupLabel": "Magic", "heroes": [{"name": "Rin", "img": "chara_339.png"}, {"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Rin | Sau: Dongyoung, Yoongun", "front": ["Rin"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "counters": ["C4", "C7", "C6"]}, {"code": "T1", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Gelidus", "img": "chara_396.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Gelidus", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Gelidus"], "pet": "Ruu", "counters": ["C2", "C11", "C13", "C24", "C17"]}, {"code": "T2", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Pallanus", "img": "chara_408.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Pallanus", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Pallanus"], "pet": "Ruu", "counters": ["C2", "C11", "C14", "C24"]}, {"code": "T3", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Hayeon", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Hayeon"], "pet": "Ruu", "counters": ["C2", "C11", "C13"]}, {"code": "T4", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Gelidus", "img": "chara_396.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Radgrid, Gelidus | Sau: Hayeon", "front": ["Radgrid", "Gelidus"], "back": ["Hayeon"], "pet": "Ruu", "counters": ["C2", "C11", "C13"]}, {"code": "T5", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Pallanus", "img": "chara_408.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Balanced (3-2) — Trước: Radgrid, Pallanus | Sau: Hayeon", "front": ["Radgrid", "Pallanus"], "back": ["Hayeon"], "pet": "Ruu", "counters": ["C2", "C11", "C14"]}, {"code": "T6", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Rudy", "img": "chara_496.png"}, {"name": "Clemyth", "img": "chara_484.png"}, {"name": "Aris", "img": "chara_495.png"}], "formation": "Defense (4-1) — Trước: Rudy | Sau: Clemyth, Aris", "front": ["Rudy"], "back": ["Clemyth", "Aris"], "pet": "Pike", "counters": ["C3", "C2", "C17", "C13"]}, {"code": "T7", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Rudy", "img": "chara_496.png"}, {"name": "Clemyth", "img": "chara_484.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Balanced (3-2) — Trước: Rudy | Sau: Clemyth, Hayeon", "front": ["Rudy"], "back": ["Clemyth", "Hayeon"], "pet": "Pike", "counters": ["C3", "C20", "C2", "C13"]}, {"code": "T8", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Rudy", "img": "chara_496.png"}, {"name": "Aris", "img": "chara_495.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Rudy | Sau: Aris, Hayeon", "front": ["Rudy"], "back": ["Aris", "Hayeon"], "pet": "Pike", "counters": ["C3", "C20", "C13", "C2"]}, {"code": "T9", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Aris", "img": "chara_495.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Aris", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Aris"], "pet": "Ruu", "counters": ["C2", "C11", "C24", "C13"]}, {"code": "T10", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Gelidus", "img": "chara_396.png"}, {"name": "Aris", "img": "chara_495.png"}], "formation": "Balanced (3-2) — Trước: Radgrid, Gelidus | Sau: Aris", "front": ["Radgrid", "Gelidus"], "back": ["Aris"], "pet": "Ruu", "counters": ["C2", "C11", "C13"]}, {"code": "T11", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Pallanus", "img": "chara_408.png"}, {"name": "Aris", "img": "chara_495.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Pallanus | Sau: Aris", "front": ["Radgrid", "Pallanus"], "back": ["Aris"], "pet": "Ruu", "counters": ["C2", "C11", "C14"]}, {"code": "T12", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Gelidus", "img": "chara_396.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Gelidus, Giyu Tomioka | Sau: Hayeon", "front": ["Gelidus", "Giyu Tomioka"], "back": ["Hayeon"], "pet": "Ruu", "counters": ["C2", "C21", "C11", "C13"]}, {"code": "T13", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Pallanus", "img": "chara_408.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Defense (4-1) — Trước: Pallanus, Giyu Tomioka | Sau: Hayeon", "front": ["Pallanus", "Giyu Tomioka"], "back": ["Hayeon"], "pet": "Ruu", "counters": ["C2", "C11", "C14"]}, {"code": "T14", "group": "tank", "groupLabel": "Tank / Sustain", "heroes": [{"name": "Trude", "img": "chara_384.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Aris", "img": "chara_495.png"}], "formation": "Balanced (3-2) — Trước: Trude, Giyu Tomioka | Sau: Aris", "front": ["Trude", "Giyu Tomioka"], "back": ["Aris"], "pet": "Karam", "counters": ["C2", "C21", "C13", "C11"]}, {"code": "D1", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Kris", "img": "chara_24.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Rosie", "img": "chara_318.png"}], "formation": "Balanced (3-2) — Trước: Kris, Mist | Sau: Rosie", "front": ["Kris", "Mist"], "back": ["Rosie"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D2", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Kris", "img": "chara_24.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Mist | Sau: Kris", "front": ["Radgrid", "Mist"], "back": ["Kris"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D3", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Kris", "img": "chara_24.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Balanced (3-2) — Trước: Kris, Mist | Sau: Hayeon", "front": ["Kris", "Mist"], "back": ["Hayeon"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D4", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Knox", "img": "chara_517.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Rosie", "img": "chara_318.png"}], "formation": "Basic (2-3) — Trước: Knox, Mist | Sau: Rosie", "front": ["Knox", "Mist"], "back": ["Rosie"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D5", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Knox", "img": "chara_517.png"}, {"name": "Kris", "img": "chara_24.png"}, {"name": "Mist", "img": "chara_466.png"}], "formation": "Attack (1-4) — Trước: Knox | Sau: Kris, Mist", "front": ["Knox"], "back": ["Kris", "Mist"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D6", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Kris", "img": "chara_24.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Juri", "img": "chara_321.png"}], "formation": "Balanced (3-2) — Trước: Kris, Mist | Sau: Juri", "front": ["Kris", "Mist"], "back": ["Juri"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D7", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Mist", "img": "chara_466.png"}, {"name": "Juri", "img": "chara_321.png"}, {"name": "Rosie", "img": "chara_318.png"}], "formation": "Basic (2-3) — Trước: Mist, Juri | Sau: Rosie", "front": ["Mist", "Juri"], "back": ["Rosie"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D8", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Kris", "img": "chara_24.png"}, {"name": "Rosie", "img": "chara_318.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Kris | Sau: Rosie", "front": ["Radgrid", "Kris"], "back": ["Rosie"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D9", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Gelidus", "img": "chara_396.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Kris", "img": "chara_24.png"}], "formation": "Balanced (3-2) — Trước: Gelidus, Mist | Sau: Kris", "front": ["Gelidus", "Mist"], "back": ["Kris"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D10", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Knox", "img": "chara_517.png"}, {"name": "Kris", "img": "chara_24.png"}, {"name": "Rosie", "img": "chara_318.png"}], "formation": "Basic (2-3) — Trước: Knox, Kris | Sau: Rosie", "front": ["Knox", "Kris"], "back": ["Rosie"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "D11", "group": "death", "groupLabel": "Death", "heroes": [{"name": "Mist", "img": "chara_466.png"}, {"name": "Rosie", "img": "chara_318.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Attack (1-4) — Trước: Mist | Sau: Rosie, Hayeon", "front": ["Mist"], "back": ["Rosie", "Hayeon"], "pet": "Merparrow", "counters": ["C9", "C10", "C4"]}, {"code": "S1", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Skuld", "img": "chara_479.png"}, {"name": "Mist", "img": "chara_466.png"}], "formation": "Attack (1-4) — Trước: Mist | Sau: Dongyoung, Skuld", "front": ["Mist"], "back": ["Dongyoung", "Skuld"], "pet": "Merparrow", "counters": ["C8", "C9", "C7"]}, {"code": "S2", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Gelidus", "img": "chara_396.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Dongyoung", "img": "chara_516.png"}], "formation": "Balanced (3-2) — Trước: Gelidus, Mist | Sau: Dongyoung", "front": ["Gelidus", "Mist"], "back": ["Dongyoung"], "pet": "Merparrow", "counters": ["C8", "C9", "C7"]}, {"code": "S3", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Yeonhee", "img": "chara_330.png"}], "formation": "Basic (2-3) — Trước: Mist | Sau: Skuld, Yeonhee", "front": ["Mist"], "back": ["Skuld", "Yeonhee"], "pet": "Pike", "counters": ["C8", "C22", "C9", "C7"]}, {"code": "S4", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Rin", "img": "chara_339.png"}], "formation": "Attack (1-4) — Trước: Mist | Sau: Skuld, Rin", "front": ["Mist"], "back": ["Skuld", "Rin"], "pet": "Pike", "counters": ["C8", "C9", "C7"]}, {"code": "S5", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Yeonhee", "img": "chara_330.png"}], "formation": "Balanced (3-2) — Trước: Mist | Sau: Dongyoung, Yeonhee", "front": ["Mist"], "back": ["Dongyoung", "Yeonhee"], "pet": "Merparrow", "counters": ["C8", "C9", "C7"]}, {"code": "S6", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Gelidus", "img": "chara_396.png"}, {"name": "Skuld", "img": "chara_479.png"}, {"name": "Mist", "img": "chara_466.png"}], "formation": "Defense (4-1) — Trước: Gelidus, Mist | Sau: Skuld", "front": ["Gelidus", "Mist"], "back": ["Skuld"], "pet": "Merparrow", "counters": ["C8", "C22", "C7", "C9"]}, {"code": "S7", "group": "status", "groupLabel": "Status Ailment", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Skuld", "img": "chara_479.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Dongyoung, Skuld", "front": ["Eileene"], "back": ["Dongyoung", "Skuld"], "pet": "Merparrow", "counters": ["C8", "C9", "C7"]}, {"code": "G1", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Rin", "img": "chara_339.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Diaochan | Sau: Rin, Yoongun", "front": ["Diaochan"], "back": ["Rin", "Yoongun"], "pet": "Yu", "counters": ["C23", "C15", "C2"]}, {"code": "G2", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Yeonhee", "img": "chara_330.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Basic (2-3) — Trước: Diaochan | Sau: Yeonhee, Yoongun", "front": ["Diaochan"], "back": ["Yeonhee", "Yoongun"], "pet": "Yu", "counters": ["C23", "C15", "C2"]}, {"code": "G3", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Rin", "img": "chara_339.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}], "formation": "Balanced (3-2) — Trước: Diaochan | Sau: Rin, Shinobu Kocho", "front": ["Diaochan"], "back": ["Rin", "Shinobu Kocho"], "pet": "Yu", "counters": ["C23", "C15", "C2"]}, {"code": "G4", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Yeonhee", "img": "chara_330.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}], "formation": "Basic (2-3) — Trước: Diaochan | Sau: Yeonhee, Shinobu Kocho", "front": ["Diaochan"], "back": ["Yeonhee", "Shinobu Kocho"], "pet": "Yu", "counters": ["C23", "C15", "C2"]}, {"code": "G5", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Sunran", "img": "chara_500.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Diaochan | Sau: Sunran, Yoongun", "front": ["Diaochan"], "back": ["Sunran", "Yoongun"], "pet": "Yu", "counters": ["C23", "C15", "C2"]}, {"code": "G6", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Aris", "img": "chara_495.png"}], "formation": "Defense (4-1) — Trước: Hellenia (Awakening), Giyu Tomioka | Sau: Aris", "front": ["Hellenia (Awakening)", "Giyu Tomioka"], "back": ["Aris"], "pet": "Ruu", "counters": ["C4", "C6", "C11"]}, {"code": "G7", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Radgrid", "img": "chara_435.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Hellenia (Awakening), Radgrid | Sau: Giyu Tomioka", "front": ["Hellenia (Awakening)", "Radgrid"], "back": ["Giyu Tomioka"], "pet": "Ruu", "counters": ["C4", "C6", "C11"]}, {"code": "G8", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Balanced (3-2) — Trước: Hellenia (Awakening), Giyu Tomioka | Sau: Hayeon", "front": ["Hellenia (Awakening)", "Giyu Tomioka"], "back": ["Hayeon"], "pet": "Ruu", "counters": ["C4", "C6", "C11"]}, {"code": "G9", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Aris", "img": "chara_495.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Basic (2-3) — Trước: Hellenia (Awakening) | Sau: Aris, Hayeon", "front": ["Hellenia (Awakening)"], "back": ["Aris", "Hayeon"], "pet": "Ruu", "counters": ["C4", "C6", "C11"]}, {"code": "G10", "group": "special", "groupLabel": "Guild War chuyên dụng", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Diaochan | Sau: Hellenia (Awakening), Yoongun", "front": ["Diaochan"], "back": ["Hellenia (Awakening)", "Yoongun"], "pet": "Yu", "counters": ["C23", "C4", "C2"]}], "counters": {"C1": {"code": "C1", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Hayeon", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Hayeon"], "pet": "Ruu", "skills": [{"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing, Seventh Form: Drop Ripple Thrust"}, {"hero": "Giyu Tomioka", "slot": "Skill 2", "name": "Water Breathing, Tenth Form: Constant Flux"}, {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}], "note": ""}, "C2": {"code": "C2", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Shinobu Kocho | Sau: Dongyoung, Yoongun", "front": ["Shinobu Kocho"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "skills": [{"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing, Dance of the Dragonfly: Compound Eye Hexagon"}, {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}, {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}], "note": ""}, "C3": {"code": "C3", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Rin", "img": "chara_339.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Diaochan | Sau: Rin, Yoongun", "front": ["Diaochan"], "back": ["Rin", "Yoongun"], "pet": "Yu", "skills": [{"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"}, {"hero": "Rin", "slot": "Skill 2", "name": "Dragon's Wrath"}, {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}], "note": ""}, "C4": {"code": "C4", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Tanjiro Kamado | Sau: Zenitsu Agatsuma, Sunran", "front": ["Tanjiro Kamado"], "back": ["Zenitsu Agatsuma", "Sunran"], "pet": "Jeo", "skills": [{"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing, First Form: Thunderclap and Flash"}, {"hero": "Tanjiro Kamado", "slot": "Skill 2", "name": "Hinokami Kagura: Dancing Flash"}, {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}], "note": ""}, "C5": {"code": "C5", "heroes": [{"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}, {"name": "Eileene", "img": "chara_527.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Tanjiro Kamado, Zenitsu Agatsuma", "front": ["Eileene"], "back": ["Tanjiro Kamado", "Zenitsu Agatsuma"], "pet": "Jeo", "skills": [{"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing, First Form: Thunderclap and Flash"}, {"hero": "Tanjiro Kamado", "slot": "Skill 2", "name": "Hinokami Kagura: Dancing Flash"}, {"hero": "Eileene", "slot": "Skill 1", "name": "Lightning Spear"}], "note": ""}, "C6": {"code": "C6", "heroes": [{"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Orkah", "img": "chara_489.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Karl Heron | Sau: Orkah, Sunran", "front": ["Karl Heron"], "back": ["Orkah", "Sunran"], "pet": "Yu", "skills": [{"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"}, {"hero": "Orkah", "slot": "Skill 2", "name": "Merciless Exploitation"}, {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}], "note": ""}, "C7": {"code": "C7", "heroes": [{"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Aris", "img": "chara_495.png"}], "formation": "Defense (4-1) — Trước: Hellenia (Awakening), Giyu Tomioka | Sau: Aris", "front": ["Hellenia (Awakening)", "Giyu Tomioka"], "back": ["Aris"], "pet": "Ruu", "skills": [{"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"}, {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing, Seventh Form: Drop Ripple Thrust"}, {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}], "note": ""}, "C8": {"code": "C8", "heroes": [{"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Trude", "img": "chara_384.png"}, {"name": "Hayeon", "img": "chara_525.png"}], "formation": "Balanced (3-2) — Trước: Trude, Giyu Tomioka | Sau: Hayeon", "front": ["Trude", "Giyu Tomioka"], "back": ["Hayeon"], "pet": "Ruu", "skills": [{"hero": "Trude", "slot": "Skill 1", "name": "Reckless Charge"}, {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing, Seventh Form: Drop Ripple Thrust"}, {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}], "note": ""}, "C9": {"code": "C9", "heroes": [{"name": "Elysia", "img": "chara_381.png"}, {"name": "Leo", "img": "chara_306.png"}, {"name": "Randgrid", "img": "chara_462.png"}], "formation": "Balanced (3-2) — Trước: Leo, Randgrid | Sau: Elysia", "front": ["Leo", "Randgrid"], "back": ["Elysia"], "pet": "Ruu", "skills": [{"hero": "Elysia", "slot": "Skill 2", "name": "Starfall"}, {"hero": "Randgrid", "slot": "Skill 1", "name": "Promised Battlefield"}, {"hero": "Leo", "slot": "Skill 1", "name": "Slice and Dice"}], "note": ""}, "C10": {"code": "C10", "heroes": [{"name": "Giyu Tomioka", "img": "chara_533.png"}, {"name": "Trude", "img": "chara_384.png"}, {"name": "Elysia", "img": "chara_381.png"}], "formation": "Balanced (3-2) — Trước: Trude, Giyu Tomioka | Sau: Elysia", "front": ["Trude", "Giyu Tomioka"], "back": ["Elysia"], "pet": "Ruu", "skills": [{"hero": "Trude", "slot": "Skill 1", "name": "Reckless Charge"}, {"hero": "Giyu Tomioka", "slot": "Skill 2", "name": "Water Breathing, Tenth Form: Constant Flux"}, {"hero": "Elysia", "slot": "Skill 2", "name": "Starfall"}], "note": ""}, "C11": {"code": "C11", "heroes": [{"name": "Kris", "img": "chara_24.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Rosie", "img": "chara_318.png"}], "formation": "Balanced (3-2) — Trước: Kris, Mist | Sau: Rosie", "front": ["Kris", "Mist"], "back": ["Rosie"], "pet": "Merparrow", "skills": [{"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"}, {"hero": "Mist", "slot": "Skill 1", "name": "Awakened Beast"}, {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}], "note": ""}, "C12": {"code": "C12", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Mist", "img": "chara_466.png"}, {"name": "Kris", "img": "chara_24.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Mist | Sau: Kris", "front": ["Radgrid", "Mist"], "back": ["Kris"], "pet": "Merparrow", "skills": [{"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"}, {"hero": "Mist", "slot": "Skill 1", "name": "Awakened Beast"}, {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}], "note": ""}, "C13": {"code": "C13", "heroes": [{"name": "Skuld", "img": "chara_479.png"}, {"name": "Freyja", "img": "chara_390.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Attack (1-4) — Trước: Freyja | Sau: Skuld, Yoongun", "front": ["Freyja"], "back": ["Skuld", "Yoongun"], "pet": "Yu", "skills": [{"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"}, {"hero": "Freyja", "slot": "Skill 2", "name": "Golden Rain"}, {"hero": "Freyja", "slot": "Skill 1", "name": "Noble Storm"}], "note": "Skuld đánh thường trước để gắn Magic Vulnerability, rồi mới tới 3 skill trên."}, "C14": {"code": "C14", "heroes": [{"name": "Eileene", "img": "chara_527.png"}, {"name": "Karl Heron", "img": "chara_475.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Eileene | Sau: Karl Heron, Sunran", "front": ["Eileene"], "back": ["Karl Heron", "Sunran"], "pet": "Yu", "skills": [{"hero": "Eileene", "slot": "Skill 1", "name": "Lightning Spear"}, {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"}, {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}], "note": ""}, "C15": {"code": "C15", "heroes": [{"name": "Orkah", "img": "chara_489.png"}, {"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}], "formation": "Attack (1-4) — Trước: Orkah | Sau: Tanjiro Kamado, Zenitsu Agatsuma", "front": ["Orkah"], "back": ["Tanjiro Kamado", "Zenitsu Agatsuma"], "pet": "Jeo", "skills": [{"hero": "Orkah", "slot": "Skill 2", "name": "Merciless Exploitation"}, {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing, First Form: Thunderclap and Flash"}, {"hero": "Tanjiro Kamado", "slot": "Skill 2", "name": "Hinokami Kagura: Dancing Flash"}], "note": ""}, "C16": {"code": "C16", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Basic (2-3) — Trước: Shinobu Kocho | Sau: Dongyoung, Sunran", "front": ["Shinobu Kocho"], "back": ["Dongyoung", "Sunran"], "pet": "Jeo", "skills": [{"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing, Dance of the Dragonfly: Compound Eye Hexagon"}, {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}, {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}], "note": ""}, "C17": {"code": "C17", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Juri", "img": "chara_321.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Juri | Sau: Dongyoung, Yoongun", "front": ["Juri"], "back": ["Dongyoung", "Yoongun"], "pet": "Jeo", "skills": [{"hero": "Juri", "slot": "Skill 2", "name": "Ultimate Verdict"}, {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}, {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}], "note": ""}, "C18": {"code": "C18", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Gelidus", "img": "chara_396.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Gelidus", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Gelidus"], "pet": "Ruu", "skills": [{"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"}, {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing, Seventh Form: Drop Ripple Thrust"}, {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"}], "note": ""}, "C19": {"code": "C19", "heroes": [{"name": "Radgrid", "img": "chara_435.png"}, {"name": "Pallanus", "img": "chara_408.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Radgrid, Giyu Tomioka | Sau: Pallanus", "front": ["Radgrid", "Giyu Tomioka"], "back": ["Pallanus"], "pet": "Ruu", "skills": [{"hero": "Pallanus", "slot": "Skill 1", "name": "Formidable Strike"}, {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing, Seventh Form: Drop Ripple Thrust"}, {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"}], "note": ""}, "C20": {"code": "C20", "heroes": [{"name": "Diaochan", "img": "chara_411.png"}, {"name": "Shinobu Kocho", "img": "chara_535.png"}, {"name": "Yoongun", "img": "chara_521.png"}], "formation": "Balanced (3-2) — Trước: Diaochan | Sau: Shinobu Kocho, Yoongun", "front": ["Diaochan"], "back": ["Shinobu Kocho", "Yoongun"], "pet": "Yu", "skills": [{"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"}, {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing, Dance of the Dragonfly: Compound Eye Hexagon"}, {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}], "note": ""}, "C21": {"code": "C21", "heroes": [{"name": "Dongyoung", "img": "chara_516.png"}, {"name": "Skuld", "img": "chara_479.png"}, {"name": "Mist", "img": "chara_466.png"}], "formation": "Attack (1-4) — Trước: Mist | Sau: Dongyoung, Skuld", "front": ["Mist"], "back": ["Dongyoung", "Skuld"], "pet": "Merparrow", "skills": [{"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"}, {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"}, {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}], "note": ""}, "C22": {"code": "C22", "heroes": [{"name": "Hellenia (Awakening)", "img": "chara_490.png"}, {"name": "Radgrid", "img": "chara_435.png"}, {"name": "Giyu Tomioka", "img": "chara_533.png"}], "formation": "Defense (4-1) — Trước: Hellenia (Awakening), Radgrid | Sau: Giyu Tomioka", "front": ["Hellenia (Awakening)", "Radgrid"], "back": ["Giyu Tomioka"], "pet": "Ruu", "skills": [{"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"}, {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing, Seventh Form: Drop Ripple Thrust"}, {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"}], "note": ""}, "C23": {"code": "C23", "heroes": [{"name": "Randgrid", "img": "chara_462.png"}, {"name": "Tanjiro Kamado", "img": "chara_529.png"}, {"name": "Zenitsu Agatsuma", "img": "chara_531.png"}], "formation": "Attack (1-4) — Trước: Randgrid | Sau: Tanjiro Kamado, Zenitsu Agatsuma", "front": ["Randgrid"], "back": ["Tanjiro Kamado", "Zenitsu Agatsuma"], "pet": "Jeo", "skills": [{"hero": "Randgrid", "slot": "Skill 1", "name": "Promised Battlefield"}, {"hero": "Tanjiro Kamado", "slot": "Skill 2", "name": "Hinokami Kagura: Dancing Flash"}, {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing, First Form: Thunderclap and Flash"}], "note": ""}, "C24": {"code": "C24", "heroes": [{"name": "Ballista", "img": "chara_120.png"}, {"name": "Hayeon", "img": "chara_525.png"}, {"name": "Sunran", "img": "chara_500.png"}], "formation": "Attack (1-4) — Trước: Sunran | Sau: Ballista, Hayeon", "front": ["Sunran"], "back": ["Ballista", "Hayeon"], "pet": "Jeo", "skills": [{"hero": "Ballista", "slot": "Skill 2", "name": "Shadow of Death"}, {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}, {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}], "note": ""}}, "heroImgs": ["chara_120.png", "chara_24.png", "chara_306.png", "chara_318.png", "chara_321.png", "chara_330.png", "chara_339.png", "chara_381.png", "chara_384.png", "chara_390.png", "chara_396.png", "chara_399.png", "chara_408.png", "chara_411.png", "chara_426.png", "chara_435.png", "chara_444.png", "chara_462.png", "chara_466.png", "chara_472.png", "chara_475.png", "chara_479.png", "chara_480.png", "chara_484.png", "chara_485.png", "chara_489.png", "chara_490.png", "chara_495.png", "chara_496.png", "chara_500.png", "chara_516.png", "chara_517.png", "chara_521.png", "chara_525.png", "chara_527.png", "chara_529.png", "chara_531.png", "chara_533.png", "chara_535.png"]};
+var PETS = {
+  "Jeo":      {img:"jeo.png",       effect:"Tăng Damage 12% · Tăng All Attack 29%"},
+  "Yu":       {img:"yu.png",        effect:"Giảm Defense địch 10% · Giảm hồi máu nhận vào của địch 32%"},
+  "Ruu":      {img:"ruu.png",       effect:"Tăng Defense 22%"},
+  "Pike":     {img:"pike.png",      effect:"Tăng Effect Resistance 19% · Tăng Defense 13%"},
+  "Merparrow":{img:"merparrow.png", effect:"Tăng Effect Probability 10% · Tăng Effect Hit Rate 19%"},
+  "Karam":    {img:"karam.png",     effect:"Tăng Block Rate 15% · Damage Resistance 8%"}
+};
+var GROUPS = [
+  {id:"physical", label:"Physical", color:"var(--physical)"},
+  {id:"magic", label:"Magic", color:"var(--magic)"},
+  {id:"tank", label:"Tank / Sustain", color:"var(--tank)"},
+  {id:"death", label:"Death", color:"var(--death)"},
+  {id:"status", label:"Status Ailment", color:"var(--status)"},
+  {id:"special", label:"Chuyên dụng", color:"var(--special)"}
+];
+var state = {tab:"all", q:""};
+
+function heroImg(h){ return "assets/heroes/" + h.img; }
+function petImg(name){ var p = PETS[name]; return p ? "assets/pets/" + p.img : ""; }
+function fmtShort(team){ return team.formation.split(" — ")[0]; }
+function groupOf(id){ for (var i=0;i<GROUPS.length;i++) if (GROUPS[i].id===id) return GROUPS[i]; return GROUPS[0]; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+
+/* reverse index: counter -> defense teams it beats */
+var beatsMap = {};
+DATA.defense.forEach(function(d){ d.counters.forEach(function(c){ (beatsMap[c] = beatsMap[c]||[]).push(d.code); }); });
+
+function heroesHTML(team){
+  return '<div class="heroes">' + team.heroes.map(function(h){
+    return '<div class="hero"><img src="'+heroImg(h)+'" alt="'+esc(h.name)+'" /><div class="hn">'+esc(h.name)+'</div></div>';
+  }).join("") + '</div>';
+}
+function petMiniHTML(team){
+  var p = PETS[team.pet]; if(!p) return "";
+  return '<span class="petmini"><img src="'+petImg(team.pet)+'" alt="Pet '+esc(team.pet)+'" />'+esc(team.pet)+'</span>';
+}
+function cardHTML(d, i){
+  var g = groupOf(d.group);
+  return '<button class="card" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-team="'+d.code+'">'
+    + '<div class="card-top"><span class="code">'+d.code+'</span><span class="gtag" style="color:'+g.color+'">'+g.label+'</span><span class="arr">Khắc chế ›</span></div>'
+    + heroesHTML(d)
+    + '<div class="card-meta"><span class="fmt">'+esc(fmtShort(d))+'</span>' + petMiniHTML(d)
+    + '<span class="ccount">'+d.counters.length+' khắc chế</span></div></button>';
+}
+function counterCardHTML(c, i){
+  var v = DATA.counters[c];
+  return '<button class="card" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-counter="'+c+'">'
+    + '<div class="card-top"><span class="code">'+c+'</span><span class="gtag" style="color:var(--gold)">Đội hình khắc chế</span><span class="arr">Chi tiết ›</span></div>'
+    + heroesHTML(v)
+    + '<div class="card-meta"><span class="fmt">'+esc(fmtShort(v))+'</span>' + petMiniHTML(v)
+    + '<span class="ccount">đánh được '+(beatsMap[c]||[]).length+' team thủ</span></div></button>';
+}
+
+function matches(team, isCounter){
+  if (!state.q) return true;
+  var q = state.q.toLowerCase();
+  var hay = (team.code + " " + team.pet + " " + team.heroes.map(function(h){return h.name;}).join(" ")).toLowerCase();
+  if (isCounter) hay += " " + DATA.counters[team.code].skills.map(function(s){return (s.hero||"")+" "+(s.name||"");}).join(" ").toLowerCase();
+  return hay.indexOf(q) !== -1;
+}
+
+function render(){
+  var list = document.getElementById("list");
+  var html = "", any = false;
+  if (state.tab === "counters"){
+    var cs = Object.keys(DATA.counters).filter(function(c){ return matches(DATA.counters[c], true); });
+    if (cs.length){
+      any = true;
+      html += '<div class="group-head"><h2>Thư viện đội hình khắc chế</h2><span class="gcount">'+cs.length+' đội hình</span><span class="grule"></span></div>'
+        + '<div class="grid">' + cs.map(function(c, i){ return counterCardHTML(c, i); }).join("") + '</div>';
+    }
+  } else {
+    GROUPS.forEach(function(g){
+      if (state.tab !== "all" && state.tab !== g.id) return;
+      var teams = DATA.defense.filter(function(d){ return d.group===g.id && matches(d,false); });
+      if (!teams.length) return;
+      any = true;
+      html += '<div class="group-head"><h2 style="color:'+g.color+'">'+g.label+'</h2><span class="gcount">'+teams.length+' biến thể</span><span class="grule"></span></div>'
+        + '<div class="grid">' + teams.map(function(d, i){ return cardHTML(d, i); }).join("") + '</div>';
+    });
+    if (state.q && state.tab === "all"){
+      var cs2 = Object.keys(DATA.counters).filter(function(c){ return matches(DATA.counters[c], true); });
+      if (cs2.length){
+        any = true;
+        html += '<div class="group-head"><h2 style="color:var(--gold)">Đội hình khắc chế</h2><span class="gcount">'+cs2.length+' đội hình có tướng này</span><span class="grule"></span></div>'
+          + '<div class="grid">' + cs2.map(function(c, i){ return counterCardHTML(c, i); }).join("") + '</div>';
+      }
+    }
+  }
+  list.innerHTML = html;
+  document.getElementById("empty").className = "empty" + (any ? "" : " show");
+  list.querySelectorAll("[data-team]").forEach(function(b){ b.addEventListener("click", function(){ openTeam(b.getAttribute("data-team")); }); });
+  list.querySelectorAll("[data-counter]").forEach(function(b){ b.addEventListener("click", function(){ openCounter(b.getAttribute("data-counter")); }); });
+}
+
+function formationHTML(team){
+  function row(label, names){
+    var byName = {}; team.heroes.forEach(function(h){ byName[h.name]=h; });
+    var inner = names.map(function(n){
+      var h = byName[n];
+      if (h) return '<span class="fhero"><img src="'+heroImg(h)+'" alt="'+esc(n)+'" /><span>'+esc(n)+'</span></span>';
+      return '<span class="fhero"><span>'+esc(n)+'</span></span>';
+    }).join("");
+    return '<div class="frow"><span class="flabel">'+label+'</span><span class="fheroes">'+inner+'</span></div>';
+  }
+  return '<div class="formation-box"><div class="fmt-name">'+esc(fmtShort(team))+' <span>— vị trí đặt thực tế trong team 3 tướng</span></div>'
+    + row("TRƯỚC", team.front) + row("SAU", team.back) + '</div>';
+}
+function skillTags(v){
+  var tags = {};
+  (v.skills || []).forEach(function(s, i){ if (s.hero) (tags[s.hero] = tags[s.hero] || []).push(i + 1); });
+  return tags;
+}
+function boardHeroHTML(h, tags){
+  var t = (tags && tags[h.name]) ? '<span class="skl-tags">' + tags[h.name].map(function(n){ return '<span class="skl-tag">⚔️' + n + '</span>'; }).join("") + '</span>' : "";
+  return '<div class="bhero"><span class="bhero-top"><img src="' + heroImg(h) + '" alt="' + esc(h.name) + '" />' + t + '</span><div class="bhn">' + esc(h.name) + '</div></div>';
+}
+function formationBoardHTML(team, withTags){
+  var byName = {}; team.heroes.forEach(function(h){ byName[h.name] = h; });
+  var tags = withTags ? skillTags(team) : null;
+  function grp(names){ return names.map(function(n){ var h = byName[n]; return h ? boardHeroHTML(h, tags) : ""; }).join(""); }
+  return '<div class="formation-box"><div class="fmt-name">' + esc(fmtShort(team)) + ' <span>— vị trí đặt thực tế trong team 3 tướng</span></div>'
+    + '<div class="board">'
+    + '<div class="bside back"><div class="bside-label">B · BACK</div><div class="bheroes">' + grp(team.back) + '</div></div>'
+    + '<div class="bdiv"><span>B</span><span class="bsep"></span><span>F</span></div>'
+    + '<div class="bside front"><div class="bside-label">F · FRONT</div><div class="bheroes">' + grp(team.front) + '</div></div>'
+    + '</div><div class="board-cap">Đọc sơ đồ từ phải sang trái: tướng Front (F) đứng bên phải, tướng Back (B) đứng bên trái. Tag ⚔️1 / ⚔️2 / ⚔️3 bên phải ảnh tướng là thứ tự skill mở đầu của tướng đó.</div></div>';
+}
+function petBoxHTML(team){
+  var p = PETS[team.pet]; if(!p) return "";
+  return '<div class="petbox"><img src="'+petImg(team.pet)+'" alt="Pet '+esc(team.pet)+'" /><div><div class="pn">Pet: '+esc(team.pet)+'</div><div class="pe">'+esc(p.effect)+' <span style="color:var(--ink3)">(6★)</span></div></div></div>';
+}
+function skillsHTML(v){
+  var items = v.skills.map(function(s, i){
+    if (s.raw) return '<li><span class="sknum">'+(i+1)+'</span><span class="skill-txt">'+esc(s.raw)+'</span></li>';
+    var slotCls = s.slot === "Skill 1" ? "s1" : "s2";
+    var pos = s.slot === "Skill 1" ? "trên" : "dưới";
+    return '<li><span class="sknum">'+(i+1)+'</span><span class="skill-txt"><b>'+esc(s.hero)+'</b> — <span class="slot '+slotCls+'">'+s.slot+' · '+pos+'</span> &ldquo;'+esc(s.name)+'&rdquo;</span></li>';
+  }).join("");
+  var note = v.note ? '<div class="note">'+esc(v.note)+'</div>' : "";
+  return '<ol class="skills">'+items+'</ol>' + note;
+}
+function counterBlockHTML(c, idx){
+  var v = DATA.counters[c];
+  return '<div class="counter-block" style="animation-delay:'+(idx*80)+'ms"><div class="cb-head"><span class="prio">ƯU TIÊN '+(idx+1)+'</span><span class="code">'+c+'</span>'
+    + '<span style="font-weight:700">'+v.heroes.map(function(h){return esc(h.name);}).join(", ")+'</span></div>'
+    + '<div style="margin-top:12px">'+formationBoardHTML(v, true)+'</div>'
+    + '<div style="margin-top:12px">'+petBoxHTML(v)+'</div>'
+    + '<div class="section-t" style="margin-top:16px">3 skill mở đầu — theo thứ tự</div>'
+    + skillsHTML(v) + '</div>';
+}
+
+function openSheet(html){
+  document.getElementById("sheet").innerHTML = html;
+  var ov = document.getElementById("overlay");
+  ov.classList.remove("closing");
+  ov.classList.add("open"); ov.scrollTop = 0;
+  document.body.style.overflow = "hidden";
+  var cb = document.getElementById("closebtn");
+  if (cb) cb.addEventListener("click", closeSheet);
+  document.querySelectorAll("#sheet [data-team]").forEach(function(b){ b.addEventListener("click", function(){ openTeam(b.getAttribute("data-team")); }); });
+}
+function closeSheet(){
+  var ov = document.getElementById("overlay");
+  if (!ov.classList.contains("open") || ov.classList.contains("closing")) return;
+  ov.classList.add("closing");
+  document.body.style.overflow = "";
+  setTimeout(function(){ ov.classList.remove("open"); ov.classList.remove("closing"); }, 180);
+}
+function openTeam(code){
+  var d = null;
+  DATA.defense.forEach(function(x){ if (x.code===code) d = x; });
+  if (!d) return;
+  var g = groupOf(d.group);
+  var counters = d.counters.map(function(c, i){ return counterBlockHTML(c, i); }).join("");
+  openSheet(
+    '<div class="sheet-head"><div><span class="code">'+d.code+'</span> <span class="gtag" style="color:'+g.color+'">'+g.label+' · Phòng thủ</span>'
+    + '<h2>'+d.heroes.map(function(h){return esc(h.name);}).join(" · ")+'</h2></div>'
+    + '<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
+    + heroesHTML(d)
+    + '<div class="section-t">Sơ đồ đội hình</div>' + formationHTML(d)
+    + '<div class="section-t">Pet</div>' + petBoxHTML(d)
+    + '<div class="section-t">Đội hình khắc chế — ưu tiên giảm dần</div>' + counters
+  );
+}
+function openCounter(code){
+  var v = DATA.counters[code]; if (!v) return;
+  var beats = (beatsMap[code]||[]).map(function(t){ return '<button type="button" data-team="'+t+'">'+t+'</button>'; }).join("");
+  openSheet(
+    '<div class="sheet-head"><div><span class="code">'+code+'</span> <span class="gtag" style="color:var(--gold)">Đội hình khắc chế</span>'
+    + '<h2>'+v.heroes.map(function(h){return esc(h.name);}).join(" · ")+'</h2></div>'
+    + '<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
+    + '<div class="section-t">Sơ đồ đội hình</div>' + formationBoardHTML(v, true)
+    + '<div class="section-t">Pet</div>' + petBoxHTML(v)
+    + '<div class="section-t">3 skill mở đầu — theo thứ tự</div>'
+    + '<div class="counter-block" style="margin-top:0">'+skillsHTML(v)+'</div>'
+    + (beats ? '<div class="beats"><b>Khắc chế được các team thủ:</b><br/>'+beats+'</div>' : "")
+  );
+}
+
+/* tabs */
+(function(){
+  var tabs = document.getElementById("tabs");
+  var defs = [{id:"all", label:"Tất cả", cnt: DATA.defense.length}].concat(
+    GROUPS.map(function(g){ return {id:g.id, label:g.label, color:g.color, cnt: DATA.defense.filter(function(d){return d.group===g.id;}).length}; })
+  ).concat([{id:"counters", label:"Thư viện khắc chế", cnt: Object.keys(DATA.counters).length}]);
+  tabs.innerHTML = defs.map(function(t){
+    return '<button class="tab" type="button" role="tab" data-tab="'+t.id+'" aria-selected="'+(state.tab===t.id)+'">'
+      + (t.color ? '<span class="dot" style="background:'+t.color+'"></span>' : '') + t.label + '<span class="cnt">'+t.cnt+'</span></button>';
+  }).join("");
+  tabs.querySelectorAll("[data-tab]").forEach(function(b){
+    b.addEventListener("click", function(){
+      state.tab = b.getAttribute("data-tab");
+      tabs.querySelectorAll("[data-tab]").forEach(function(x){ x.setAttribute("aria-selected", x===b ? "true" : "false"); });
+      render();
+      window.scrollTo({top: document.getElementById("list").offsetTop - 130, behavior:"smooth"});
+    });
+  });
+})();
+
+/* pet grid */
+document.getElementById("petgrid").innerHTML = Object.keys(PETS).map(function(name){
+  var p = PETS[name];
+  var used = DATA.defense.filter(function(d){return d.pet===name;}).length + Object.keys(DATA.counters).filter(function(c){return DATA.counters[c].pet===name;}).length;
+  return '<div class="pet-card"><img src="assets/pets/'+p.img+'" alt="Pet '+name+'" /><div><div class="pn">'+name+'</div><div class="pe">'+esc(p.effect)+'</div><div class="pe">Dùng trong '+used+' đội hình</div></div></div>';
+}).join("");
+
+/* search + hero suggestions */
+var HEROES = (function(){
+  var m = {};
+  function add(h, kind){ var e = m[h.name] || (m[h.name] = {name: h.name, img: h.img, def: 0, ctr: 0}); e[kind]++; }
+  DATA.defense.forEach(function(d){ d.heroes.forEach(function(h){ add(h, "def"); }); });
+  Object.keys(DATA.counters).forEach(function(c){ DATA.counters[c].heroes.forEach(function(h){ add(h, "ctr"); }); });
+  return Object.keys(m).map(function(k){ return m[k]; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+})();
+var qInput = document.getElementById("q");
+var sgBox = document.getElementById("suggest");
+var sgIndex = -1;
+function hideSuggest(){ sgBox.classList.remove("open"); sgBox.innerHTML = ""; sgIndex = -1; }
+function showSuggest(){
+  var q = qInput.value.trim().toLowerCase();
+  if (!q){ hideSuggest(); return; }
+  var items = HEROES.filter(function(h){ return h.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 8);
+  if (!items.length){ hideSuggest(); return; }
+  sgIndex = -1;
+  sgBox.innerHTML = items.map(function(h){
+    return '<button type="button" class="sg-item" role="option" data-hero="' + esc(h.name) + '"><img src="assets/heroes/' + h.img + '" alt="" /><span class="sg-name">' + esc(h.name) + '</span><span class="cnt">' + h.def + ' thủ · ' + h.ctr + ' khắc chế</span></button>';
+  }).join("");
+  sgBox.classList.add("open");
+  sgBox.querySelectorAll(".sg-item").forEach(function(b){
+    b.addEventListener("mousedown", function(e){ e.preventDefault(); pickHero(b.getAttribute("data-hero")); });
+  });
+}
+function setTabAll(){
+  state.tab = "all";
+  document.querySelectorAll("#tabs [data-tab]").forEach(function(x){ x.setAttribute("aria-selected", x.getAttribute("data-tab") === "all" ? "true" : "false"); });
+}
+function pickHero(name){
+  qInput.value = name; state.q = name;
+  document.getElementById("qclear").style.display = "block";
+  setTabAll(); hideSuggest(); render();
+}
+qInput.addEventListener("input", function(){
+  state.q = qInput.value.trim();
+  document.getElementById("qclear").style.display = state.q ? "block" : "none";
+  render();
+  showSuggest();
+});
+qInput.addEventListener("focus", showSuggest);
+qInput.addEventListener("blur", function(){ setTimeout(hideSuggest, 120); });
+qInput.addEventListener("keydown", function(e){
+  var items = sgBox.querySelectorAll(".sg-item");
+  if (!sgBox.classList.contains("open") || !items.length) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp"){
+    e.preventDefault();
+    sgIndex = e.key === "ArrowDown" ? Math.min(sgIndex + 1, items.length - 1) : Math.max(sgIndex - 1, 0);
+    items.forEach(function(it, i){ it.classList.toggle("active", i === sgIndex); });
+  } else if (e.key === "Enter" && sgIndex >= 0 && items[sgIndex]){
+    e.preventDefault(); pickHero(items[sgIndex].getAttribute("data-hero"));
+  } else if (e.key === "Escape"){
+    hideSuggest();
+  }
+});
+document.getElementById("qclear").addEventListener("click", function(){
+  qInput.value = ""; state.q = ""; this.style.display = "none"; hideSuggest(); render(); qInput.focus();
+});
+
+/* overlay close */
+document.getElementById("overlay").addEventListener("click", function(e){ if (e.target === this) closeSheet(); });
+document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeSheet(); });
+
+render();
+</script>
+</body>
+</html>
