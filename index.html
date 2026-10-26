@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.26-4" />
+<meta name="page-version" content="v2026.10.26-5" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -67,7 +67,7 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .searchbar{position:sticky;top:0;z-index:40;background:var(--bg);padding:12px 0 10px;margin-top:10px}
 .search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
 .search svg{flex:none;color:var(--ink3)}
-.search input{border:0;outline:0;background:transparent;color:var(--ink);font:inherit;width:100%}
+.search input{border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:16px;width:100%}
 .search input::placeholder{color:var(--ink3)}
 .search .clear{border:0;background:var(--chip);color:var(--ink2);border-radius:8px;padding:4px 10px;font-size:12.5px;font-weight:700;display:none}
 .search-wrap{position:relative}
@@ -79,6 +79,9 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .sg-item .sg-name{font-weight:700;font-size:14px}
 .sg-item .cnt{margin-left:auto;color:var(--ink3);font-size:12px;font-weight:700;white-space:nowrap}
 .sg-item.active,.sg-item:hover{background:var(--surface2)}
+.sg-head{padding:9px 12px 3px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.sg-code{flex:none;font-weight:800;font-size:13px;background:var(--ink);color:var(--bg);border-radius:6px;padding:2px 8px;min-width:38px;text-align:center}
+.sg-item .sg-sub{font-size:13px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;padding:12px 2px 4px}
 .tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;display:inline-flex;gap:7px;align-items:center}
 .tab .cnt{font-size:11.5px;background:var(--chip);border-radius:999px;padding:1px 8px;color:var(--ink2)}
@@ -228,7 +231,7 @@ footer .ver{display:block;margin-top:6px;font-size:10px;letter-spacing:.04em;opa
       <input id="q" type="search" placeholder="Gõ tên tướng để xem gợi ý — hoặc mã team, pet…" autocomplete="off" />
       <button class="clear" id="qclear" type="button">Xóa</button>
     </label>
-    <div class="suggest" id="suggest" role="listbox" aria-label="Gợi ý tên tướng"></div>
+    <div class="suggest" id="suggest" role="listbox" aria-label="Gợi ý tìm kiếm"></div>
     </div>
   </div>
   <div class="tabs" id="tabs" role="tablist" aria-label="Nhóm đội hình"></div>
@@ -241,7 +244,7 @@ footer .ver{display:block;margin-top:6px;font-size:10px;letter-spacing:.04em;opa
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-4</span></footer>
+  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-5</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -279,19 +282,434 @@ function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
 var beatsMap = {};
 DATA.defense.forEach(function(d){ d.counters.forEach(function(c){ (beatsMap[c] = beatsMap[c]||[]).push(d.code); }); });
 
-/* Determined opening skill queues for specific defense compositions (planner-verified).
-   Keyed by alphabetically sorted hero names. Compositions absent here have NO
-   verified queue: they render no skill tags and no skill section. */
+/* Opening skill chains for defense teams (skill-tag audit 2026-10-26: KEEP 1,
+   NEW 84), keyed by alphabetically sorted hero names. Teams absent here render
+   no skill tags and no skill section. */
 var QUEUES = {
+  "Aris|Clemyth|Rudy": [
+    {"hero": "Rudy", "slot": "Skill 2", "name": "Raise Shield"},
+    {"hero": "Clemyth", "slot": "Skill 1", "name": "Perfect Trap"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}
+  ],
+  "Aris|Gelidus|Radgrid": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}
+  ],
   "Aris|Gelidus|Rudy": [
     {"hero": "Rudy", "slot": "Skill 2", "name": "Raise Shield"},
     {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"},
     {"hero": "Rudy", "slot": "Skill 1", "name": "Charge"}
   ],
+  "Aris|Giyu Tomioka|Hellenia (Awakening)": [
+    {"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}
+  ],
+  "Aris|Giyu Tomioka|Radgrid": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}
+  ],
+  "Aris|Giyu Tomioka|Trude": [
+    {"hero": "Trude", "slot": "Skill 1", "name": "Reckless Charge"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}
+  ],
+  "Aris|Hayeon|Hellenia (Awakening)": [
+    {"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"},
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}
+  ],
+  "Aris|Hayeon|Rudy": [
+    {"hero": "Rudy", "slot": "Skill 2", "name": "Raise Shield"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"},
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}
+  ],
   "Aris|Knox|Rudy": [
     {"hero": "Rudy", "slot": "Skill 2", "name": "Raise Shield"},
-    {"hero": "Knox", "slot": "Skill 2", "name": "Death Sentence"},
+    {"hero": "Knox", "slot": "Skill 2", "name": "Hell Strike"},
     {"hero": "Rudy", "slot": "Skill 1", "name": "Charge"}
+  ],
+  "Aris|Pallanus|Radgrid": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Pallanus", "slot": "Skill 1", "name": "Formidable Strike"},
+    {"hero": "Aris", "slot": "Skill 1", "name": "Crushing Strike"}
+  ],
+  "Ballista|Eileene|Sunran": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Ballista", "slot": "Skill 2", "name": "Shadow of Death"}
+  ],
+  "Ballista|Hayeon|Sunran": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Ballista", "slot": "Skill 2", "name": "Shadow of Death"}
+  ],
+  "Ballista|Karl Heron|Sunran": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Ballista", "slot": "Skill 2", "name": "Shadow of Death"}
+  ],
+  "Ballista|Sunran|Trude": [
+    {"hero": "Trude", "slot": "Skill 1", "name": "Reckless Charge"},
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Ballista", "slot": "Skill 2", "name": "Shadow of Death"}
+  ],
+  "Clemyth|Hayeon|Rudy": [
+    {"hero": "Rudy", "slot": "Skill 2", "name": "Raise Shield"},
+    {"hero": "Clemyth", "slot": "Skill 1", "name": "Perfect Trap"},
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}
+  ],
+  "Dellons|Karl Heron|Sunran": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Dellons", "slot": "Skill 1", "name": "Reaper's Advent"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Diaochan|Hellenia (Awakening)|Yoongun": [
+    {"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"},
+    {"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Diaochan|Rin|Shinobu Kocho": [
+    {"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"},
+    {"hero": "Rin", "slot": "Skill 1", "name": "Dragon's Descent"},
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"}
+  ],
+  "Diaochan|Rin|Yoongun": [
+    {"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"},
+    {"hero": "Rin", "slot": "Skill 1", "name": "Dragon's Descent"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Diaochan|Shinobu Kocho|Yeonhee": [
+    {"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"},
+    {"hero": "Yeonhee", "slot": "Skill 1", "name": "Calamitous Gesture"},
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"}
+  ],
+  "Diaochan|Sunran|Yoongun": [
+    {"hero": "Diaochan", "slot": "Skill 1", "name": "Forward March"},
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Diaochan|Yeonhee|Yoongun": [
+    {"hero": "Diaochan", "slot": "Skill 2", "name": "Song of Protection"},
+    {"hero": "Yeonhee", "slot": "Skill 1", "name": "Calamitous Gesture"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Dongyoung|Eileene|Shinobu Kocho": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Eileene|Skuld": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Eileene|Yoongun": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Dongyoung|Freyja|Skuld": [
+    {"hero": "Freyja", "slot": "Skill 1", "name": "Noble Storm"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"}
+  ],
+  "Dongyoung|Gelidus|Mist": [
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Juri|Shinobu Kocho": [
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "Juri", "slot": "Skill 1", "name": "Celestial Judgment"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Juri|Yoongun": [
+    {"hero": "Juri", "slot": "Skill 1", "name": "Celestial Judgment"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Dongyoung|Melia|Yoongun": [
+    {"hero": "Melia", "slot": "Skill 1", "name": "Crystal Dragon's Mirrors"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Dongyoung|Mist|Skuld": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Mist|Yeonhee": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Yeonhee", "slot": "Skill 2", "name": "Eternal Slumber"}
+  ],
+  "Dongyoung|O'Mok|Shinobu Kocho": [
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "O'Mok", "slot": "Skill 1", "name": "Tiger's Chivalry"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Reginleif|Shinobu Kocho": [
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "Reginleif", "slot": "Skill 1", "name": "Advent of Light"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"}
+  ],
+  "Dongyoung|Rin|Yoongun": [
+    {"hero": "Rin", "slot": "Skill 1", "name": "Dragon's Descent"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Dongyoung|Shinobu Kocho|Sunran": [
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Dongyoung|Shinobu Kocho|Yoongun": [
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "Dongyoung", "slot": "Skill 2", "name": "Touch of the Abyss"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Dongyoung|Yeonhee|Yoongun": [
+    {"hero": "Yeonhee", "slot": "Skill 1", "name": "Calamitous Gesture"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"},
+    {"hero": "Yoongun", "slot": "Skill 2", "name": "Rapid Volley"}
+  ],
+  "Eileene|Karl Heron|Orkah": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Orkah", "slot": "Skill 2", "name": "Merciless Exploitation"},
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"}
+  ],
+  "Eileene|Karl Heron|Sunran": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Eileene|Sunran|Tanjiro Kamado": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Eileene|Sunran|Zenitsu Agatsuma": [
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Eileene|Tanjiro Kamado|Zenitsu Agatsuma": [
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"},
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"}
+  ],
+  "Eileene|Trude|Zenitsu Agatsuma": [
+    {"hero": "Trude", "slot": "Skill 1", "name": "Reckless Charge"},
+    {"hero": "Eileene", "slot": "Skill 2", "name": "Heavens' Wrath - Unleashed"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"}
+  ],
+  "Freyja|Shinobu Kocho|Skuld": [
+    {"hero": "Freyja", "slot": "Skill 1", "name": "Noble Storm"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"}
+  ],
+  "Freyja|Skuld|Yoongun": [
+    {"hero": "Freyja", "slot": "Skill 1", "name": "Noble Storm"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Gelidus|Giyu Tomioka|Hayeon": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"}
+  ],
+  "Gelidus|Giyu Tomioka|Radgrid": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"}
+  ],
+  "Gelidus|Hayeon|Radgrid": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"}
+  ],
+  "Gelidus|Knox|Rudy": [
+    {"hero": "Rudy", "slot": "Skill 2", "name": "Raise Shield"},
+    {"hero": "Knox", "slot": "Skill 1", "name": "Infernal Shield"},
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"}
+  ],
+  "Gelidus|Kris|Mist": [
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}
+  ],
+  "Gelidus|Mist|Skuld": [
+    {"hero": "Gelidus", "slot": "Skill 1", "name": "Tyrant's Memories"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"}
+  ],
+  "Giyu Tomioka|Hayeon|Hellenia (Awakening)": [
+    {"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"},
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"}
+  ],
+  "Giyu Tomioka|Hayeon|Pallanus": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Pallanus", "slot": "Skill 1", "name": "Formidable Strike"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"}
+  ],
+  "Giyu Tomioka|Hayeon|Radgrid": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"}
+  ],
+  "Giyu Tomioka|Hellenia (Awakening)|Radgrid": [
+    {"hero": "Hellenia (Awakening)", "slot": "Skill 2", "name": "Celestial Shield"},
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"}
+  ],
+  "Giyu Tomioka|Pallanus|Radgrid": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Pallanus", "slot": "Skill 1", "name": "Formidable Strike"},
+    {"hero": "Giyu Tomioka", "slot": "Skill 1", "name": "Water Breathing Seventh Form: Drop Ripple Thrust"}
+  ],
+  "Hayeon|Karl Heron|Orkah": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Orkah", "slot": "Skill 2", "name": "Merciless Exploitation"}
+  ],
+  "Hayeon|Kris|Mist": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}
+  ],
+  "Hayeon|Mist|Rosie": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Mist", "slot": "Skill 1", "name": "Awakened Beast"}
+  ],
+  "Hayeon|Pallanus|Radgrid": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Pallanus", "slot": "Skill 1", "name": "Formidable Strike"}
+  ],
+  "Hayeon|Sunran|Tanjiro Kamado": [
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Hayeon|Sunran|Zenitsu Agatsuma": [
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Hayeon|Tanjiro Kamado|Zenitsu Agatsuma": [
+    {"hero": "Hayeon", "slot": "Skill 2", "name": "Moon-Sealing Gate"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"}
+  ],
+  "Juri|Kris|Mist": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Juri", "slot": "Skill 1", "name": "Celestial Judgment"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}
+  ],
+  "Juri|Mist|Rosie": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Juri", "slot": "Skill 1", "name": "Celestial Judgment"},
+    {"hero": "Juri", "slot": "Skill 2", "name": "Ultimate Verdict"}
+  ],
+  "Karl Heron|Lu Bu|Sunran": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Lu Bu", "slot": "Skill 1", "name": "Bloody Whirlwind"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Karl Heron|Orkah|Sunran": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Orkah", "slot": "Skill 2", "name": "Merciless Exploitation"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Karl Heron|Sunran|Tanjiro Kamado": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Karl Heron|Sunran|Zenitsu Agatsuma": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Karl Heron|Tanjiro Kamado|Zenitsu Agatsuma": [
+    {"hero": "Karl Heron", "slot": "Skill 1", "name": "Lightning Beam"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 2", "name": "Hinokami Kagura: Dancing Flash"}
+  ],
+  "Knox|Kris|Mist": [
+    {"hero": "Knox", "slot": "Skill 1", "name": "Infernal Shield"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}
+  ],
+  "Knox|Kris|Rosie": [
+    {"hero": "Knox", "slot": "Skill 1", "name": "Infernal Shield"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"},
+    {"hero": "Kris", "slot": "Skill 2", "name": "Dark Whispers"}
+  ],
+  "Knox|Mist|Rosie": [
+    {"hero": "Knox", "slot": "Skill 1", "name": "Infernal Shield"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Mist", "slot": "Skill 1", "name": "Awakened Beast"}
+  ],
+  "Kris|Mist|Radgrid": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}
+  ],
+  "Kris|Mist|Rosie": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Mist", "slot": "Skill 1", "name": "Awakened Beast"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"}
+  ],
+  "Kris|Radgrid|Rosie": [
+    {"hero": "Radgrid", "slot": "Skill 1", "name": "Rain of Spears"},
+    {"hero": "Kris", "slot": "Skill 1", "name": "Dark Slash"},
+    {"hero": "Kris", "slot": "Skill 2", "name": "Dark Whispers"}
+  ],
+  "Mist|Rin|Skuld": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Rin", "slot": "Skill 2", "name": "Dragon's Wrath"}
+  ],
+  "Mist|Skuld|Yeonhee": [
+    {"hero": "Mist", "slot": "Skill 2", "name": "Deadly Mist"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Yeonhee", "slot": "Skill 2", "name": "Eternal Slumber"}
+  ],
+  "Randgrid|Tanjiro Kamado|Zenitsu Agatsuma": [
+    {"hero": "Randgrid", "slot": "Skill 1", "name": "Promised Battlefield"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 2", "name": "Thunder Breathing First Form: Thunderclap and Flash Eightfold"}
+  ],
+  "Shinobu Kocho|Skuld|Yoongun": [
+    {"hero": "Shinobu Kocho", "slot": "Skill 2", "name": "Insect Breathing Dance of the Dragonfly: Compound Eye Hexagon"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Silvesta|Skuld|Yoongun": [
+    {"hero": "Silvesta", "slot": "Skill 1", "name": "Agonizing Condemnation"},
+    {"hero": "Skuld", "slot": "Skill 2", "name": "Constellation's Secret"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"}
+  ],
+  "Sunran|Tanjiro Kamado|Trude": [
+    {"hero": "Trude", "slot": "Skill 1", "name": "Reckless Charge"},
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Sunran", "slot": "Skill 2", "name": "Phantom Flying Blade"}
+  ],
+  "Sunran|Tanjiro Kamado|Zenitsu Agatsuma": [
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Sunran", "slot": "Skill 1", "name": "Chained Slash"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 1", "name": "Thunder Breathing First Form: Thunderclap and Flash"}
+  ],
+  "Tanjiro Kamado|Yoongun|Zenitsu Agatsuma": [
+    {"hero": "Tanjiro Kamado", "slot": "Skill 1", "name": "Hinokami Kagura: Dance"},
+    {"hero": "Yoongun", "slot": "Skill 1", "name": "Tenfold Barrage"},
+    {"hero": "Zenitsu Agatsuma", "slot": "Skill 2", "name": "Thunder Breathing First Form: Thunderclap and Flash Eightfold"}
   ]
 };
 function defSkills(team){
@@ -556,7 +974,7 @@ document.getElementById("petgrid").innerHTML = Object.keys(PETS).map(function(na
   return '<div class="pet-card"><img src="'+petImg(name)+'" alt="Pet '+name+'" /><div><div class="pn">'+name+'</div><div class="pe">'+esc(p.effect)+'</div><div class="pe">Dùng trong '+used+' đội hình</div></div></div>';
 }).join("");
 
-/* search + hero suggestions */
+/* search + suggestions: heroes first, then pets, then team codes (query >= 2 chars) */
 var HEROES = (function(){
   var m = {};
   function add(h, kind){ var e = m[h.name] || (m[h.name] = {name: h.name, img: h.img, def: 0, ctr: 0}); e[kind]++; }
@@ -564,22 +982,54 @@ var HEROES = (function(){
   Object.keys(DATA.counters).forEach(function(c){ DATA.counters[c].heroes.forEach(function(h){ add(h, "ctr"); }); });
   return Object.keys(m).map(function(k){ return m[k]; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
 })();
+var PET_SUGGEST = Object.keys(PETS).map(function(name){
+  var used = DATA.defense.filter(function(d){ return d.pet === name; }).length
+    + Object.keys(DATA.counters).filter(function(c){ return DATA.counters[c].pet === name; }).length;
+  return {name: name, used: used};
+}).sort(function(a, b){ return a.name.localeCompare(b.name); });
+var CODE_SUGGEST = DATA.defense.map(function(d){
+  return {code: d.code, kind: "def", label: groupOf(d.group).label + " · Phòng thủ",
+    heroes: d.heroes.map(function(h){ return h.name; }).join(", ")};
+}).concat(Object.keys(DATA.counters).map(function(c){
+  var v = DATA.counters[c];
+  return {code: c, kind: "ctr", label: "Đội hình khắc chế",
+    heroes: v.heroes.map(function(h){ return h.name; }).join(", ")};
+}));
 var qInput = document.getElementById("q");
 var sgBox = document.getElementById("suggest");
 var sgIndex = -1;
 function hideSuggest(){ sgBox.classList.remove("open"); sgBox.innerHTML = ""; sgIndex = -1; }
 function showSuggest(){
   var q = qInput.value.trim().toLowerCase();
-  if (!q){ hideSuggest(); return; }
-  var items = HEROES.filter(function(h){ return h.name.toLowerCase().indexOf(q) !== -1; }).slice(0, 8);
-  if (!items.length){ hideSuggest(); return; }
+  if (q.length < 2){ hideSuggest(); return; }
+  var room = 12;
+  var heroes = HEROES.filter(function(h){ return h.name.toLowerCase().indexOf(q) !== -1; }).slice(0, Math.min(8, room));
+  room -= heroes.length;
+  var pets = room > 0 ? PET_SUGGEST.filter(function(p){ return p.name.toLowerCase().indexOf(q) !== -1; }).slice(0, room) : [];
+  room -= pets.length;
+  var codes = room > 0 ? CODE_SUGGEST.filter(function(t){ return t.code.toLowerCase().indexOf(q) !== -1; }).slice(0, room) : [];
+  if (!heroes.length && !pets.length && !codes.length){ hideSuggest(); return; }
   sgIndex = -1;
-  sgBox.innerHTML = items.map(function(h){
-    return '<button type="button" class="sg-item" role="option" data-hero="' + esc(h.name) + '"><img src="' + heroImg(h) + '" alt="" /><span class="sg-name">' + esc(h.name) + '</span><span class="cnt">' + h.def + ' thủ · ' + h.ctr + ' khắc chế</span></button>';
-  }).join("");
+  var html = "";
+  if (heroes.length){
+    html += '<div class="sg-head">Tướng</div>' + heroes.map(function(h){
+      return '<button type="button" class="sg-item" role="option" data-kind="hero" data-value="' + esc(h.name) + '"><img src="' + heroImg(h) + '" alt="" /><span class="sg-name">' + esc(h.name) + '</span><span class="cnt">' + h.def + ' thủ · ' + h.ctr + ' khắc chế</span></button>';
+    }).join("");
+  }
+  if (pets.length){
+    html += '<div class="sg-head">Pet</div>' + pets.map(function(p){
+      return '<button type="button" class="sg-item" role="option" data-kind="pet" data-value="' + esc(p.name) + '"><img src="' + petImg(p.name) + '" alt="" /><span class="sg-name">' + esc(p.name) + '</span><span class="cnt">dùng trong ' + p.used + ' đội hình</span></button>';
+    }).join("");
+  }
+  if (codes.length){
+    html += '<div class="sg-head">Mã team</div>' + codes.map(function(t){
+      return '<button type="button" class="sg-item" role="option" data-kind="' + t.kind + '" data-value="' + t.code + '"><span class="sg-code">' + t.code + '</span><span class="sg-sub">' + esc(t.heroes) + '</span><span class="cnt">' + esc(t.label) + '</span></button>';
+    }).join("");
+  }
+  sgBox.innerHTML = html;
   sgBox.classList.add("open");
   sgBox.querySelectorAll(".sg-item").forEach(function(b){
-    b.addEventListener("mousedown", function(e){ e.preventDefault(); pickHero(b.getAttribute("data-hero")); });
+    b.addEventListener("mousedown", function(e){ e.preventDefault(); pickSuggest(b.getAttribute("data-kind"), b.getAttribute("data-value")); });
   });
 }
 function setTabAll(){
@@ -590,6 +1040,16 @@ function pickHero(name){
   qInput.value = name; state.q = name;
   document.getElementById("qclear").style.display = "block";
   setTabAll(); hideSuggest(); render();
+}
+function pickSuggest(kind, value){
+  if (kind === "hero"){ pickHero(value); return; }
+  if (kind === "pet"){
+    qInput.value = value; state.q = value;
+    document.getElementById("qclear").style.display = "block";
+    setTabAll(); hideSuggest(); render(); return;
+  }
+  hideSuggest();
+  if (kind === "def") openTeam(value); else openCounter(value);
 }
 qInput.addEventListener("input", function(){
   state.q = qInput.value.trim();
@@ -607,7 +1067,7 @@ qInput.addEventListener("keydown", function(e){
     sgIndex = e.key === "ArrowDown" ? Math.min(sgIndex + 1, items.length - 1) : Math.max(sgIndex - 1, 0);
     items.forEach(function(it, i){ it.classList.toggle("active", i === sgIndex); });
   } else if (e.key === "Enter" && sgIndex >= 0 && items[sgIndex]){
-    e.preventDefault(); pickHero(items[sgIndex].getAttribute("data-hero"));
+    e.preventDefault(); pickSuggest(items[sgIndex].getAttribute("data-kind"), items[sgIndex].getAttribute("data-value"));
   } else if (e.key === "Escape"){
     hideSuggest();
   }
