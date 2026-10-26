@@ -119,33 +119,28 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .formation-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
 .fmt-name{font-weight:800;font-size:16px;margin-bottom:10px}
 .fmt-name span{color:var(--ink2);font-weight:600;font-size:13px}
-.frow{display:flex;align-items:center;gap:10px;padding:8px 0}
-.frow + .frow{border-top:1px dashed var(--line)}
-.frow .flabel{flex:none;width:52px;font-family:"Be Vietnam Pro",sans-serif;font-weight:700;letter-spacing:.08em;font-size:13px;color:var(--ink2)}
-.frow .fheroes{display:flex;gap:10px;flex-wrap:wrap}
-.fhero{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:5px 10px 5px 5px}
-.fhero img{width:40px;height:40px;border-radius:8px}
-.fhero span{font-size:13px;font-weight:700}
 .board{position:relative;display:flex;align-items:flex-start;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px}
-.bgroup{flex:1;min-width:0;display:flex;gap:12px;flex-wrap:wrap}
+.bgroup{flex:1;min-width:0;display:flex;gap:10px;flex-wrap:nowrap}
+.bgroup.back{justify-content:flex-start}
 .bgroup.front{justify-content:flex-end}
-.bdiv{flex:none;width:2px;height:52px;border-radius:2px;background:var(--ink3);opacity:.55;margin:0 8px}
-.bhero{display:flex;align-items:flex-start;gap:5px}
-.bimgcol{display:flex;flex-direction:column;align-items:center;width:64px}
-.bimg{width:52px;height:52px;flex:none}
+.bdiv{flex:none;width:2px;height:52px;border-radius:2px;background:var(--ink3);opacity:.55;margin:0 10px}
+.bhero{position:relative;flex:none;width:56px;display:flex;flex-direction:column;align-items:center}
+.bimg{position:relative;width:52px;height:52px;flex:none}
 .bimg img{width:52px;height:52px;border-radius:9px;background:var(--surface);object-fit:cover}
 .bhero.front .bimg img{border:3px solid var(--front-frame)}
 .bhero.back .bimg img{border:3px solid var(--back-frame)}
-.skl-tags{display:flex;flex-direction:column;gap:3px;padding-top:2px}
-.skl-tag{font-size:11px;font-weight:800;background:var(--gold-bg);border:1px solid var(--gold-line);color:var(--ink);border-radius:6px;padding:1px 5px;white-space:nowrap;line-height:1.35}
-.bhn{font-size:11px;font-weight:600;color:var(--ink2);margin-top:5px;line-height:1.25;text-align:center;overflow-wrap:anywhere}
+.skl-tags{position:absolute;top:50%;z-index:3;display:flex;flex-direction:column;gap:3px;pointer-events:none}
+.bhero.front .skl-tags{left:100%;transform:translate(-50%,-50%)}
+.bhero.back .skl-tags{right:100%;transform:translate(50%,-50%)}
+.skl-tag{font-size:11px;font-weight:800;background:var(--gold-bg);border:1px solid var(--gold-line);color:var(--ink);border-radius:6px;padding:1px 5px;white-space:nowrap;line-height:1.35;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.bhn{font-size:11px;font-weight:600;color:var(--ink2);margin-top:5px;line-height:1.25;text-align:center;overflow-wrap:anywhere;width:100%}
 .lgwrap{float:right;display:inline-flex;gap:12px}
 .lg{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--ink2)}
 .lg i{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none}
 .lg .lg-f{background:var(--front-frame)}
 .lg .lg-b{background:var(--back-frame)}
 .mini-open{margin-left:auto;border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:8px;padding:5px 11px;font-weight:800;font-size:12.5px;flex:none}
-@media (max-width:560px){.bimg,.bimg img{width:46px;height:46px}.bdiv{height:46px}.bimgcol{width:56px}.board{padding:10px}.bgroup{gap:8px}}
+@media (max-width:560px){.bimg,.bimg img{width:44px;height:44px}.bdiv{height:44px;margin:0 6px}.bhero{width:48px}.board{padding:10px}.bgroup{gap:6px}}
 .petbox{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
 .petbox img{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);background:var(--surface2)}
 .petbox .pn{font-weight:800;font-size:16px}
@@ -193,7 +188,6 @@ footer{margin-top:30px;color:var(--ink3);font-size:12.5px;text-align:center}
 @media (max-width:560px){
   .grid{grid-template-columns:1fr}
   .stat{min-width:0;flex:1}
-  .frow .flabel{width:44px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
@@ -335,19 +329,6 @@ function render(){
   list.querySelectorAll("[data-counter]").forEach(function(b){ b.addEventListener("click", function(){ openCounter(b.getAttribute("data-counter")); }); });
 }
 
-function formationHTML(team){
-  function row(label, names){
-    var byName = {}; team.heroes.forEach(function(h){ byName[h.name]=h; });
-    var inner = names.map(function(n){
-      var h = byName[n];
-      if (h) return '<span class="fhero"><img src="'+heroImg(h)+'" alt="'+esc(n)+'" /><span>'+esc(n)+'</span></span>';
-      return '<span class="fhero"><span>'+esc(n)+'</span></span>';
-    }).join("");
-    return '<div class="frow"><span class="flabel">'+label+'</span><span class="fheroes">'+inner+'</span></div>';
-  }
-  return '<div class="formation-box"><div class="fmt-name">'+esc(fmtShort(team))+'</div>'
-    + row("TRƯỚC", team.front) + row("SAU", team.back) + '</div>';
-}
 function skillTags(v){
   var tags = {};
   (v.skills || []).forEach(function(s, i){ if (s.hero) (tags[s.hero] = tags[s.hero] || []).push(i + 1); });
@@ -355,8 +336,7 @@ function skillTags(v){
 }
 function boardHeroHTML(h, tags, side){
   var t = (tags && tags[h.name]) ? '<span class="skl-tags">' + tags[h.name].map(function(n){ return '<span class="skl-tag">⚔️' + n + '</span>'; }).join("") + '</span>' : "";
-  var col = '<span class="bimgcol"><span class="bimg"><img src="' + heroImg(h) + '" alt="' + esc(h.name) + '" /></span><span class="bhn">' + esc(h.name) + '</span></span>';
-  return '<div class="bhero ' + side + '">' + (side === "back" ? t + col : col + t) + '</div>';
+  return '<div class="bhero ' + side + '"><span class="bimg"><img src="' + heroImg(h) + '" alt="' + esc(h.name) + '" />' + t + '</span><span class="bhn">' + esc(h.name) + '</span></div>';
 }
 function formationBoardHTML(team, withTags){
   var byName = {}; team.heroes.forEach(function(h){ byName[h.name] = h; });
@@ -423,7 +403,7 @@ function openTeam(code){
     + '<h2>'+d.heroes.map(function(h){return esc(h.name);}).join(" · ")+'</h2></div>'
     + '<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
     + heroesHTML(d)
-    + '<div class="section-t">Sơ đồ đội hình</div>' + formationHTML(d)
+    + '<div class="section-t">Sơ đồ đội hình</div>' + formationBoardHTML(d, false)
     + '<div class="section-t">Pet</div>' + petBoxHTML(d)
     + '<div class="section-t">Đội hình khắc chế — ưu tiên giảm dần</div>' + counters
   );
