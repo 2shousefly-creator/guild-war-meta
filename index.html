@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.26-3" />
+<meta name="page-version" content="v2026.10.26-4" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -241,7 +241,7 @@ footer .ver{display:block;margin-top:6px;font-size:10px;letter-spacing:.04em;opa
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-3</span></footer>
+  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-4</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -300,37 +300,56 @@ function defSkills(team){
 }
 
 /* Visual formation diagram: Back-slot column (left) + Front-slot column (right).
-   Squares are placed by absolute offset against the column's TOTAL height
-   (rows = max(frontCap, backCap) cells of 12px pitch), never snapped to a
-   row: the lit (filled) squares form one contiguous group whose center is
-   exactly the column's mid-height, and the slot block is centered the same
-   way — e.g. Attack (1-4): the two lit blue squares sit in the middle, and
-   the lone orange Front square is centered on the gap between them, at
-   half-height of the whole diagram. Empty-slot outline squares ride the
-   slot block's lattice and are skipped where they would overlap the lit
-   group (odd slot/hero counts, where no outline fits without overlap). */
+   Both columns share ONE total height, FSQ_H = 46px (the tallest template
+   column: 4 slots at 12px pitch), and every column always draws its
+   template's full slot count: lit squares for the heroes in that row plus
+   outline squares for the empty slots — outlines are never dropped. The
+   lit squares form one contiguous group centered on the shared mid-height
+   (23px) — e.g. Attack (1-4): the Back column draws 4 squares with the 2
+   lit ones at tops 12/24 and outlines at 0/36, and the lone lit Front
+   square sits at top 18, centered on the gap between them. Outline squares
+   extend the lit group's own 12px lattice outward, above first, then
+   below. Parity-locked case: a 4-slot column holding 3 heroes (Defense
+   all-Front) — a perfectly centered lit group leaves only 6px free at
+   both ends, too small for the last 10px outline square, so that column
+   falls back to the plain full-slot lattice (outline on top, the 3 lit
+   squares below it) and still draws all 4 slots. */
 var TEMPLATES = {"Defense (4-1)": [4, 1], "Attack (1-4)": [1, 4], "Basic (2-3)": [2, 3], "Balanced (3-2)": [3, 2]};
+var FSQ_H = 46;
 function formationSquares(team){
   var name = fmtShort(team);
   var cap = TEMPLATES[name] || [team.front.length, team.back.length];
-  var rows = Math.max(cap[0], cap[1]);
-  var colH = rows * 12 - 2;
   function col(capN, filled, cls){
-    var blockTop = (colH - (capN * 12 - 2)) / 2;
-    var fillTop = filled > 0 ? (colH - (filled * 12 - 2)) / 2 : 0;
-    var fillBot = fillTop + filled * 12 - 2;
+    var cells = []; /* {top, lit} */
+    var i, t;
+    if (filled <= 0){
+      var blockTop = (FSQ_H - (capN * 12 - 2)) / 2;
+      for (i = 0; i < capN; i++) cells.push({top: blockTop + i * 12, lit: false});
+    } else {
+      var fillTop = (FSQ_H - (filled * 12 - 2)) / 2;
+      var need = capN - filled;
+      var above = [], below = [];
+      for (t = fillTop - 12; t >= 0; t -= 12) above.push(t);
+      for (t = fillTop + filled * 12; t + 10 <= FSQ_H; t += 12) below.push(t);
+      var offs = [], ai = 0, bi = 0;
+      while (offs.length < need && (ai < above.length || bi < below.length)){
+        if (ai < above.length){ offs.push(above[ai]); ai++; }
+        if (offs.length < need && bi < below.length){ offs.push(below[bi]); bi++; }
+      }
+      if (offs.length < need){
+        var stackTop = (FSQ_H - (capN * 12 - 2)) / 2;
+        for (i = 0; i < capN; i++) cells.push({top: stackTop + i * 12, lit: i >= need});
+      } else {
+        for (i = 0; i < offs.length; i++) cells.push({top: offs[i], lit: false});
+        for (i = 0; i < filled; i++) cells.push({top: fillTop + i * 12, lit: true});
+      }
+    }
+    cells.sort(function(a, b){ return a.top - b.top; });
     var s = "";
-    var i, top;
-    for (i = 0; i < capN; i++){
-      top = blockTop + i * 12;
-      if (filled > 0 && top < fillBot && top + 10 > fillTop) continue;
-      s += '<span class="fsq ' + cls + ' off" style="top:' + top + 'px"></span>';
+    for (i = 0; i < cells.length; i++){
+      s += '<span class="fsq ' + cls + (cells[i].lit ? '' : ' off') + '" style="top:' + cells[i].top + 'px"></span>';
     }
-    for (i = 0; i < filled; i++){
-      top = fillTop + i * 12;
-      s += '<span class="fsq ' + cls + '" style="top:' + top + 'px"></span>';
-    }
-    return '<span class="fsq-col" style="height:' + colH + 'px">' + s + '</span>';
+    return '<span class="fsq-col" style="height:' + FSQ_H + 'px">' + s + '</span>';
   }
   return '<span class="fmt-sq" role="img" title="' + esc(name) + '" aria-label="Đội hình ' + esc(name) + '">'
     + col(cap[1], team.back.length, "b") + col(cap[0], team.front.length, "f")
