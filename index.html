@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.26-6" />
+<meta name="page-version" content="v2026.10.26-7" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -321,7 +321,7 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-6</span></footer>
+  <footer>Bảng meta Major League 3v3 · Nguồn: <a href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600">fanpage 7krbvn</a> <span class="ver">v2026.10.26-7</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -924,7 +924,7 @@ function render(){
       var cs2 = Object.keys(DATA.counters).filter(function(c){ return matches(DATA.counters[c], true); });
       if (cs2.length){
         any = true;
-        html += '<div class="group-head"><h2 style="color:var(--gold)">Đội hình khắc chế</h2><span class="gcount">'+cs2.length+' đội hình có tướng này</span><span class="grule"></span></div>'
+        html += '<div class="group-head"><h2 style="color:var(--gold)">Đội hình khắc chế</h2><span class="gcount">'+cs2.length+' đội hình khớp tìm kiếm</span><span class="grule"></span></div>'
           + '<div class="grid">' + cs2.map(function(c, i){ return counterCardHTML(c, i); }).join("") + '</div>';
       }
     }
@@ -971,7 +971,7 @@ function openerHTML(steps){
   var rows = steps.map(function(s, i){
     var sec = panelSec(s.hero, s.slot);
     var name = sec ? sec.n : s.name;
-    var ic = sec && sec.i ? '<img src="assets/skills/'+sec.i+'" alt="" />' : '';
+    var ic = sec && sec.i ? '<img src="'+GW_BASE+sec.i+'" alt="" />' : '';
     return '<button type="button" class="op-row" data-skill-panel="'+esc(s.hero)+'|'+esc(s.slot)+'" aria-label="Xem chi tiết skill '+esc(name)+' của '+esc(s.hero)+'">'
       + '<span class="op-num">#'+(i+1)+'</span><span class="op-ic">'+ic+'</span>'
       + '<span class="op-txt"><b>'+esc(s.hero)+':</b> <span class="op-sn">'+esc(name)+'</span></span></button>';
@@ -1021,7 +1021,7 @@ function secMetaChips(sec){
 }
 function secHTML(slotLabel, sec){
   if (!sec) return "";
-  var ic = sec.i ? '<img src="assets/skills/' + sec.i + '" alt="" />' : "";
+  var ic = sec.i ? '<img src="' + GW_BASE + sec.i + '" alt="" />' : "";
   var h = '<div class="skill-sec"><div class="ss-head">' + ic + '<div><div class="ss-slot">' + esc(slotLabel) + '</div><div class="ss-name">' + esc(sec.n) + '</div></div></div>'
     + secMetaChips(sec);
   if (sec.e) h += '<div class="ss-eff">' + esc(sec.e) + '</div>';
