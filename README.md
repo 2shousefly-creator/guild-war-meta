@@ -4,10 +4,10 @@ Vietnamese reference site for Major League 3v3. Cloudflare deploys the static `i
 
 ## Data reviewed on 27 October 2026
 
-- [7K Note / Pandoara](https://7k-note.pages.dev/g/4ZyeEGMZ?tab=targets): 43 enemy entries, 104 listed counter occurrences. Identical defense configurations may be merged, retaining each source link and its counter conditions.
+- [7K Note / Pandoara](https://7k-note.pages.dev/g/4ZyeEGMZ?tab=targets): 43 enemy entries, 104 listed counter occurrences. Research references remain in the repository and are not linked from the public site.
 - [7K Atlas Guild War](https://7katlas.com/guildwar.html): 48 **Major** variants across Physical, Magic, Tank and CC. Formation **F1** is the captured variant; this snapshot does not claim to contain F2, Minor, Situational or Unused variants.
 - Ten Physical matchup panels from Atlas were inspected. Only explicit **offense wins against defense** and **defense loses against offense** relations are imported, and only when both referenced configurations exist in this snapshot. This is not an exhaustive import of Atlas matchups.
-- Result: **67 defense configurations, 127 offense configurations, 136 directed matchup pairs**. Configurations include primary pet, source-provided backup pets, formation, front/back rows and opening queue. Empty queues remain empty.
+- Result: **49 unique defense trios and 89 unique offense trios**, representing 67 defense configurations, 127 offense configurations, and 136 directed configuration-specific matchups. Configurations include primary pet, backup pets, formation, front/back rows and opening queue. Empty queues remain empty.
 
 This is a dated manual research snapshot, not an automatic update service. Atlas's “Heroes Used in Guild War” summary displayed 21 October 2026; that label is not asserted to be the modification date of every team.
 
@@ -28,9 +28,9 @@ python scripts/build_dataset.py
 node scripts/check_dataset.cjs
 ```
 
-The builder preserves stable IDs, retains per-matchup notes and source links, distinguishes differing configurations, and regenerates the inline dataset. No external network is needed to rebuild. Do not infer extra counter pairs from overlapping heroes, pet substitutions, or reversing a recorded outcome.
+The builder groups teams by an unordered set of three heroes while preserving stable variant IDs, different configurations and their exact counter conditions. Each detail view identifies which defense and offense configurations a matchup applies to. The builder verifies all 136 recorded configuration-to-configuration relationships survive grouping. No external network is needed to rebuild. Do not infer extra counter pairs from overlapping heroes, pet substitutions, or reversing a recorded outcome.
 
-Thai conditions are summarized in Vietnamese beside each matchup. Their original wording remains available in a disclosure. A source explicitly marking an option untested is displayed as such. Source order is not a win-rate ranking.
+Thai conditions are summarized in Vietnamese beside each matchup. Original wording is retained in the repository snapshots. An option explicitly marked untested is displayed as such. Display order is not a win-rate ranking. The public page links only to the 7krbvn fanpage; external image URLs are retained for illustrations.
 
 ## Illustrations and skill reference
 

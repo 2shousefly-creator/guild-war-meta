@@ -1,7 +1,8 @@
 """Rebuild the inline site dataset from the reviewed 27 October source snapshots.
 
 No runtime scraping: publishing index.html keeps the existing Cloudflare setup.
-Source records keep different formations, pets and queues as distinct variants.
+Teams are grouped by their three heroes; different formations, pets, queues,
+and their exact recorded matchups remain separate variants within that group.
 """
 import copy
 import json
@@ -65,21 +66,21 @@ translations = {
  'ต้องเปิดก่อน': 'Bắt buộc đi trước.',
  'เปิดก่อนเท่านั้น': 'Chỉ dùng khi đi trước.',
  'เปิดก่อนดีกว่า': 'Nên đi trước.',
- 'ยังไม่ได้ลอง': 'Nguồn ghi CHƯA THỬ đội này; chưa có xác nhận thực chiến.',
+ 'ยังไม่ได้ลอง': 'CHƯA THỬ đội này; chưa có xác nhận thực chiến.',
  'จูนเลือด ซิลเวสต้า ให้มากกว่าไอลีน': 'Chỉnh HP của Silvesta cao hơn Eileene.',
  'เดลต้องมายืนหน้าเท่านั้น ถึงจะใช้ได้': 'Chỉ áp dụng khi Dellons của đội thủ đứng hàng trước.',
  'ใช้ก็ต่อเมื่อสัตว์ **ไม่ใช่ ยู เท่านั้น**': 'Chỉ dùng khi pet của đội thủ KHÔNG phải Yu.',
- 'ต้าน 80+ ทั้งทีม': 'Cả đội cần Effect Resistance từ 80% trở lên theo ghi chú nguồn.',
+ 'ต้าน 80+ ทั้งทีม': 'Cả đội cần Effect Resistance từ 80% trở lên.',
  'ใช้กรณี เซนอิทสึ เปิดบน ก่อน': 'Dùng khi Zenitsu của đội thủ mở đầu bằng S2.',
- 'ถ้ายุนเปิดบน 1 ต้องเล่นไวกว่า / ถ้ายุนกดบน 2 ให้เล่นช้ากว่า': 'Nếu Yoongun địch dùng S2 ở ưu tiên #1, đội công phải nhanh hơn. Nếu S2 ở #2, nguồn yêu cầu đội công chậm hơn.',
+ 'ถ้ายุนเปิดบน 1 ต้องเล่นไวกว่า / ถ้ายุนกดบน 2 ให้เล่นช้ากว่า': 'Nếu Yoongun địch dùng S2 ở ưu tiên #1, đội công phải nhanh hơn. Nếu S2 ở #2, đội công phải chậm hơn.',
  'เปิดหลังได้ เรียงสปีด โดยอง > ยอนฮี > ยุนกอน(ขอช้า)': 'Có thể đi sau. Thứ tự tốc độ: Dongyoung > Yeonhee > Yoongun; để Yoongun chậm.',
  'ถ้าแหวนเหลือ เหมาะกับเป็นไม้เปิด': 'Phù hợp làm lượt công mở đầu nếu còn đủ nhẫn cần thiết.',
  'ทันจิโร่สปีด no.1 ต้องเปิดก่อนเข้าบ้านช้าจะดีที่สุด': 'Tanjiro cần tốc độ cao nhất đội và giành lượt đi trước; nên chọn nhà thủ chậm.',
- '**เจอ 2 ตัวหลังไม่ใส่อำนาจ = GG': 'Nguồn nhấn mạnh kiểm tra Ring of Authority của hai tướng hàng sau; xem cấu hình gốc trước khi dùng.',
+ '**เจอ 2 ตัวหลังไม่ใส่อำนาจ = GG': 'Kiểm tra Ring of Authority của hai tướng hàng sau; điều kiện cụ thể chưa được xác minh.',
  'เฉพาะบ้านที่เปิดยุนก่อน ถ้าบ้านไหนเปิดชิโนบุก่อน โอกาสลื่นสุง': 'Chỉ áp dụng khi đội thủ dùng Yoongun trước. Rủi ro thất bại cao nếu địch mở bằng Shinobu.',
  'เปิดก่อนดีสุด *ถ้าเปิดหลังให้จอง บนล่างซอรัน บนบาลิสต้า*': 'Ưu tiên đi trước. Nếu đi sau, đổi chuỗi thành Sunran S2 → Sunran S1 → Ballista S2.',
- 'เปิดก่อนถ้าอยากชนะทีมนี้ชัวๆแหวนซ้อนทุกตัว': 'Cần đi trước; nguồn còn yêu cầu cấu hình nhẫn cho cả đội. Kiểm tra trang nguồn để đối chiếu nhẫn.',
- 'จูนสปีดให้ เปิดก่อน **ทันจิโร่ต้องเลือดน้อยสุด**\n*ถ้าเตียวเสี้ยนอ่อนไม่ 100 ให้สปีดชิโนบุนำเตียวเสี้ยน': 'Chỉnh tốc độ để đi trước; Tanjiro địch phải có HP thấp nhất. Ghi chú nguồn còn yêu cầu Shinobu nhanh hơn Diaochan khi cấu hình Diaochan chưa đủ; xem chỉ số tại nguồn.',
+ 'เปิดก่อนถ้าอยากชนะทีมนี้ชัวๆแหวนซ้อนทุกตัว': 'Cần đi trước và cấu hình nhẫn cho cả đội; chi tiết loại nhẫn chưa được xác minh.',
+ 'จูนสปีดให้ เปิดก่อน **ทันจิโร่ต้องเลือดน้อยสุด**\n*ถ้าเตียวเสี้ยนอ่อนไม่ 100 ให้สปีดชิโนบุนำเตียวเสี้ยน': 'Chỉnh tốc độ để đi trước; Tanjiro địch phải có HP thấp nhất. Shinobu cần nhanh hơn Diaochan khi cấu hình Diaochan chưa đủ; điều kiện chỉ số chưa được xác minh.',
  'ต้องรู้ข้อมูลก่อน - ถ้ายุนกอนเปิดบนก่อน กดบนวาแดงก่อน - ไม้แก้ถ้าเจอ ชิโนบุเปิดบนก่อน เล่นตามนี้ได้เลย': 'Phải biết chuỗi mở đầu của đội thủ: nếu Yoongun dùng S2 trước, mở bằng Hellenia S2. Nếu Shinobu dùng S2 trước, dùng chuỗi hiển thị.',
 }
 
@@ -95,7 +96,7 @@ def translate(raw):
         if 'สไป' in raw:
             text += ' Chỉ nên dùng như phương án cuối khi đã đầu tư Spike.'
         if 'เข้าเป้า' in raw:
-            text += ' Nếu Gelidus/Aris địch có Effect Hit Rate 100% và gây nhiều CC, nguồn khuyên cân nhắc counter khác.'
+            text += ' Nếu Gelidus/Aris địch có Effect Hit Rate 100% và gây nhiều CC, hãy cân nhắc counter khác.'
         return text
     raise ValueError('Missing translation: ' + raw)
 
@@ -217,9 +218,81 @@ for t in data['defense'] + list(data['counters'].values()):
     cap = {'Defense (4-1)': [4, 1], 'Attack (1-4)': [1, 4], 'Basic (2-3)': [2, 3], 'Balanced (3-2)': [3, 2]}[t['formation'].split(' — ')[0]]
     assert len(t['front']) <= cap[0] and len(t['back']) <= cap[1]
 
+# A visible team is identified only by its unordered trio. Keep every original
+# configuration and every directed matchup so merging never implies that a
+# counter for one formation also applies to the other formations.
+def trio(t):
+    return tuple(sorted(h['name'] for h in t['heroes']))
+
+def public_variant(t):
+    return {k: copy.deepcopy(v) for k, v in t.items()
+            if k not in ('sources', 'counters', 'matchups')}
+
+expected_edges = {
+    (d['code'], c): (tuple(d['matchups'][c]['notes']), d['matchups'][c]['untested'])
+    for d in data['defense'] for c in d['counters']}
+grouped = {'defense': [], 'counters': {}}
+def_groups, ctr_groups, ctr_by_variant = {}, {}, {}
+for t in data['counters'].values():
+    key = trio(t)
+    if key not in ctr_groups:
+        g = public_variant(t)
+        g['variants'] = []
+        grouped['counters'][g['code']] = g
+        ctr_groups[key] = g
+    g = ctr_groups[key]
+    g['variants'].append(public_variant(t))
+    ctr_by_variant[t['code']] = g['code']
+
+for t in data['defense']:
+    key = trio(t)
+    if key not in def_groups:
+        g = public_variant(t)
+        g.update({'variants': [], 'groups': [], 'counters': [], 'matchups': {}})
+        grouped['defense'].append(g)
+        def_groups[key] = g
+    g = def_groups[key]
+    g['variants'].append(public_variant(t))
+    if t['group'] not in g['groups']:
+        g['groups'].append(t['group'])
+    for counter_code in t['counters']:
+        counter_group = ctr_by_variant[counter_code]
+        if counter_group not in g['counters']:
+            g['counters'].append(counter_group)
+        m = t['matchups'][counter_code]
+        g['matchups'].setdefault(counter_group, []).append({
+            'defenseVariant': t['code'], 'attackVariant': counter_code,
+            'notes': copy.deepcopy(m['notes']), 'untested': m['untested']})
+
+research = copy.deepcopy(data['research'])
+research.update({'defenseTeams': len(grouped['defense']),
+                 'offenseTeams': len(grouped['counters']),
+                 'teamMatchups': sum(len(g['counters']) for g in grouped['defense'])})
+grouped['research'] = research
+assert sum(len(g['variants']) for g in grouped['defense']) == len(data['defense'])
+assert sum(len(g['variants']) for g in grouped['counters'].values()) == len(data['counters'])
+assert sum(len(edges) for g in grouped['defense'] for edges in g['matchups'].values()) == research['matchups']
+actual_edges = {
+    (m['defenseVariant'], m['attackVariant']): (tuple(m['notes']), m['untested'])
+    for g in grouped['defense'] for edges in g['matchups'].values() for m in edges}
+assert actual_edges == expected_edges, 'Grouping must preserve each exact matchup and its conditions.'
+data = grouped
+
+# References are retained in the local research snapshots, but the published
+# page has no outgoing source links or source URLs in the panel metadata.
+for panel in panels.values():
+    panel.pop('source', None)
+pet_panels = inline('PET_PANELS')
+for panel in pet_panels.values():
+    panel.pop('source', None)
+if 'Nezuko Kamado' in pet_panels:
+    pet_panels['Nezuko Kamado']['levelLabel'] = '6★ — mức cơ bản; chưa đối chiếu giá trị sau cường hóa skill'
+
 html = re.sub(r'^var DATA = .+;$', lambda _: 'var DATA = ' + json.dumps(data, ensure_ascii=False) + ';', html, flags=re.M)
 html = re.sub(r'^var HERO_PANELS = .+;$', lambda _: 'var HERO_PANELS = ' + json.dumps(panels, ensure_ascii=False) + ';', html, flags=re.M)
-pet_map = {code: [c['pet']] + c['petBackup'] for code, c in data['counters'].items()}
+html = re.sub(r'^var PET_PANELS = .+;$', lambda _: 'var PET_PANELS = ' + json.dumps(pet_panels, ensure_ascii=False) + ';', html, flags=re.M)
+pet_map = {code: list(dict.fromkeys(p for variant in c['variants'] for p in [variant['pet']] + variant['petBackup']))
+           for code, c in data['counters'].items()}
 html = re.sub(r'^var COUNTER_PETS = .+;$', lambda _: 'var COUNTER_PETS = ' + json.dumps(pet_map, ensure_ascii=False) + ';', html, flags=re.M)
 html = re.sub(r'^var PROPOSED_(DEFENSE|COUNTER) = .+;$', lambda m: 'var PROPOSED_' + m[1] + ' = {};', html, flags=re.M)
 PAGE.write_text(html)
