@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.27-21" />
+<meta name="page-version" content="v2026.10.27-22" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -329,6 +329,62 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
   .stat{min-width:0;flex:1}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* Larger, directional matchup headings and clearly separated conditions */
+.sheet{max-width:920px}
+.sheet-head h2{font-size:clamp(20px,3vw,27px);line-height:1.28;margin-top:8px}
+.sheet-role{display:inline-flex;padding:3px 9px;border-radius:7px;font-size:10px;font-weight:900;letter-spacing:.08em}
+.sheet-role.defense{background:var(--enemy-bg2);color:var(--enemy-ink);border:1px solid var(--enemy-line)}
+.sheet-role.attack{background:var(--ally-bg2);color:var(--ally-ink);border:1px solid var(--ally-line)}
+.match-intro{padding:18px 20px;margin:14px 0 18px;border-radius:15px;border:2px solid var(--line)}
+.match-intro.danger{background:var(--enemy-bg);border-color:var(--enemy-line)}
+.match-intro.advantage{background:var(--ally-bg);border-color:var(--ally-line)}
+.match-eyebrow{display:block;font-weight:900;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px}
+.match-intro.danger .match-eyebrow,.match-heading.danger .match-eyebrow{color:var(--enemy-ink)}
+.match-intro.advantage .match-eyebrow,.match-heading.advantage .match-eyebrow{color:var(--ally-ink)}
+.match-intro h3{font-size:clamp(20px,3.7vw,27px);font-weight:900;line-height:1.3;margin:0 0 8px}
+.match-intro p,.match-heading p{font-size:12.6px;line-height:1.6;color:var(--ink2);margin:0}
+.match-heading{margin:28px 0 14px;padding-bottom:14px;border-bottom:3px solid var(--line)}
+.match-heading.danger{border-color:var(--enemy-line)}
+.match-heading.advantage{border-color:var(--ally-line)}
+.match-heading h3{font-size:clamp(21px,3.4vw,27px);font-weight:900;line-height:1.3;margin:1px 0 5px}
+.team-zone>.section-t{font-size:14px;letter-spacing:0;text-transform:none;font-weight:900;color:var(--ink)}
+.matchup-card{padding:17px 17px 53px;margin:14px 0}
+.matchup-victim{padding:16px;margin:14px 0;border-width:2px}
+.match-tag{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px}
+.matchup-card .match-tag{color:var(--ally-ink)}
+.matchup-victim .match-tag{color:var(--enemy-ink)}
+.match-number{display:inline-block;font-size:11px;font-weight:900;color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:3px 9px}
+.match-team-name{font-size:clamp(16px,2.5vw,20px);line-height:1.4;font-weight:900;margin:9px 0 6px;overflow-wrap:anywhere}
+.match-explain{font-weight:700;font-size:12.3px;line-height:1.55;color:var(--ink2);margin:4px 0 12px}
+.match-case{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--surface);margin:10px 0}
+.match-case>summary{display:flex;flex-direction:column;gap:3px;padding:12px 13px;list-style-position:inside;cursor:pointer}
+.match-case[open]>summary{background:var(--surface2);border-bottom:1px solid var(--line)}
+.case-title{font-size:13.8px;font-weight:900;color:var(--ink)}
+.case-sub{font-size:12.2px;font-weight:700;color:var(--ink2)}
+.match-case .variant-body{padding:12px}
+.match-case-row{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);margin-top:10px}
+.match-case-context{font-size:12.2px;font-weight:800;color:var(--ink);line-height:1.5}
+.match-requirements{background:var(--gold-bg);border-left:4px solid var(--gold);border-radius:7px;margin-top:8px;padding:10px 12px}
+.match-requirements strong{display:block;margin-bottom:5px;font-size:12.3px;font-weight:900}
+.match-requirements p{margin:4px 0;font-size:12.2px;line-height:1.55}
+.lineup-tip{margin:10px 0;padding:10px 12px;border-left:3px solid var(--front);background:var(--surface2);border-radius:9px;font-size:12.2px;line-height:1.6}
+.empty-match{padding:16px;border:1px dashed var(--line);border-radius:11px;background:var(--surface);font-size:13px;font-weight:700;color:var(--ink2)}
+.card-top .arr{font-size:11px;color:var(--ink2);max-width:142px;text-align:right}
+.card .ccount{font-size:11.5px}
+@media(max-width:600px){
+ .sheet{padding:16px 12px 24px}
+ .sheet-head{margin:-16px -12px 6px;padding:13px 12px 10px}
+ .sheet-head h2{font-size:19px}
+ .closebtn{padding:7px 9px;font-size:11px}
+ .match-intro{padding:15px 14px}
+ .match-intro h3{font-size:20px}
+ .match-heading h3{font-size:21px}
+ .matchup-card{padding:13px 12px 50px}
+ .matchup-victim{padding:13px 12px}
+ .match-team-name{font-size:17px}
+ .match-case .variant-body{padding:10px}
+}
 </style>
 </head>
 <body>
@@ -361,7 +417,7 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
     <summary>Cách đọc đội hình và kỹ năng</summary>
     <p>Icon kỹ năng trong game, từ trên xuống: <b>Awakening (nếu có) → Skill 2 → Skill 1</b>. Tướng có hai icon: <b>Skill 2 ở trên, Skill 1 ở dưới</b>. Số #1, #2, #3 là thứ tự sử dụng, không phải số hiệu kỹ năng. Awakening bị động tự kích hoạt, không tự thêm vào chuỗi mở đầu.</p>
     <p>Mỗi thẻ đại diện cho một bộ ba tướng, bất kể vị trí. Mở thẻ để xem từng cách bố trí, formation, pet và chuỗi mở đầu đã ghi nhận.</p>
-    <p>Mỗi phương án khắc chế chỉ áp dụng cho các cách thủ được ghi bên cạnh. Chú ý điều kiện về tốc độ, HP, nhẫn và các phương án chưa thử. “Chưa có matchup” nghĩa là chưa ghi nhận cặp đối đầu; thứ tự hiển thị không phải bảng xếp hạng tỷ lệ thắng.</p>
+    <p>Chọn đội phòng thủ để xem những đội công khắc chế đội đó; chọn đội công để xem đội thủ nào có thể bị khắc chế. Mỗi cặp đối đầu được phân tách theo cách xếp tướng, pet và điều kiện sử dụng. Danh sách không phải bảng xếp hạng tỷ lệ thắng.</p>
   </details>
 
   <section class="info" id="pets">
@@ -369,7 +425,7 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Hình ảnh game © Netmarble Corp. &amp; Netmarble Nexus Inc. <span class="ver">v2026.10.27-21</span></footer>
+  <footer>Bảng meta Major League 3v3 · Hình ảnh game © Netmarble Corp. &amp; Netmarble Nexus Inc. <span class="ver">v2026.10.27-22</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -427,33 +483,51 @@ function fmtShort(team){ return team.formation.split(" — ")[0]; }
 function groupOf(id){ for (var i=0;i<GROUPS.length;i++) if (GROUPS[i].id===id) return GROUPS[i]; return GROUPS[0]; }
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 
-function matchupNoteHTML(matchup, context){
-  var h = '<div class="variant-context">'+esc(context)+'</div>';
-  if (matchup.untested || matchup.notes.length){
-    h += '<div class="match-note'+(matchup.untested?' untested':'')+'"><b>'+(matchup.untested?'Chưa thử':'Điều kiện sử dụng')+'</b>'
-      + matchup.notes.map(function(n){return '<p>'+esc(n)+'</p>';}).join('')+'</div>';
-  }
-  return h;
+
+function cleanMatchNote(raw){
+  return String(raw || "").trim()
+    .replace(/CHƯA THỬ[^.]*\./gi,"")
+    .replace(/;\s*điều kiện chỉ số chưa được xác minh\.?/gi,".")
+    .replace(/;\s*chi tiết loại nhẫn chưa được xác minh\.?/gi,".")
+    .replace(/;\s*điều kiện cụ thể chưa được xác minh\.?/gi,".")
+    .replace(/\s+\./g,".").trim();
 }
+function lineupAdvice(raw){
+  return /Đề xuất theo cơ chế kỹ năng/i.test(raw)
+    ? "Xếp cả ba tướng hàng trước để đều nhận hiệu ứng giảm sát thương Rudy chỉ cấp cho đồng minh hàng trước."
+    : cleanMatchNote(raw);
+}
+function rowDescription(team){
+  return "Trước: "+(team.front.length ? team.front.join(", ") : "trống")
+    +" · Sau: "+(team.back.length ? team.back.join(", ") : "trống");
+}
+function matchupNoteHTML(matchup, context){
+  var notes=(matchup.notes||[]).map(cleanMatchNote).filter(Boolean);
+  var h='<div class="match-case-row"><div class="match-case-context">'+esc(context)+'</div>';
+  if(notes.length)h+='<div class="match-requirements"><strong>Điều kiện cần đáp ứng để có lợi thế</strong>'
+    +notes.map(function(n){return '<p>'+esc(n)+'</p>';}).join('')+'</div>';
+  return h+'</div>';
+}
+
 function variantNumber(team, code){
   return team.variants.findIndex(function(v){return v.code===code;}) + 1;
 }
+
 function variantTitle(v, kind, number){
-  return 'Bố trí '+kind+' '+number+' · '+fmtShort(v)+' · Pet '+v.pet+(v.recommended?' · Đề xuất, chưa thử':'');
+  return 'Cách xếp '+kind+' '+number+' · '+fmtShort(v)+' · Pet '+v.pet;
 }
 
-/* reverse index: counter -> defense teams it beats */
-var beatsMap = {};
-DATA.defense.forEach(function(d){ d.counters.forEach(function(c){ (beatsMap[c] = beatsMap[c]||[]).push(d.code); }); });
 
-/* Cards whose dataset entry carries a PROPOSED flag (build-dataset v2026.10.27-18):
-   every defense/counter with any PROPOSED_* flag shows the "Đề xuất" badge,
-   in list cards and details. Sets below are derived from those flags. */
-var PROPOSED_DEFENSE = {};
-var PROPOSED_COUNTER = {};
-function propBadgeHTML(isProposed){ return isProposed ? '<span class="prop-badge">Đề xuất</span>' : ''; }
-function defPropBadge(code){ return propBadgeHTML(!!PROPOSED_DEFENSE[code]); }
-function ctrPropBadge(code){ return propBadgeHTML(!!PROPOSED_COUNTER[code]); }
+/* Do not claim matchups known only as untested. Keep raw JSON unchanged. */
+DATA.defense.forEach(function(d){
+  Object.keys(d.matchups).forEach(function(c){
+    d.matchups[c]=d.matchups[c].filter(function(m){return !m.untested;});
+    if(!d.matchups[c].length)delete d.matchups[c];
+  });
+  d.counters=d.counters.filter(function(c){return d.matchups[c]&&d.matchups[c].length;});
+});
+var beatsMap={};
+DATA.defense.forEach(function(d){d.counters.forEach(function(c){(beatsMap[c]=beatsMap[c]||[]).push(d.code);});});
 
 /* Opening skill chains for defense teams are part of the planner copy in
    DATA (team.skills, in display order). Teams without a chain render no
@@ -533,24 +607,24 @@ function petMiniHTML(team){
   var p = PETS[team.pet]; if(!p) return "";
   return '<span class="petmini"><img src="'+petImg(team.pet)+'" alt="Pet '+esc(team.pet)+'" />'+esc(team.pet)+'</span>';
 }
+
 function cardHTML(d, i){
-  var g = groupOf(d.groups.indexOf(state.tab)!==-1 ? state.tab : d.group);
+  var g=groupOf(d.groups.indexOf(state.tab)!==-1?state.tab:d.group);
   return '<button class="card def" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-team="'+d.code+'">'
-    + '<div class="card-top"><span class="code">'+d.code+'</span><span class="gtag" style="color:'+g.color+'">'+g.label+'</span>'+defPropBadge(d.code)+'<span class="arr">Khắc chế ›</span></div>'
-    + heroesHTML(d)
-    + '<div class="card-meta">' + formationSquares(d) + petMiniHTML(d)
-    + '<span class="ccount">'+(d.counters.length ? d.counters.length+' khắc chế' : 'Chưa có matchup')+'</span></div>'
-    + (d.variants[0].recommended ? '<div class="variant-count">Bố trí đề xuất · Chưa thử thực chiến</div>' : '')
-    + (d.variants.length>1 ? '<div class="variant-count">'+d.variants.length+' cách bố trí · Xem chi tiết</div>' : '')+'</button>';
+    +'<div class="card-top"><span class="code">'+d.code+'</span><span class="gtag" style="color:'+g.color+'">'+g.label+'</span><span class="arr">Xem đội công khắc chế ›</span></div>'
+    +heroesHTML(d)
+    +'<div class="card-meta">'+formationSquares(d)+petMiniHTML(d)
+    +'<span class="ccount">'+(d.counters.length?d.counters.length+' đội công khắc chế':'Chưa có đội công khắc chế')+'</span></div>'
+    +(d.variants.length>1?'<div class="variant-count">'+d.variants.length+' cách xếp phòng thủ</div>':'')+'</button>';
 }
 function counterCardHTML(c, i){
-  var v = DATA.counters[c];
+  var v=DATA.counters[c];
   return '<button class="card ctr" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-counter="'+c+'">'
-    + '<div class="card-top"><span class="code">'+c+'</span><span class="gtag" style="color:var(--gold)">Đội hình công</span>'+ctrPropBadge(c)+'<span class="arr">Chi tiết ›</span></div>'
-    + heroesHTML(v)
-    + '<div class="card-meta">' + formationSquares(v) + petMiniHTML(v)
-    + '<span class="ccount">'+((beatsMap[c]||[]).length ? (beatsMap[c]||[]).length+' đội thủ' : 'Chưa có matchup')+'</span></div>'
-    + (v.variants.length>1 ? '<div class="variant-count">'+v.variants.length+' cách bố trí · Xem chi tiết</div>' : '')+'</button>';
+    +'<div class="card-top"><span class="code">'+c+'</span><span class="gtag" style="color:var(--gold)">Đội hình công</span><span class="arr">Xem đội thủ bị khắc chế ›</span></div>'
+    +heroesHTML(v)
+    +'<div class="card-meta">'+formationSquares(v)+petMiniHTML(v)
+    +'<span class="ccount">'+((beatsMap[c]||[]).length?(beatsMap[c]||[]).length+' đội thủ có thể khắc chế':'Chưa có đội thủ đối đầu')+'</span></div>'
+    +(v.variants.length>1?'<div class="variant-count">'+v.variants.length+' cách xếp tấn công</div>':'')+'</button>';
 }
 
 function matches(team, isCounter){
@@ -620,7 +694,7 @@ function formationBoardHTML(team, petsHTML){
     return ghosts(above, side) + heroes + ghosts(below, side);
   }
   return '<div class="formation-box"><div class="fmt-name">' + formationSquares(team)
-    + '<span class="lgwrap"><span class="lg"><i class="lg-b"></i>Back</span><span class="lg"><i class="lg-f"></i>Front</span></span></div>'
+    + '<span class="lgwrap"><span class="lg"><i class="lg-b"></i>Hàng sau</span><span class="lg"><i class="lg-f"></i>Hàng trước</span></span></div>'
     + '<div class="board">'
     + '<div class="bgroup back">' + grp(team.back, "back", cap ? cap[1] : null) + '</div>'
     + '<div class="bdiv"></div>'
@@ -662,27 +736,33 @@ function openerHTML(steps){
   }).join("");
   return '<div class="opener"><div class="opener-t">'+steps.length+' skill mở đầu theo thứ tự:</div>'+rows+'</div>';
 }
+
 function counterBlockHTML(c, idx, defenseCode){
-  var v = DATA.counters[c];
-  var defense = DATA.defense.find(function(t){return t.code===defenseCode;});
-  var records = defense.matchups[c];
-  var shown = 0;
-  var variants = v.variants.map(function(variant, i){
-    var relevant = records.filter(function(m){return m.attackVariant===variant.code;});
-    if (!relevant.length) return '';
-    var applies = relevant.map(function(m){return variantNumber(defense,m.defenseVariant);});
-    return '<details class="variant"'+(shown++===0?' open':'')+'><summary>'+esc(variantTitle(variant,'công',i+1))
-      +' · Áp dụng cho thủ '+applies.join(', ')+'</summary><div class="variant-body">'
-      +formationBoardHTML(variant,petColHTML(c,variant))
-      +'<div style="margin-top:12px">'+openerHTML(variant.skills)+'</div>'
-      +relevant.map(function(m){return matchupNoteHTML(m,'Đối đầu bố trí thủ '+variantNumber(defense,m.defenseVariant)+'.');}).join('')
-      +'</div></details>';
+  var v=DATA.counters[c];
+  var defense=DATA.defense.find(function(t){return t.code===defenseCode;});
+  var records=defense.matchups[c]||[],shown=0;
+  var variants=v.variants.map(function(variant,i){
+    var relevant=records.filter(function(m){return m.attackVariant===variant.code;});
+    if(!relevant.length)return '';
+    var applies=relevant.map(function(m){return variantNumber(defense,m.defenseVariant);});
+    var caseNum=++shown;
+    return '<details class="variant match-case"'+(caseNum===1?' open':'')+'><summary>'
+      +'<span class="case-title">Trường hợp '+caseNum+': Dùng cách công '+(i+1)+'</span>'
+      +'<span class="case-sub">Khi đội thủ '+defense.code+' dùng cách xếp '+applies.join(', ')+'</span></summary>'
+      +'<div class="variant-body">'+formationBoardHTML(variant,petColHTML(c,variant))
+      +'<div class="section-t">Thứ tự kỹ năng mở đầu của đội công</div>'+openerHTML(variant.skills)
+      +relevant.map(function(m){
+        var dv=defense.variants.find(function(x){return x.code===m.defenseVariant;});
+        return matchupNoteHTML(m,'Đối đầu cách thủ '+variantNumber(defense,m.defenseVariant)
+          +(dv?' ('+rowDescription(dv)+')':''));
+      }).join('')+'</div></details>';
   }).join('');
-  return '<div class="counter-block ally" style="animation-delay:'+(idx*80)+'ms">'
-    + '<button type="button" class="cb-detail" data-counter-open="'+c+'">Chi tiết team này ›</button>'
-    + '<div class="cb-title">Phương án '+(idx+1)+'</div>'
-    + '<div class="cb-sub"><span class="code">'+c+'</span>'+ctrPropBadge(c)+'<span class="cb-heroes">'+v.heroes.map(function(h){return esc(h.name);}).join(" · ")+'</span></div>'
-    + variants+'</div>';
+  return '<article class="counter-block ally matchup-card" style="animation-delay:'+(idx*80)+'ms">'
+    +'<div class="match-tag">Đội công khắc chế đội thủ '+defense.code+'</div>'
+    +'<div class="cb-head"><span class="match-number">Đội công '+(idx+1)+'</span><span class="code">'+c+'</span></div>'
+    +'<h4 class="match-team-name">'+v.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h4>'
+    +'<p class="match-explain">Có lợi thế trước đội thủ '+defense.code+' trong những trường hợp sau.</p>'
+    +variants+'<button type="button" class="cb-detail" data-counter-open="'+c+'">Xem chi tiết đội công ›</button></article>';
 }
 
 function openSheet(html){
@@ -798,59 +878,86 @@ document.addEventListener("click", function(e){
 });
 document.getElementById("poverlay").addEventListener("click", function(e){ if (e.target === this) closePanel(); });
 
+
 function openTeam(code){
-  var d = DATA.defense.find(function(x){return x.code===code || x.variants.some(function(v){return v.code===code;});});
-  if (!d) return;
-  var g = groupOf(d.group);
-  var counters = d.counters.map(function(c, i){ return counterBlockHTML(c, i, d.code); }).join("");
-  var variants = d.variants.map(function(v, i){
+  var d=DATA.defense.find(function(x){return x.code===code||x.variants.some(function(v){return v.code===code;});});
+  if(!d)return;
+  var count=d.counters.length;
+  var counters=d.counters.map(function(c,i){return counterBlockHTML(c,i,d.code);}).join("");
+  var variants=d.variants.map(function(v,i){
+    var advice=v.advice?lineupAdvice(v.advice):"";
     return '<details class="variant"'+(i===0?' open':'')+'><summary>'+esc(variantTitle(v,'thủ',i+1))+'</summary><div class="variant-body">'
-      +(v.advice ? '<div class="match-note">'+esc(v.advice)+'</div>' : '')
+      +(advice?'<div class="lineup-tip">'+esc(advice)+'</div>':'')
       +formationBoardHTML(v)+'<div class="section-t">Pet</div>'+defensePetsHTML(v)
       +'<div class="section-t">Kỹ năng mở đầu</div>'+openerHTML(defSkills(v))+'</div></details>';
   }).join('');
   openSheet(
-    '<div class="sheet-head"><div><span class="code">'+d.code+'</span> <span class="gtag" style="color:'+g.color+'">'+g.label+' · Phòng thủ</span> '+defPropBadge(d.code)
-    + '<h2>'+d.heroes.map(function(h){return esc(h.name);}).join(" · ")+'</h2></div>'
-    + '<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
-    + '<div class="team-zone enemy">' + heroesHTML(d, true)
-    + '<div class="section-t">Các cách bố trí phòng thủ ('+d.variants.length+')</div>' + variants + '</div>'
-    + '<div class="section-t">Phương án khắc chế ('+d.counters.length+')</div>'
-    + (counters || '<div class="p-note">Chưa ghi nhận matchup cho đội này.</div>')
+    '<div class="sheet-head"><div><span class="sheet-role defense">ĐỘI PHÒNG THỦ</span> <span class="code">'+d.code+'</span>'
+    +'<h2>'+d.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h2></div>'
+    +'<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
+    +'<div class="match-intro danger"><span class="match-eyebrow">Khi đội này phòng thủ</span>'
+    +'<h3>'+(count?'Đội thủ '+d.code+' bị khắc chế bởi '+count+' đội công':'Đội thủ '+d.code+' chưa có đội công khắc chế được liệt kê')+'</h3>'
+    +'<p>Mỗi đội công có lợi thế trong những cách xếp và điều kiện cụ thể. Hãy xem đúng trường hợp trước khi chọn đội.</p></div>'
+    +'<div class="team-zone enemy">'+heroesHTML(d,true)
+    +'<div class="section-t">Cách xếp của đội phòng thủ ('+d.variants.length+')</div>'+variants+'</div>'
+    +'<div class="match-heading danger"><span class="match-eyebrow">Các cặp đối đầu</span>'
+    +'<h3>Đội công khắc chế đội thủ '+d.code+'</h3>'
+    +'<p>Mở từng trường hợp để xem cách công tương ứng với cách thủ và điều kiện cần đáp ứng.</p></div>'
+    +(counters||'<div class="empty-match">Chưa có đội công khắc chế được liệt kê cho đội thủ này.</div>')
   );
 }
-function defenseMiniHTML(code, counterCode){
-  var d = DATA.defense.find(function(x){return x.code===code;});
-  if (!d) return "";
-  var g = groupOf(d.group), attack = DATA.counters[counterCode], records = d.matchups[counterCode];
-  var variants = d.variants.map(function(v, i){
-    var relevant = records.filter(function(m){return m.defenseVariant===v.code;});
-    if (!relevant.length) return '';
-    var applies = relevant.map(function(m){return variantNumber(attack,m.attackVariant);});
-    return '<details class="variant"><summary>'+esc(variantTitle(v,'thủ',i+1))+' · Bị khắc chế bởi công '+applies.join(', ')+'</summary>'
-      +'<div class="variant-body">'+formationBoardHTML(v)+'<div style="margin-top:12px">'+defensePetsHTML(v)+'</div>'
-      +relevant.map(function(m){return matchupNoteHTML(m,'Đối đầu bố trí công '+variantNumber(attack,m.attackVariant)+'.');}).join('')
+
+
+function defenseMiniHTML(code,counterCode){
+  var d=DATA.defense.find(function(x){return x.code===code;});
+  if(!d)return "";
+  var g=groupOf(d.group),attack=DATA.counters[counterCode],records=d.matchups[counterCode]||[],shown=0;
+  var variants=d.variants.map(function(v,i){
+    var relevant=records.filter(function(m){return m.defenseVariant===v.code;});
+    if(!relevant.length)return '';
+    var applies=relevant.map(function(m){return variantNumber(attack,m.attackVariant);}),caseNum=++shown;
+    return '<details class="variant match-case"'+(caseNum===1?' open':'')+'><summary>'
+      +'<span class="case-title">Trường hợp '+caseNum+': Đội thủ xếp cách '+(i+1)+'</span>'
+      +'<span class="case-sub">Dùng đội công '+counterCode+' theo cách xếp '+applies.join(', ')+'</span></summary>'
+      +'<div class="variant-body">'+formationBoardHTML(v)
+      +'<div class="section-t">Pet của đội thủ</div>'+defensePetsHTML(v)
+      +relevant.map(function(m){return matchupNoteHTML(m,'Đội công '+counterCode+' sử dụng cách công '+variantNumber(attack,m.attackVariant));}).join('')
       +'</div></details>';
   }).join('');
-  return '<div class="def-block"><div class="cb-head"><span class="code">'+d.code+'</span><span class="gtag" style="color:'+g.color+'">'+g.label+' · Phòng thủ</span>'+defPropBadge(d.code)
-    + '<button type="button" class="mini-open" data-team="'+d.code+'">Xem chi tiết ›</button></div>'
-    + '<div class="cb-heroes">'+d.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</div>'+variants+'</div>';
+  return '<article class="def-block matchup-victim">'
+    +'<div class="match-tag">Đội thủ bị đội công '+counterCode+' khắc chế</div>'
+    +'<div class="cb-head"><span class="code">'+d.code+'</span>'
+    +'<span class="gtag" style="color:'+g.color+'">'+g.label+' · Phòng thủ</span>'
+    +'<button type="button" class="mini-open" data-team="'+d.code+'">Xem đội thủ ›</button></div>'
+    +'<h4 class="match-team-name">'+d.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h4>'
+    +'<p class="match-explain">Đội công '+counterCode+' có lợi thế trước đội thủ '+d.code+' trong những trường hợp bên dưới.</p>'
+    +variants+'</article>';
 }
+
+
 function openCounter(code){
-  var v = DATA.counters[code] || Object.values(DATA.counters).find(function(x){return x.variants.some(function(y){return y.code===code;});});
-  if (!v) return;
-  code = v.code;
-  var beats = (beatsMap[code]||[]).map(function(t){ return defenseMiniHTML(t,code); }).join("");
-  var variants = v.variants.map(function(variant, i){
+  var v=DATA.counters[code]||Object.values(DATA.counters).find(function(x){return x.variants.some(function(y){return y.code===code;});});
+  if(!v)return;
+  code=v.code;
+  var targets=beatsMap[code]||[];
+  var beats=targets.map(function(t){return defenseMiniHTML(t,code);}).join('');
+  var variants=v.variants.map(function(variant,i){
     return '<details class="variant"'+(i===0?' open':'')+'><summary>'+esc(variantTitle(variant,'công',i+1))+'</summary><div class="variant-body">'
-      +formationBoardHTML(variant,petColHTML(code,variant))+'<div class="section-t">Kỹ năng mở đầu</div>'+openerHTML(variant.skills)+'</div></details>';
+      +formationBoardHTML(variant,petColHTML(code,variant))
+      +'<div class="section-t">Kỹ năng mở đầu</div>'+openerHTML(variant.skills)+'</div></details>';
   }).join('');
   openSheet(
-    '<div class="sheet-head"><div><span class="code">'+code+'</span> <span class="gtag" style="color:var(--gold)">Đội hình công</span> '+ctrPropBadge(code)
-    + '<h2>'+v.heroes.map(function(h){return esc(h.name);}).join(" · ")+'</h2></div>'
-    + '<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
-    + '<div class="team-zone ally"><div class="section-t">Các cách bố trí tấn công ('+v.variants.length+')</div>' + variants + '</div>'
-    + (beats ? '<div class="section-t">Đội hình phòng thủ và điều kiện đối đầu</div>' + beats : '<div class="p-note">Chưa ghi nhận matchup cho đội này.</div>')
+    '<div class="sheet-head"><div><span class="sheet-role attack">ĐỘI TẤN CÔNG</span> <span class="code">'+code+'</span>'
+    +'<h2>'+v.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h2></div>'
+    +'<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
+    +'<div class="match-intro advantage"><span class="match-eyebrow">Khi đội này tấn công</span>'
+    +'<h3>'+(targets.length?'Đội công '+code+' có lợi thế trước '+targets.length+' đội thủ':'Đội công '+code+' chưa có đội thủ đối đầu được liệt kê')+'</h3>'
+    +'<p>Chỉ đối chiếu các đội thủ có trong danh sách; mỗi cách thủ có thể yêu cầu cách công, tốc độ hoặc trang bị khác nhau.</p></div>'
+    +'<div class="team-zone ally"><div class="section-t">Cách xếp của đội tấn công ('+v.variants.length+')</div>'+variants+'</div>'
+    +'<div class="match-heading advantage"><span class="match-eyebrow">Các cặp đối đầu</span>'
+    +'<h3>Đội thủ mà đội công '+code+' có lợi thế khi gặp</h3>'
+    +'<p>Mỗi thẻ cho biết đối thủ có những tướng nào, xếp theo cách nào và điều kiện áp dụng.</p></div>'
+    +(beats||'<div class="empty-match">Chưa có đội thủ đối đầu được liệt kê cho đội công này.</div>')
   );
 }
 
