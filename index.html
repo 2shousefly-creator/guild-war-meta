@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.27-19" />
+<meta name="page-version" content="v2026.10.27-20" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -294,8 +294,6 @@ h1 .thin{font-weight:600;color:var(--ink2)}
 .pet-card img{width:56px;height:56px;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
 .pet-card .pn{font-weight:800}
 .pet-card .pe{font-size:10.6px;color:var(--ink2)}
-.research-summary{margin:14px 0 0;padding:12px 14px;border:1px solid var(--gold-line);border-radius:12px;background:var(--gold-bg);color:var(--ink2);font-size:11.5px}
-.research-summary b{color:var(--ink)}
 .variant{margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
 .variant>summary{cursor:pointer;padding:11px 13px;font-size:11.5px;font-weight:800;color:var(--ink)}
 .variant[open]>summary{border-bottom:1px solid var(--line)}
@@ -342,7 +340,6 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
       <span class="fp-src">Cộng đồng <b>facebook.com/7krbvn</b></span>
       <a class="fp-btn" href="https://www.facebook.com/7krbvn" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7V11H8.3v3h2.4v7h2.8z"/></svg>Truy cập fanpage</a>
     </div>
-    <div class="research-summary" id="research-summary"></div>
   </header>
 
   <div class="searchbar">
@@ -372,7 +369,7 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Hình ảnh game © Netmarble Corp. &amp; Netmarble Nexus Inc. <span class="ver">v2026.10.27-19</span></footer>
+  <footer>Bảng meta Major League 3v3 · Hình ảnh game © Netmarble Corp. &amp; Netmarble Nexus Inc. <span class="ver">v2026.10.27-20</span></footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -990,8 +987,6 @@ document.addEventListener("keydown", function(e){
   if (document.getElementById("poverlay").classList.contains("open")) closePanel(); else closeSheet();
 });
 
-var research = DATA.research;
-document.getElementById("research-summary").innerHTML = '<b>Cập nhật 27/10/2026</b> · '+research.defenseTeams+' đội thủ · '+research.offenseTeams+' đội công · '+research.teamMatchups+' cặp đối đầu. Mỗi đội có thể có nhiều cách bố trí và điều kiện riêng.';
 render();
 </script>
 </body>
