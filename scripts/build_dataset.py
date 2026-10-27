@@ -55,6 +55,12 @@ else:
         ids['counters'].setdefault(fp(t, False), code)
 
 translations = {
+ 'เรียงสปีด ดี้ > เพลตัน > เคลมิส': 'Thứ tự tốc độ bắt buộc: Rudy > Platin > Clemyth.',
+ 'ดี้ สปีด 1 กดสกิลตามโพย / ดี้สปีดไม่ 1 กด ล่างบน เคลมิส > บนดี้': 'Nếu Rudy nhanh nhất đội, dùng chuỗi hiển thị. Nếu không, đổi thành Clemyth S1 → Clemyth S2 → Rudy S2.',
+ 'เปิดก่อนได้ก็ดี': 'Nên giành lượt đi trước nếu có thể.',
+ 'ทำสปีดให้เปิดก่อน เรียงสปีด ทันจิโร่ เซนอิทสึ ลิโป้': 'Cần đi trước; thứ tự tốc độ: Tanjiro > Zenitsu > Lu Bu.',
+ 'ได้เริ่มก่อน': 'Cần giành lượt đi trước.',
+ 'สกัล มิเลีย คริ100(รวมสัตว์)': 'Skuld và Melia cần Crit Rate 100%, tính cả hiệu ứng pet.',
  'เปิดก่อน': 'Cần giành lượt đi trước.',
  'ต้องเปิดก่อน': 'Bắt buộc đi trước.',
  'เปิดก่อนเท่านั้น': 'Chỉ dùng khi đi trước.',

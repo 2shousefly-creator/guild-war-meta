@@ -56,6 +56,7 @@ const noteById = id=>d.defense.find(t=>t.sources.some(s=>s.url.endsWith('/'+id))
 assert.equal(noteById('3LZMb7xvTj').front.length,0);
 assert.equal(noteById('3LZMb7xvTj').skills.length,0,'Do not invent an unset queue');
 assert.equal(noteById('RvEePzqTuN').back[0],'Sunran');
+assert.ok(Object.values(noteById('683wNzd4wh').matchups).some(m=>m.notes.some(n=>n.includes('Rudy > Platin > Clemyth'))));
 assert.equal(ctx.heroImg({img:'chara_435.png'}).endsWith('chara_435.png'),true);
 assert.notEqual(all.find(t=>t.heroes.some(h=>h.name==='Radgrid')).heroes.find(h=>h.name==='Radgrid').img,
   all.find(t=>t.heroes.some(h=>h.name==='Randgrid')).heroes.find(h=>h.name==='Randgrid').img);
