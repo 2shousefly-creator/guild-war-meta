@@ -1,0 +1,45 @@
+# Guild War Meta — Seven Knights Re:BIRTH
+
+Vietnamese reference site for Major League 3v3. Cloudflare deploys the static `index.html` from `main`.
+
+## Data reviewed on 27 October 2026
+
+- [7K Note / Pandoara](https://7k-note.pages.dev/g/4ZyeEGMZ?tab=targets): 43 enemy entries, 104 listed counter occurrences. Identical defense configurations may be merged, retaining each source link and its counter conditions.
+- [7K Atlas Guild War](https://7katlas.com/guildwar.html): 48 **Major** variants across Physical, Magic, Tank and CC. Formation **F1** is the captured variant; this snapshot does not claim to contain F2, Minor, Situational or Unused variants.
+- Ten Physical matchup panels from Atlas were inspected. Only explicit **offense wins against defense** and **defense loses against offense** relations are imported, and only when both referenced configurations exist in this snapshot. This is not an exhaustive import of Atlas matchups.
+- Result: **67 defense configurations, 127 offense configurations, 136 directed matchup pairs**. Configurations include primary pet, source-provided backup pets, formation, front/back rows and opening queue. Empty queues remain empty.
+
+This is a dated manual research snapshot, not an automatic update service. Atlas's “Heroes Used in Guild War” summary displayed 21 October 2026; that label is not asserted to be the modification date of every team.
+
+## Skill conventions
+
+Visual order is **Awakening (if present), S2, S1**, from top to bottom. Two-icon heroes have S2 above S1. Priority #1/#2/#3 means usage order. Atlas reverses the DOM order using CSS: DOM order alone must never be interpreted as visual order. Explicit skill codes were checked against the displayed layout. Note's “Top skill” maps to S2; “Bottom skill” maps to S1. Do not add passive awakenings to an active queue.
+
+**Radgrid and Randgrid are different heroes.** Do not normalize these names together. Short Demon Slayer names are normalized to their full English names.
+
+## Updating
+
+The two compact source snapshots have a `names` dictionary. Note records contain a target ID followed by defense and counter records: `[front, back, formation, primaryPet, queue, backupPets, originalNote]`. Atlas records contain `[sourceTeamId, front, back, formation, pets, queue, usage]`. Name and pet references are dictionary indexes.
+
+Run from the repository root:
+
+```sh
+python scripts/build_dataset.py
+node scripts/check_dataset.cjs
+```
+
+The builder preserves stable IDs, retains per-matchup notes and source links, distinguishes differing configurations, and regenerates the inline dataset. No external network is needed to rebuild. Do not infer extra counter pairs from overlapping heroes, pet substitutions, or reversing a recorded outcome.
+
+Thai conditions are summarized in Vietnamese beside each matchup. Their original wording remains available in a disclosure. A source explicitly marking an option untested is displayed as such. Source order is not a win-rate ranking.
+
+## Illustrations and skill reference
+
+Existing hero/pet/skill illustrations come from GameWith. Added references:
+
+- [Lina](https://gamewith.jp/sevenknights-rebirth/513560): `chara_147.png`, skills 192–194.
+- [Rook](https://gamewith.jp/sevenknights-rebirth/513561): `chara_150.png`, skills 196–198.
+- [Nezuko Kamado pet](https://gamewith.net/sevenknights-rebirth/78031): `pet_102.png`. Its 6★ base effect is scoped to Demon Slayer allies; it is not labeled as an enhanced maximum.
+
+The existing detailed hero and pet effect library was retained. This refresh does not assert that every pre-existing effect, enhancement value or translation was re-audited. Lina/Rook have verified icons and translated skill names, with missing numerical effects explicitly left unspecified.
+
+Game images © Netmarble Corp. & Netmarble Nexus Inc. This fan site is not affiliated with Netmarble, GameWith, 7K Note or 7K Atlas.

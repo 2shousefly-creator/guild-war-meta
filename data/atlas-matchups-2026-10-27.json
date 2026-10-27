@@ -1,0 +1,12 @@
+[
+ ["physical-8C",[["offense","physical-1A"],["offense","physical-8A"],["offense","magic-1A"],["offense","tank-7A"],["offense","tank-1C"],["offense","cc-1F"],["defense","physical-9A"],["defense","magic-1C"],["defense","magic-4A"],["defense","tank-1A"],["defense","tank-1C"],["defense","tank-8B"]]],
+ ["physical-8A",[["offense","physical-9A"],["offense","physical-8B"],["offense","magic-4B"],["offense","magic-7B"],["offense","magic-4A"],["offense","tank-7A"],["defense","physical-8C"],["defense","magic-1A"],["defense","tank-1C"]]],
+ ["physical-8B",[["offense","tank-7A"],["defense","physical-8A"],["defense","magic-8A"],["defense","tank-1A"]]],
+ ["physical-8D",[["offense","physical-1A"],["defense","magic-2D"]]],
+ ["physical-8E",[["offense","tank-7A"]]],
+ ["physical-8F",[["offense","magic-1B"]]],
+ ["physical-9A",[["offense","physical-8C"],["offense","physical-1A"],["defense","physical-8A"],["defense","tank-1C"]]],
+ ["physical-9B",[["offense","magic-1B"],["offense","tank-1A"],["defense","magic-1C"],["defense","tank-1C"]]],
+ ["physical-9F",[]],
+ ["physical-9C",[["defense","magic-1D"],["defense","tank-1A"],["defense","tank-6C"],["defense","tank-6D"]]]
+]
