@@ -276,6 +276,23 @@ actual_edges = {
     (m['defenseVariant'], m['attackVariant']): (tuple(m['notes']), m['untested'])
     for g in grouped['defense'] for edges in g['matchups'].values() for m in edges}
 assert actual_edges == expected_edges, 'Grouping must preserve each exact matchup and its conditions.'
+
+# T17's captured Basic formation has an empty front row. Preserve that
+# observation, but lead with a clearly untested suggestion that gives Rudy's
+# front-row passive a valid target. No captured matchup is attached to it.
+t17 = next(g for g in grouped['defense'] if g['code'] == 'T17')
+original = t17['variants'][0]
+assert original['front'] == [] and set(original['back']) == {'Knox', 'Rudy', 'Aris'}
+assert not t17['counters']
+original['advice'] = 'Hàng trước trống nên không có tướng nhận hiệu ứng giảm sát thương dành riêng cho hàng trước của Rudy.'
+suggested = copy.deepcopy(original)
+suggested.update({'code': 'T17-GOIY', 'front': ['Knox', 'Rudy', 'Aris'], 'back': [],
+                  'formation': 'Balanced (3-2) — Trước: Knox, Rudy, Aris | Sau: —',
+                  'advice': 'Đề xuất theo cơ chế kỹ năng: cả ba ở hàng trước để nhận hiệu ứng của Rudy. Chưa kiểm chứng thực chiến.',
+                  'recommended': True})
+t17['variants'].insert(0, suggested)
+for field in ('front', 'back', 'formation'):
+    t17[field] = copy.deepcopy(suggested[field])
 data = grouped
 
 # References are retained in the local research snapshots, but the published

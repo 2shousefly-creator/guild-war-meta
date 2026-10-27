@@ -30,6 +30,8 @@ node scripts/check_dataset.cjs
 
 The builder groups teams by an unordered set of three heroes while preserving stable variant IDs, different configurations and their exact counter conditions. Each detail view identifies which defense and offense configurations a matchup applies to. The builder verifies all 136 recorded configuration-to-configuration relationships survive grouping. No external network is needed to rebuild. Do not infer extra counter pairs from overlapping heroes, pet substitutions, or reversing a recorded outcome.
 
+T17 includes an explicitly untested Balanced suggestion with Rudy, Knox and Aris in front, so Rudy's front-row passive has recipients. Its recorded Basic layout is retained and labeled with the front-row limitation; no matchup is inferred for the suggestion.
+
 Thai conditions are summarized in Vietnamese beside each matchup. Original wording is retained in the repository snapshots. An option explicitly marked untested is displayed as such. Display order is not a win-rate ranking. The public page links only to the 7krbvn fanpage; external image URLs are retained for illustrations.
 
 ## Illustrations and skill reference

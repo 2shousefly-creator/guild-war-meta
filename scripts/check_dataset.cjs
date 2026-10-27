@@ -105,6 +105,16 @@ assert.ok(node('sheet').innerHTML.includes('Áp dụng cho thủ 2'));
 const emptyQueue = d.defense.find(t=>t.code==='M32').variants.find(v=>v.code==='M32');
 assert.equal(emptyQueue.front.length,0);
 assert.equal(emptyQueue.skills.length,0,'Do not invent an unset queue');
+const rudyTeam = d.defense.find(t=>t.code==='T17');
+assert.equal(rudyTeam.variants[0].recommended,true);
+assert.equal(rudyTeam.variants[0].front.length,3);
+assert.equal(rudyTeam.variants[1].front.length,0);
+assert.equal(rudyTeam.counters.length,0);
+ctx.openTeam('T17');
+assert.ok(node('sheet').innerHTML.includes('Chưa kiểm chứng thực chiến'));
+assert.ok(node('sheet').innerHTML.includes('Hàng trước trống'));
+ctx.openHeroPanel('Rudy');
+assert.ok(node('psheet').innerHTML.includes('đồng minh hàng trước'));
 
 // Older variant codes and alternative pets still find their consolidated team.
 ctx.state.q='P38';
