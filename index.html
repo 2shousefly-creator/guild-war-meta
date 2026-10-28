@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<meta name="page-version" content="v2026.10.27-22" />
+<meta name="page-version" content="v2026.10.28-01" />
 <link rel="icon" href="data:," />
 <title>Guild War Meta — Major League 3v3 · Seven Knights: Re:BIRTH</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -385,10 +385,63 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
  .match-team-name{font-size:17px}
  .match-case .variant-body{padding:10px}
 }
+/* Compact lookup and accessible navigation */
+.search-help{margin:6px 2px 0;color:var(--ink2);font-size:11px}
+.sheet-title{min-width:0;flex:1}
+.sheet-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0}
+.nav-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px 11px;font:inherit;font-weight:800;min-height:40px}
+.sheet-toolbar .share-btn{margin-left:auto}
+.share-url{width:100%;font:inherit;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.route-context{padding:10px 12px;border:1px solid var(--gold-line);background:var(--gold-bg);border-radius:10px;font-size:12px;font-weight:700;margin:10px 0}
+.variant-filter{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}
+.variant-filter button{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:var(--surface);color:var(--ink);font-weight:800;min-height:42px}
+.variant-filter button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.variant-filter small{font:inherit;opacity:.8}
+.lineup-details{margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.lineup-details>summary{cursor:pointer;padding:12px;font-weight:800}
+.lineup-content{padding:0 12px 12px}
+.lineup-content .variant{margin:8px 0}
+.lineup-content .section-t{margin-top:14px}
+.match-portraits{display:flex;gap:6px;margin:8px 0}
+.match-portraits img{width:40px;height:40px;object-fit:cover;border:1px solid var(--line);border-radius:8px}
+.matchup-card,.matchup-victim{padding:13px;margin:10px 0}
+.matchup-card .match-team-name,.matchup-victim .match-team-name{font-size:16px;margin:6px 0}
+.match-case>summary{list-style:none;gap:5px;padding:11px 12px}
+.match-case>summary::-webkit-details-marker{display:none}
+.case-action{font-size:11px;color:var(--ink2);font-weight:800}
+.case-action:before{content:"▸ ";font-size:13px}
+.match-case[open]>summary .case-action:before{content:"▾ "}
+.case-queue{display:block;font-size:11px;line-height:1.6;color:var(--ink2);font-weight:600}
+.case-warning{display:block;padding:7px 9px;background:var(--gold-bg);border-left:3px solid var(--gold);border-radius:5px;font-size:11.5px;line-height:1.5;font-weight:700;color:var(--ink)}
+.match-link{position:static;display:block;width:100%;margin-top:10px;padding:10px;border:1px solid var(--ally-line);border-radius:8px;background:var(--surface);color:var(--ally-ink);font:inherit;font-weight:800;text-align:center;min-height:42px}
+.matchup-victim .match-link{border-color:var(--enemy-line);color:var(--enemy-ink)}
+.match-intro{padding:12px 14px;margin:10px 0}
+.match-intro h3{font-size:19px;margin-bottom:5px}
+.match-heading{margin:18px 0 10px;padding-bottom:10px}
+.match-heading h3{font-size:20px}
+button:focus-visible,summary:focus-visible,input:focus-visible,[tabindex="0"]:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#sheet-title:focus,#panel-title:focus{outline:none}
+@media(max-width:600px){
+ .overlay,.poverlay{padding:0}
+ .sheet,.psheet{border-radius:0;min-height:100%;border-width:0;padding:14px 12px 24px}
+ .sheet-head,.p-head{border-radius:0;margin:-14px -12px 6px;padding:10px 12px;top:0}
+ .sheet-head h2{font-size:17px;margin:5px 0 0}
+ .sheet-role{font-size:9px}
+ .sheet-head .code{font-size:13px}
+ .sheet-toolbar{margin:8px 0}
+ .variant-filter{gap:6px}
+ .variant-filter button{font-size:11.5px;padding:8px 10px}
+ .match-intro h3{font-size:18px}
+ .matchup-card,.matchup-victim{padding:11px}
+ .case-title{font-size:12.5px}
+ .case-sub{font-size:11.5px}
+ .match-case .variant-body{padding:9px}
+ .lineup-content{padding:0 9px 9px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="app">
   <header class="top">
     <div class="eyebrow">Seven Knights: Re:BIRTH · Guild War</div>
     <h1>Guild War Meta <span class="thin">— Major League 3v3</span></h1>
@@ -400,17 +453,20 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
 
   <div class="searchbar">
     <div class="search-wrap">
-    <label class="search">
+    <div class="search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
-      <input id="q" type="search" placeholder="Gõ tên tướng để xem gợi ý — hoặc mã team, pet…" autocomplete="off" />
+      <label class="sr-only" for="q">Tìm đội hình theo tướng, mã đội hoặc pet</label>
+      <input id="q" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest" aria-describedby="search-help" placeholder="Tên tướng, mã đội hoặc pet…" autocomplete="off" />
       <button class="clear" id="qclear" type="button">Xóa</button>
-    </label>
+    </div>
     <div class="suggest" id="suggest" role="listbox" aria-label="Gợi ý tìm kiếm"></div>
     </div>
+    <p class="search-help" id="search-help">Tìm nhiều tướng, không cần đúng thứ tự. Ví dụ: Hayeon Sunran.</p>
   </div>
   <div class="tabs" id="tabs" role="tablist" aria-label="Nhóm đội hình"></div>
 
-  <main id="list"></main>
+  <div class="sr-only" id="search-status" role="status" aria-live="polite" aria-atomic="true"></div>
+  <main id="list" role="tabpanel" aria-labelledby="tab-all"></main>
   <div class="empty" id="empty">Không tìm thấy đội hình nào khớp. Thử tên tướng khác hoặc xóa bộ lọc.</div>
 
   <details class="info reading-guide">
@@ -425,14 +481,14 @@ footer .ver{display:block;margin-top:6px;font-size:8.5px;letter-spacing:.04em;op
     <div class="pet-grid" id="petgrid"></div>
   </section>
 
-  <footer>Bảng meta Major League 3v3 · Hình ảnh game © Netmarble Corp. &amp; Netmarble Nexus Inc. <span class="ver">v2026.10.27-22</span></footer>
+  <footer>Bảng meta Major League 3v3 · Hình ảnh game © Netmarble Corp. &amp; Netmarble Nexus Inc. <span class="ver">v2026.10.28-01</span></footer>
 </div>
 
-<div class="overlay" id="overlay" role="dialog" aria-modal="true">
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="sheet-title" aria-hidden="true" tabindex="-1">
   <div class="sheet" id="sheet"></div>
 </div>
 
-<div class="poverlay" id="poverlay" role="dialog" aria-modal="true">
+<div class="poverlay" id="poverlay" role="dialog" aria-modal="true" aria-labelledby="panel-title" aria-hidden="true" tabindex="-1">
   <div class="psheet" id="psheet"></div>
 </div>
 
@@ -475,6 +531,8 @@ var TAB_ICONS = {
   "status": "https://img.gamewith.net/jp/article_tools/sevenknights-rebirth/gacha/skill_687.png"
 };
 var state = {tab:"all", q:""};
+var currentView = null, navigationDepth = 0;
+var modalTrigger = null, panelTrigger = null;
 
 var GW_BASE = "https://img.gamewith.net/jp/article_tools/sevenknights-rebirth/gacha/";
 function heroImg(h){ return h.img ? (/^https:\/\//.test(h.img) ? h.img : GW_BASE + h.img) : ""; }
@@ -610,7 +668,7 @@ function petMiniHTML(team){
 
 function cardHTML(d, i){
   var g=groupOf(d.groups.indexOf(state.tab)!==-1?state.tab:d.group);
-  return '<button class="card def" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-team="'+d.code+'">'
+  return '<button class="card def" id="team-'+d.code+'" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-team="'+d.code+'">'
     +'<div class="card-top"><span class="code">'+d.code+'</span><span class="gtag" style="color:'+g.color+'">'+g.label+'</span><span class="arr">Xem đội công khắc chế ›</span></div>'
     +heroesHTML(d)
     +'<div class="card-meta">'+formationSquares(d)+petMiniHTML(d)
@@ -619,7 +677,7 @@ function cardHTML(d, i){
 }
 function counterCardHTML(c, i){
   var v=DATA.counters[c];
-  return '<button class="card ctr" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-counter="'+c+'">'
+  return '<button class="card ctr" id="counter-'+c+'" type="button" style="animation-delay:'+Math.min((i||0)*35,350)+'ms" data-counter="'+c+'">'
     +'<div class="card-top"><span class="code">'+c+'</span><span class="gtag" style="color:var(--gold)">Đội hình công</span><span class="arr">Xem đội thủ bị khắc chế ›</span></div>'
     +heroesHTML(v)
     +'<div class="card-meta">'+formationSquares(v)+petMiniHTML(v)
@@ -627,14 +685,17 @@ function counterCardHTML(c, i){
     +(v.variants.length>1?'<div class="variant-count">'+v.variants.length+' cách xếp tấn công</div>':'')+'</button>';
 }
 
+function searchText(value){
+  return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/gi,'d').toLowerCase();
+}
 function matches(team, isCounter){
   if (!state.q) return true;
-  var q = state.q.toLowerCase();
-  var hay = (team.heroes.map(function(h){return h.name;}).join(" ") + " " + team.variants.map(function(v){
+  var terms = searchText(state.q).split(/[\s,;+|]+/).filter(Boolean);
+  var hay = searchText(team.code + " " + team.heroes.map(function(h){return h.name;}).join(" ") + " " + team.variants.map(function(v){
     return v.code + " " + v.pet + " " + (v.petBackup || []).join(" ") + " "
       + v.skills.map(function(s){return (s.hero||"")+" "+(s.name||"");}).join(" ");
-  }).join(" ")).toLowerCase();
-  return hay.indexOf(q) !== -1;
+  }).join(" "));
+  return terms.every(function(term){return hay.indexOf(term) !== -1;});
 }
 
 function render(){
@@ -666,6 +727,9 @@ function render(){
     }
   }
   list.innerHTML = html;
+  list.setAttribute('aria-labelledby','tab-'+state.tab);
+  document.getElementById('search-status').textContent = state.q
+    ? list.querySelectorAll('.card').length+' đội hình khớp tìm kiếm.' : '';
   document.getElementById("empty").className = "empty" + (any ? "" : " show");
   list.querySelectorAll("[data-team]").forEach(function(b){ b.addEventListener("click", function(){ openTeam(b.getAttribute("data-team")); }); });
   list.querySelectorAll("[data-counter]").forEach(function(b){ b.addEventListener("click", function(){ openCounter(b.getAttribute("data-counter")); }); });
@@ -737,52 +801,230 @@ function openerHTML(steps){
   return '<div class="opener"><div class="opener-t">'+steps.length+' skill mở đầu theo thứ tự:</div>'+rows+'</div>';
 }
 
-function counterBlockHTML(c, idx, defenseCode){
-  var v=DATA.counters[c];
-  var defense=DATA.defense.find(function(t){return t.code===defenseCode;});
-  var records=defense.matchups[c]||[],shown=0;
+function matchPortraitsHTML(team){
+  return '<div class="match-portraits">'+team.heroes.map(function(h){return h.img
+    ? '<img src="'+heroImg(h)+'" alt="'+esc(h.name)+'" width="40" height="40" loading="lazy" />' : '';}).join('')+'</div>';
+}
+function queuePreviewHTML(steps){
+  return '<span class="case-queue">'+(steps && steps.length ? steps.map(function(s){
+    return esc(s.hero)+' '+esc(s.slot.replace('Skill ','S'));
+  }).join(' → ') : 'Chưa ghi nhận chuỗi mở đầu')+'</span>';
+}
+function requirementsPreviewHTML(records, defense){
+  return records.map(function(m){
+    var notes=(m.notes||[]).map(cleanMatchNote).filter(Boolean);
+    return notes.length ? '<span class="case-warning">'+(records.length>1?'Cách thủ '+variantNumber(defense,m.defenseVariant)+': ':'Điều kiện: ')
+      +notes.map(esc).join(' ')+'</span>' : '';
+  }).join('');
+}
+function counterBlockHTML(c, idx, defenseCode, defenseVariant){
+  var v=DATA.counters[c], defense=teamFor('defense',defenseCode);
+  var records=(defense.matchups[c]||[]).filter(function(m){return !defenseVariant || m.defenseVariant===defenseVariant;});
+  if(!records.length)return '';
   var variants=v.variants.map(function(variant,i){
     var relevant=records.filter(function(m){return m.attackVariant===variant.code;});
     if(!relevant.length)return '';
     var applies=relevant.map(function(m){return variantNumber(defense,m.defenseVariant);});
-    var caseNum=++shown;
-    return '<details class="variant match-case"'+(caseNum===1?' open':'')+'><summary>'
-      +'<span class="case-title">Trường hợp '+caseNum+': Dùng cách công '+(i+1)+'</span>'
-      +'<span class="case-sub">Khi đội thủ '+defense.code+' dùng cách xếp '+applies.join(', ')+'</span></summary>'
+    return '<details class="variant match-case" id="case-'+defense.code+'-'+variant.code+'"><summary>'
+      +'<span class="case-title">Cách công '+(i+1)+' · '+esc(fmtShort(variant))+'</span>'
+      +'<span class="case-sub">Pet '+esc(variant.pet)+' · Gặp cách thủ '+applies.join(', ')+'</span>'
+      +queuePreviewHTML(variant.skills)+requirementsPreviewHTML(relevant,defense)
+      +'<span class="case-action">Xem sơ đồ và kỹ năng</span></summary>'
       +'<div class="variant-body">'+formationBoardHTML(variant,petColHTML(c,variant))
-      +'<div class="section-t">Thứ tự kỹ năng mở đầu của đội công</div>'+openerHTML(variant.skills)
+      +'<div class="section-t">Kỹ năng mở đầu của đội công</div>'+openerHTML(variant.skills)
       +relevant.map(function(m){
         var dv=defense.variants.find(function(x){return x.code===m.defenseVariant;});
-        return matchupNoteHTML(m,'Đối đầu cách thủ '+variantNumber(defense,m.defenseVariant)
-          +(dv?' ('+rowDescription(dv)+')':''));
+        return matchupNoteHTML(m,'Đối đầu cách thủ '+variantNumber(defense,m.defenseVariant)+' ('+rowDescription(dv)+')')
+          +'<button type="button" class="match-link" id="open-'+c+'-'+variant.code+'-'+m.defenseVariant+'" data-counter-open="'+c+'" data-variant="'+variant.code+'" data-against="'+defense.code+'" data-against-variant="'+m.defenseVariant+'">Xem chi tiết đội công ›</button>';
       }).join('')+'</div></details>';
   }).join('');
-  return '<article class="counter-block ally matchup-card" style="animation-delay:'+(idx*80)+'ms">'
-    +'<div class="match-tag">Đội công khắc chế đội thủ '+defense.code+'</div>'
+  return '<article class="counter-block ally matchup-card" id="matchup-'+c+'">'
     +'<div class="cb-head"><span class="match-number">Đội công '+(idx+1)+'</span><span class="code">'+c+'</span></div>'
     +'<h4 class="match-team-name">'+v.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h4>'
-    +'<p class="match-explain">Có lợi thế trước đội thủ '+defense.code+' trong những trường hợp sau.</p>'
-    +variants+'<button type="button" class="cb-detail" data-counter-open="'+c+'">Xem chi tiết đội công ›</button></article>';
+    +matchPortraitsHTML(v)+variants+'</article>';
 }
 
-function openSheet(html){
-  document.getElementById("sheet").innerHTML = html;
-  var ov = document.getElementById("overlay");
-  ov.classList.remove("closing");
-  ov.classList.add("open"); ov.scrollTop = 0;
-  document.body.style.overflow = "hidden";
-  var cb = document.getElementById("closebtn");
-  if (cb) cb.addEventListener("click", closeSheet);
-  document.querySelectorAll("#sheet [data-team]").forEach(function(b){ b.addEventListener("click", function(){ openTeam(b.getAttribute("data-team")); }); });
-  document.querySelectorAll("#sheet [data-counter-open]").forEach(function(b){ b.addEventListener("click", function(){ openCounter(b.getAttribute("data-counter-open")); }); });
+function teamFor(kind, code){
+  var teams=kind==='attack' ? Object.values(DATA.counters) : DATA.defense;
+  return teams.find(function(t){return t.code===code || t.variants.some(function(v){return v.code===code;});});
+}
+function normaliseView(request){
+  if(!request || ['defense','attack'].indexOf(request.kind)===-1)return null;
+  var team=teamFor(request.kind,request.code);
+  if(!team)return null;
+  var selected=request.variant || (request.code!==team.code ? request.code : null);
+  if(!team.variants.some(function(v){return v.code===selected;}))selected=null;
+  var view={kind:request.kind,code:team.code,variant:selected,against:null,againstVariant:null};
+  var opponent=teamFor(request.kind==='attack'?'defense':'attack',request.against);
+  if(opponent && selected && opponent.variants.some(function(v){return v.code===request.againstVariant;})){
+    var defense=request.kind==='defense'?team:opponent;
+    var attack=request.kind==='attack'?team:opponent;
+    var dv=request.kind==='defense'?selected:request.againstVariant;
+    var av=request.kind==='attack'?selected:request.againstVariant;
+    if((defense.matchups[attack.code]||[]).some(function(m){return m.defenseVariant===dv && m.attackVariant===av;})){
+      view.against=opponent.code;view.againstVariant=request.againstVariant;
+    }
+  }
+  return view;
+}
+function viewURL(view){
+  var url=new URL(window.location.href);
+  ['q','group','team','view','variant','against','againstVariant'].forEach(function(k){url.searchParams.delete(k);});
+  if(state.q)url.searchParams.set('q',state.q);
+  if(state.tab!=='all')url.searchParams.set('group',state.tab);
+  if(view){
+    url.searchParams.set('view',view.kind);url.searchParams.set('team',view.code);
+    if(view.variant)url.searchParams.set('variant',view.variant);
+    if(view.against){url.searchParams.set('against',view.against);url.searchParams.set('againstVariant',view.againstVariant);}
+  }
+  return url.pathname+url.search+url.hash;
+}
+function navigationRecord(ui){return {view:currentView,q:state.q,tab:state.tab,depth:navigationDepth,ui:ui||null};}
+function captureViewUI(){
+  return {scroll:document.getElementById('overlay').scrollTop,
+    expanded:Array.from(document.querySelectorAll('#sheet details[open][id]')).map(function(e){return e.id;}),
+    focus:document.activeElement ? document.activeElement.id : ''};
+}
+function rememberView(){
+  window.history.replaceState({gwm:navigationRecord(captureViewUI())},'',viewURL(currentView));
+}
+function updateListURL(){if(!currentView)rememberView();}
+function focusElement(element){if(element && element.focus)element.focus({preventScroll:true});}
+function syncModals(){
+  var ov=document.getElementById('overlay'),po=document.getElementById('poverlay');
+  var sheetOpen=ov.classList.contains('open'),panelOpen=po.classList.contains('open');
+  document.getElementById('app').inert=sheetOpen||panelOpen;
+  ov.inert=panelOpen;
+  ov.setAttribute('aria-hidden',String(!sheetOpen||panelOpen));
+  po.setAttribute('aria-hidden',String(!panelOpen));
+  document.body.style.overflow=sheetOpen||panelOpen?'hidden':'';
+}
+function renderNavigation(ui){
+  closePanel(false);
+  if(currentView){
+    if(currentView.kind==='defense')renderDefense(currentView);else renderAttack(currentView);
+    if(ui){
+      document.querySelectorAll('#sheet details[id]').forEach(function(e){e.open=ui.expanded.indexOf(e.id)!==-1;});
+      var target=ui.focus && document.getElementById(ui.focus);
+      if(target && target.getClientRects().length)focusElement(target);
+      document.getElementById('overlay').scrollTop=ui.scroll||0;
+    }
+  }else{
+    var wasOpen=document.getElementById('overlay').classList.contains('open');
+    document.getElementById('overlay').classList.remove('open');
+    syncModals();
+    var saved=ui && ui.focus && document.getElementById(ui.focus);
+    if(saved)focusElement(saved);
+    else if(modalTrigger && modalTrigger.isConnected)focusElement(modalTrigger);
+    else if(modalTrigger || wasOpen)focusElement(document.getElementById('q'));
+    modalTrigger=null;
+  }
+}
+function navigateTo(request, replace){
+  var next=normaliseView(request);
+  if(request && !next)return;
+  rememberView();
+  if(!currentView && next)modalTrigger=document.activeElement;
+  currentView=next;
+  navigationDepth=next ? navigationDepth+(replace?0:1) : 0;
+  window.history[replace?'replaceState':'pushState']({gwm:navigationRecord()},'',viewURL(next));
+  renderNavigation();
 }
 function closeSheet(){
-  var ov = document.getElementById("overlay");
-  if (!ov.classList.contains("open") || ov.classList.contains("closing")) return;
-  ov.classList.add("closing");
-  document.body.style.overflow = "";
-  setTimeout(function(){ ov.classList.remove("open"); ov.classList.remove("closing"); }, 180);
+  if(!document.getElementById('overlay').classList.contains('open'))return;
+  if(navigationDepth>0)window.history.go(-navigationDepth);else navigateTo(null,true);
 }
+function goBack(){if(navigationDepth>0)window.history.back();else closeSheet();}
+function syncListControls(){
+  document.getElementById('q').value=state.q;
+  document.getElementById('qclear').style.display=state.q?'block':'none';
+  document.querySelectorAll('#tabs [data-tab]').forEach(function(b){
+    var selected=b.getAttribute('data-tab')===state.tab;
+    b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;
+  });
+}
+function initialiseNavigation(){
+  var params=new URL(window.location.href).searchParams,saved=window.history.state && window.history.state.gwm;
+  state.q=(params.get('q')||'').slice(0,500);
+  var group=params.get('group');
+  state.tab=group==='counters'||GROUPS.some(function(g){return g.id===group;})?group:'all';
+  currentView=normaliseView({kind:params.get('view'),code:params.get('team'),variant:params.get('variant'),against:params.get('against'),againstVariant:params.get('againstVariant')});
+  navigationDepth=saved && currentView ? saved.depth||0 : 0;
+  // A fresh shared link gets its own list entry, so Back/Close stay on this site.
+  if(currentView && !navigationDepth){
+    var initial=currentView;currentView=null;
+    window.history.replaceState({gwm:navigationRecord()},'',viewURL(null));
+    currentView=initial;navigationDepth=1;
+    window.history.pushState({gwm:navigationRecord()},'',viewURL(currentView));
+  }else window.history.replaceState({gwm:navigationRecord(saved && saved.ui)},'',viewURL(currentView));
+  syncListControls();render();renderNavigation(saved && saved.ui);
+}
+window.addEventListener('popstate',function(e){
+  var saved=e.state && e.state.gwm;
+  if(!saved){initialiseNavigation();return;}
+  state.q=saved.q||'';state.tab=saved.tab||'all';
+  currentView=normaliseView(saved.view);navigationDepth=saved.depth||0;
+  hideSuggest();syncListControls();render();renderNavigation(saved.ui);
+});
+async function copyViewLink(){
+  var field=document.getElementById('share-url'),status=document.getElementById('route-status');
+  try{
+    await navigator.clipboard.writeText(window.location.href);
+    status.textContent='Đã sao chép liên kết đến đúng cách xếp đang xem.';
+  }catch(error){
+    field.hidden=false;field.value=window.location.href;focusElement(field);field.select();
+    status.textContent='Sao chép liên kết trong ô bên dưới.';
+  }
+}
+function openSheet(html){
+  document.getElementById('sheet').innerHTML=html;
+  var ov=document.getElementById('overlay');
+  ov.classList.remove('closing');ov.classList.add('open');ov.scrollTop=0;ov.inert=false;
+  ov.setAttribute('aria-hidden','false');
+  document.getElementById('closebtn').addEventListener('click',closeSheet);
+  document.getElementById('backbtn').addEventListener('click',goBack);
+  document.getElementById('sharebtn').addEventListener('click',copyViewLink);
+  document.querySelectorAll('#sheet [data-team],#sheet [data-counter-open]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var options={variant:b.getAttribute('data-variant'),against:b.getAttribute('data-against'),againstVariant:b.getAttribute('data-against-variant')};
+      if(b.hasAttribute('data-team'))openTeam(b.getAttribute('data-team'),options);
+      else openCounter(b.getAttribute('data-counter-open'),options);
+    });
+  });
+  document.querySelectorAll('#sheet [data-switch-variant]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var next=Object.assign({},currentView,{variant:b.getAttribute('data-switch-variant')||null});
+      navigateTo(next);
+    });
+  });
+  focusElement(document.getElementById('sheet-title'));syncModals();
+}
+function activeDialog(){
+  var po=document.getElementById('poverlay'),ov=document.getElementById('overlay');
+  return po.classList.contains('open')?po:ov.classList.contains('open')?ov:null;
+}
+function focusableIn(dialog){
+  return Array.from(dialog.querySelectorAll('button,a[href],input,select,textarea,summary,[tabindex="0"]')).filter(function(e){
+    return !e.disabled && !e.closest('[inert]') && e.getClientRects().length>0;
+  });
+}
+document.addEventListener('keydown',function(e){
+  var dialog=activeDialog();if(!dialog)return;
+  if(e.key==='Escape'){
+    e.preventDefault();e.stopPropagation();
+    if(dialog.id==='poverlay')closePanel();else closeSheet();return;
+  }
+  if(e.key!=='Tab')return;
+  var items=focusableIn(dialog),index=items.indexOf(document.activeElement);
+  if(!items.length){e.preventDefault();focusElement(dialog);return;}
+  if(index===-1 || (!e.shiftKey && index===items.length-1) || (e.shiftKey && index===0)){
+    e.preventDefault();focusElement(e.shiftKey?items[items.length-1]:items[0]);
+  }
+});
+document.addEventListener('focusin',function(e){
+  var dialog=activeDialog();
+  if(dialog && !dialog.contains(e.target))focusElement(dialog.querySelector('[tabindex="-1"]')||dialog);
+});
 /* ---------- info panels (hero / skill / pet) ---------- */
 function heroImgByName(name){
   for (var i = 0; i < HEROES.length; i++) if (HEROES[i].name === name) return GW_BASE + HEROES[i].img;
@@ -821,17 +1063,28 @@ function secHTML(slotLabel, sec){
   return h + '</div>';
 }
 function openPanel(html){
+  panelTrigger=document.activeElement;
   document.getElementById("psheet").innerHTML = html;
   var po = document.getElementById("poverlay");
   po.classList.add("open"); po.scrollTop = 0;
+  po.setAttribute('aria-hidden','false');
   var cb = document.getElementById("pclosebtn");
   if (cb) cb.addEventListener("click", closePanel);
+  focusElement(document.getElementById('panel-title'));syncModals();
 }
-function closePanel(){
-  document.getElementById("poverlay").classList.remove("open");
+function closePanel(restore){
+  var po=document.getElementById('poverlay');
+  if(!po.classList.contains('open'))return;
+  po.classList.remove('open');syncModals();
+  if(restore!==false){
+    if(panelTrigger && panelTrigger.isConnected)focusElement(panelTrigger);
+    else if(currentView)focusElement(document.getElementById('sheet-title'));
+    else focusElement(document.getElementById('q'));
+  }
+  panelTrigger=null;
 }
 function panelHead(img, title, sub){
-  return '<div class="p-head"><img class="pava" src="' + img + '" alt="" /><div><h3>' + esc(title) + '</h3>'
+  return '<div class="p-head"><img class="pava" src="' + img + '" alt="" /><div><h3 id="panel-title" tabindex="-1">' + esc(title) + '</h3>'
     + (sub ? '<div class="p-sub">' + esc(sub) + '</div>' : "") + '</div>'
     + '<button class="p-close" id="pclosebtn" type="button">✕ Đóng</button></div>';
 }
@@ -879,86 +1132,110 @@ document.addEventListener("click", function(e){
 document.getElementById("poverlay").addEventListener("click", function(e){ if (e.target === this) closePanel(); });
 
 
-function openTeam(code){
-  var d=DATA.defense.find(function(x){return x.code===code||x.variants.some(function(v){return v.code===code;});});
-  if(!d)return;
-  var count=d.counters.length;
-  var counters=d.counters.map(function(c,i){return counterBlockHTML(c,i,d.code);}).join("");
-  var variants=d.variants.map(function(v,i){
-    var advice=v.advice?lineupAdvice(v.advice):"";
-    return '<details class="variant"'+(i===0?' open':'')+'><summary>'+esc(variantTitle(v,'thủ',i+1))+'</summary><div class="variant-body">'
-      +(advice?'<div class="lineup-tip">'+esc(advice)+'</div>':'')
-      +formationBoardHTML(v)+'<div class="section-t">Pet</div>'+defensePetsHTML(v)
-      +'<div class="section-t">Kỹ năng mở đầu</div>'+openerHTML(defSkills(v))+'</div></details>';
-  }).join('');
-  openSheet(
-    '<div class="sheet-head"><div><span class="sheet-role defense">ĐỘI PHÒNG THỦ</span> <span class="code">'+d.code+'</span>'
-    +'<h2>'+d.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h2></div>'
+function sheetHeaderHTML(team, kind){
+  var role=kind==='defense'?'ĐỘI PHÒNG THỦ':'ĐỘI TẤN CÔNG';
+  return '<div class="sheet-head"><div class="sheet-title"><span class="sheet-role '+(kind==='defense'?'defense':'attack')+'">'+role+'</span> <span class="code">'+team.code+'</span>'
+    +'<h2 id="sheet-title" tabindex="-1">'+team.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h2></div>'
     +'<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
-    +'<div class="match-intro danger"><span class="match-eyebrow">Khi đội này phòng thủ</span>'
-    +'<h3>'+(count?'Đội thủ '+d.code+' bị khắc chế bởi '+count+' đội công':'Đội thủ '+d.code+' chưa có đội công khắc chế được liệt kê')+'</h3>'
-    +'<p>Mỗi đội công có lợi thế trong những cách xếp và điều kiện cụ thể. Hãy xem đúng trường hợp trước khi chọn đội.</p></div>'
-    +'<div class="team-zone enemy">'+heroesHTML(d,true)
-    +'<div class="section-t">Cách xếp của đội phòng thủ ('+d.variants.length+')</div>'+variants+'</div>'
-    +'<div class="match-heading danger"><span class="match-eyebrow">Các cặp đối đầu</span>'
-    +'<h3>Đội công khắc chế đội thủ '+d.code+'</h3>'
-    +'<p>Mở từng trường hợp để xem cách công tương ứng với cách thủ và điều kiện cần đáp ứng.</p></div>'
-    +(counters||'<div class="empty-match">Chưa có đội công khắc chế được liệt kê cho đội thủ này.</div>')
-  );
+    +'<div class="sheet-toolbar"><button class="nav-btn" id="backbtn" type="button">← Quay lại</button>'
+    +'<button class="nav-btn share-btn" id="sharebtn" type="button">Sao chép liên kết</button>'
+    +'<span class="sr-only" id="route-status" role="status" aria-live="polite"></span>'
+    +'<input class="share-url" id="share-url" aria-label="Liên kết đến đội hình đang xem" readonly hidden /></div>';
 }
-
-
-function defenseMiniHTML(code,counterCode){
-  var d=DATA.defense.find(function(x){return x.code===code;});
-  if(!d)return "";
-  var g=groupOf(d.group),attack=DATA.counters[counterCode],records=d.matchups[counterCode]||[],shown=0;
+function viewContextHTML(view){
+  var team=teamFor(view.kind,view.code),kind=view.kind==='defense'?'thủ':'công';
+  if(!view.variant)return '';
+  var text='Đang xem cách '+kind+' '+variantNumber(team,view.variant)+' ('+view.variant+')';
+  if(view.against){
+    var opponent=teamFor(view.kind==='defense'?'attack':'defense',view.against);
+    text+=' · Đối đầu '+view.against+' cách '+(view.kind==='defense'?'công ':'thủ ')+variantNumber(opponent,view.againstVariant)+' ('+view.againstVariant+')';
+  }
+  return '<div class="route-context">'+esc(text)+'</div>';
+}
+function targetCodes(team, kind, variant){
+  if(kind==='defense')return team.counters.filter(function(c){
+    return (team.matchups[c]||[]).some(function(m){return !variant || m.defenseVariant===variant;});
+  });
+  return (beatsMap[team.code]||[]).filter(function(code){
+    return (teamFor('defense',code).matchups[team.code]||[]).some(function(m){return !variant || m.attackVariant===variant;});
+  });
+}
+function variantFiltersHTML(team,kind,selected){
+  var label=kind==='defense'?'thủ':'công';
+  return '<div class="variant-filter" role="group" aria-label="Lọc theo cách xếp '+label+'">'
+    +'<button type="button" data-switch-variant="" aria-pressed="'+(!selected)+'">Tất cả cách '+label+' ('+targetCodes(team,kind,null).length+')</button>'
+    +team.variants.map(function(v,i){
+      return '<button type="button" data-switch-variant="'+v.code+'" aria-pressed="'+(selected===v.code)+'">Cách '+label+' '+(i+1)+' ('+targetCodes(team,kind,v.code).length+')<small> · '+v.code+'</small></button>';
+    }).join('')+'</div>';
+}
+function lineupHTML(team,kind,selected){
+  var defense=kind==='defense',label=defense?'thủ':'công';
+  var variants=team.variants.map(function(v,i){
+    return '<details class="variant team-variant" id="lineup-'+v.code+'"'+((selected?selected===v.code:i===0)?' open':'')+'><summary>'+esc(variantTitle(v,label,i+1))+'</summary><div class="variant-body">'
+      +(v.advice?'<div class="lineup-tip">'+esc(lineupAdvice(v.advice))+'</div>':'')
+      +formationBoardHTML(v,defense?null:petColHTML(team.code,v))
+      +(defense?'<div class="section-t">Pet</div>'+defensePetsHTML(v):'')
+      +'<div class="section-t">Kỹ năng mở đầu</div>'+openerHTML(defense?defSkills(v):v.skills)+'</div></details>';
+  }).join('');
+  return '<details class="lineup-details" id="team-lineup"'+(selected?' open':'')+'><summary>Xem đội hình '+(defense?'phòng thủ':'tấn công')+' và kỹ năng'+(selected?' · Cách '+label+' '+variantNumber(team,selected):' ('+team.variants.length+' cách xếp)')+'</summary>'
+    +'<div class="lineup-content team-zone '+(defense?'enemy':'ally')+'">'+variants+'</div></details>';
+}
+function openTeam(code,options){
+  navigateTo(Object.assign({kind:'defense',code:code},options||{}));
+}
+function renderDefense(view){
+  var d=teamFor('defense',view.code),codes=targetCodes(d,'defense',view.variant);
+  if(view.against)codes.sort(function(a,b){return (b===view.against?1:0)-(a===view.against?1:0);});
+  var counters=codes.map(function(c,i){return counterBlockHTML(c,i,d.code,view.variant);}).join('');
+  openSheet(sheetHeaderHTML(d,'defense')+viewContextHTML(view)
+    +'<div class="match-intro danger"><h3>'+codes.length+' đội công khắc chế '+d.code+'</h3>'
+    +'<p>'+(view.variant?'Chỉ hiện phương án cho cách thủ '+variantNumber(d,view.variant)+'.':'Chọn đúng cách thủ để lọc phương án phù hợp.')+'</p></div>'
+    +variantFiltersHTML(d,'defense',view.variant)+lineupHTML(d,'defense',view.variant)
+    +'<div class="match-heading danger"><h3>Đội công khắc chế đội thủ '+d.code+'</h3>'
+    +'<p>Điều kiện và chuỗi mở đầu hiện ngay bên dưới; mở từng phương án để xem sơ đồ.</p></div>'
+    +(counters||'<div class="empty-match">Chưa có đội công khắc chế được liệt kê cho '+(view.variant?'cách thủ này.':'đội thủ này.')+'</div>'));
+}
+function defenseMiniHTML(code,counterCode,attackVariant){
+  var d=teamFor('defense',code),attack=teamFor('attack',counterCode);
+  if(!d)return '';
+  var records=(d.matchups[counterCode]||[]).filter(function(m){return !attackVariant || m.attackVariant===attackVariant;});
+  if(!records.length)return '';
   var variants=d.variants.map(function(v,i){
     var relevant=records.filter(function(m){return m.defenseVariant===v.code;});
     if(!relevant.length)return '';
-    var applies=relevant.map(function(m){return variantNumber(attack,m.attackVariant);}),caseNum=++shown;
-    return '<details class="variant match-case"'+(caseNum===1?' open':'')+'><summary>'
-      +'<span class="case-title">Trường hợp '+caseNum+': Đội thủ xếp cách '+(i+1)+'</span>'
-      +'<span class="case-sub">Dùng đội công '+counterCode+' theo cách xếp '+applies.join(', ')+'</span></summary>'
+    var applies=relevant.map(function(m){return variantNumber(attack,m.attackVariant);});
+    return '<details class="variant match-case" id="case-'+counterCode+'-'+v.code+'"><summary>'
+      +'<span class="case-title">Cách thủ '+(i+1)+' · '+esc(fmtShort(v))+'</span>'
+      +'<span class="case-sub">Pet '+esc(v.pet)+' · Dùng cách công '+applies.join(', ')+'</span>'
+      +queuePreviewHTML(v.skills)+requirementsPreviewHTML(relevant,d)
+      +'<span class="case-action">Xem sơ đồ và kỹ năng</span></summary>'
       +'<div class="variant-body">'+formationBoardHTML(v)
       +'<div class="section-t">Pet của đội thủ</div>'+defensePetsHTML(v)
-      +relevant.map(function(m){return matchupNoteHTML(m,'Đội công '+counterCode+' sử dụng cách công '+variantNumber(attack,m.attackVariant));}).join('')
-      +'</div></details>';
+      +'<div class="section-t">Kỹ năng mở đầu của đội thủ</div>'+openerHTML(defSkills(v))
+      +relevant.map(function(m){
+        return matchupNoteHTML(m,'Đội công '+counterCode+' sử dụng cách công '+variantNumber(attack,m.attackVariant))
+          +'<button type="button" class="match-link" id="open-'+d.code+'-'+v.code+'-'+m.attackVariant+'" data-team="'+d.code+'" data-variant="'+v.code+'" data-against="'+counterCode+'" data-against-variant="'+m.attackVariant+'">Xem chi tiết đội thủ ›</button>';
+      }).join('')+'</div></details>';
   }).join('');
-  return '<article class="def-block matchup-victim">'
-    +'<div class="match-tag">Đội thủ bị đội công '+counterCode+' khắc chế</div>'
-    +'<div class="cb-head"><span class="code">'+d.code+'</span>'
-    +'<span class="gtag" style="color:'+g.color+'">'+g.label+' · Phòng thủ</span>'
-    +'<button type="button" class="mini-open" data-team="'+d.code+'">Xem đội thủ ›</button></div>'
+  return '<article class="def-block matchup-victim" id="matchup-'+d.code+'">'
+    +'<div class="cb-head"><span class="code">'+d.code+'</span><span class="gtag">Đội phòng thủ</span></div>'
     +'<h4 class="match-team-name">'+d.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h4>'
-    +'<p class="match-explain">Đội công '+counterCode+' có lợi thế trước đội thủ '+d.code+' trong những trường hợp bên dưới.</p>'
-    +variants+'</article>';
+    +matchPortraitsHTML(d)+variants+'</article>';
 }
-
-
-function openCounter(code){
-  var v=DATA.counters[code]||Object.values(DATA.counters).find(function(x){return x.variants.some(function(y){return y.code===code;});});
-  if(!v)return;
-  code=v.code;
-  var targets=beatsMap[code]||[];
-  var beats=targets.map(function(t){return defenseMiniHTML(t,code);}).join('');
-  var variants=v.variants.map(function(variant,i){
-    return '<details class="variant"'+(i===0?' open':'')+'><summary>'+esc(variantTitle(variant,'công',i+1))+'</summary><div class="variant-body">'
-      +formationBoardHTML(variant,petColHTML(code,variant))
-      +'<div class="section-t">Kỹ năng mở đầu</div>'+openerHTML(variant.skills)+'</div></details>';
-  }).join('');
-  openSheet(
-    '<div class="sheet-head"><div><span class="sheet-role attack">ĐỘI TẤN CÔNG</span> <span class="code">'+code+'</span>'
-    +'<h2>'+v.heroes.map(function(h){return esc(h.name);}).join(' · ')+'</h2></div>'
-    +'<button class="closebtn" id="closebtn" type="button">✕ Đóng</button></div>'
-    +'<div class="match-intro advantage"><span class="match-eyebrow">Khi đội này tấn công</span>'
-    +'<h3>'+(targets.length?'Đội công '+code+' có lợi thế trước '+targets.length+' đội thủ':'Đội công '+code+' chưa có đội thủ đối đầu được liệt kê')+'</h3>'
-    +'<p>Chỉ đối chiếu các đội thủ có trong danh sách; mỗi cách thủ có thể yêu cầu cách công, tốc độ hoặc trang bị khác nhau.</p></div>'
-    +'<div class="team-zone ally"><div class="section-t">Cách xếp của đội tấn công ('+v.variants.length+')</div>'+variants+'</div>'
-    +'<div class="match-heading advantage"><span class="match-eyebrow">Các cặp đối đầu</span>'
-    +'<h3>Đội thủ mà đội công '+code+' có lợi thế khi gặp</h3>'
-    +'<p>Mỗi thẻ cho biết đối thủ có những tướng nào, xếp theo cách nào và điều kiện áp dụng.</p></div>'
-    +(beats||'<div class="empty-match">Chưa có đội thủ đối đầu được liệt kê cho đội công này.</div>')
-  );
+function openCounter(code,options){
+  navigateTo(Object.assign({kind:'attack',code:code},options||{}));
+}
+function renderAttack(view){
+  var team=teamFor('attack',view.code),targets=targetCodes(team,'attack',view.variant);
+  if(view.against)targets.sort(function(a,b){return (b===view.against?1:0)-(a===view.against?1:0);});
+  var beats=targets.map(function(t){return defenseMiniHTML(t,team.code,view.variant);}).join('');
+  openSheet(sheetHeaderHTML(team,'attack')+viewContextHTML(view)
+    +'<div class="match-intro advantage"><h3>'+team.code+' có lợi thế trước '+targets.length+' đội thủ</h3>'
+    +'<p>'+(view.variant?'Đang dùng cách công '+variantNumber(team,view.variant)+'. Hãy đối chiếu điều kiện của từng cặp đấu.':'Chọn cách công để xem đúng các cặp đối đầu đã ghi nhận.')+'</p></div>'
+    +variantFiltersHTML(team,'attack',view.variant)+lineupHTML(team,'attack',view.variant)
+    +'<div class="match-heading advantage"><h3>Đội thủ mà '+team.code+' có lợi thế khi gặp</h3>'
+    +'<p>Mỗi phương án gắn với cách thủ và cách công cụ thể.</p></div>'
+    +(beats||'<div class="empty-match">Chưa có đội thủ đối đầu được liệt kê cho '+(view.variant?'cách công này.':'đội công này.')+'</div>'));
 }
 
 /* tabs */
@@ -968,14 +1245,22 @@ function openCounter(code){
     GROUPS.filter(function(g){ return DATA.defense.some(function(d){return d.groups.indexOf(g.id)!==-1;}); }).map(function(g){ return {id:g.id, label:g.label, color:g.color, icon:TAB_ICONS[g.id] || null, cnt: DATA.defense.filter(function(d){return d.groups.indexOf(g.id)!==-1;}).length}; })
   ).concat([{id:"counters", label:"Thư viện đội công", cnt: Object.keys(DATA.counters).length}]);
   tabs.innerHTML = defs.map(function(t){
-    return '<button class="tab" type="button" role="tab" data-tab="'+t.id+'" aria-selected="'+(state.tab===t.id)+'">'
+    return '<button class="tab" id="tab-'+t.id+'" type="button" role="tab" aria-controls="list" tabindex="'+(state.tab===t.id?'0':'-1')+'" data-tab="'+t.id+'" aria-selected="'+(state.tab===t.id)+'">'
       + (t.icon ? '<img class="tab-ic" src="'+t.icon+'" alt="" />' : (t.color ? '<span class="dot" style="background:'+t.color+'"></span>' : '')) + t.label + '<span class="cnt">'+t.cnt+'</span></button>';
   }).join("");
   tabs.querySelectorAll("[data-tab]").forEach(function(b){
     b.addEventListener("click", function(){
       state.tab = b.getAttribute("data-tab");
-      tabs.querySelectorAll("[data-tab]").forEach(function(x){ x.setAttribute("aria-selected", x===b ? "true" : "false"); });
-      render();
+      syncListControls();render();updateListURL();
+    });
+    b.addEventListener('keydown',function(e){
+      var buttons=Array.from(tabs.querySelectorAll('[data-tab]')),index=buttons.indexOf(b),next=index;
+      if(e.key==='ArrowRight')next=(index+1)%buttons.length;
+      else if(e.key==='ArrowLeft')next=(index+buttons.length-1)%buttons.length;
+      else if(e.key==='Home')next=0;
+      else if(e.key==='End')next=buttons.length-1;
+      else return;
+      e.preventDefault();buttons[next].focus();buttons[next].click();
     });
   });
 })();
@@ -1011,14 +1296,17 @@ var CODE_SUGGEST = DATA.defense.flatMap(function(d){
 var qInput = document.getElementById("q");
 var sgBox = document.getElementById("suggest");
 var sgIndex = -1;
-function hideSuggest(){ sgBox.classList.remove("open"); sgBox.innerHTML = ""; sgIndex = -1; }
+function hideSuggest(){
+  sgBox.classList.remove('open');sgBox.innerHTML='';sgIndex=-1;
+  qInput.setAttribute('aria-expanded','false');qInput.removeAttribute('aria-activedescendant');
+}
 function showSuggest(){
-  var q = qInput.value.trim().toLowerCase();
+  var q = searchText(qInput.value.trim());
   if (q.length < 2){ hideSuggest(); return; }
   var room = 12;
-  var heroes = HEROES.filter(function(h){ return h.name.toLowerCase().indexOf(q) !== -1; }).slice(0, Math.min(8, room));
+  var heroes = HEROES.filter(function(h){ return searchText(h.name).indexOf(q) !== -1; }).slice(0, Math.min(8, room));
   room -= heroes.length;
-  var pets = room > 0 ? PET_SUGGEST.filter(function(p){ return p.name.toLowerCase().indexOf(q) !== -1; }).slice(0, room) : [];
+  var pets = room > 0 ? PET_SUGGEST.filter(function(p){ return searchText(p.name).indexOf(q) !== -1; }).slice(0, room) : [];
   room -= pets.length;
   var codes = room > 0 ? CODE_SUGGEST.filter(function(t){ return t.code.toLowerCase().indexOf(q) !== -1; }).slice(0, room) : [];
   if (!heroes.length && !pets.length && !codes.length){ hideSuggest(); return; }
@@ -1041,34 +1329,38 @@ function showSuggest(){
   }
   sgBox.innerHTML = html;
   sgBox.classList.add("open");
-  sgBox.querySelectorAll(".sg-item").forEach(function(b){
-    b.addEventListener("mousedown", function(e){ e.preventDefault(); pickSuggest(b.getAttribute("data-kind"), b.getAttribute("data-value")); });
+  qInput.setAttribute('aria-expanded','true');qInput.removeAttribute('aria-activedescendant');
+  sgBox.querySelectorAll(".sg-item").forEach(function(b,i){
+    b.id='suggest-'+i;b.tabIndex=-1;b.setAttribute('aria-selected','false');
+    b.addEventListener('mousedown',function(e){e.preventDefault();});
+    b.addEventListener('click',function(){pickSuggest(b.getAttribute('data-kind'),b.getAttribute('data-value'));});
   });
 }
 function setTabAll(){
   state.tab = "all";
-  document.querySelectorAll("#tabs [data-tab]").forEach(function(x){ x.setAttribute("aria-selected", x.getAttribute("data-tab") === "all" ? "true" : "false"); });
+  syncListControls();
 }
 function pickHero(name){
   qInput.value = name; state.q = name;
   document.getElementById("qclear").style.display = "block";
-  setTabAll(); hideSuggest(); render();
+  setTabAll(); hideSuggest(); render();updateListURL();
 }
 function pickSuggest(kind, value){
   if (kind === "hero"){ pickHero(value); return; }
   if (kind === "pet"){
     qInput.value = value; state.q = value;
     document.getElementById("qclear").style.display = "block";
-    setTabAll(); hideSuggest(); render(); return;
+    setTabAll(); hideSuggest(); render();updateListURL(); return;
   }
   hideSuggest();
-  if (kind === "def") openTeam(value); else openCounter(value);
+  if (kind === "def") openTeam(value,{variant:value}); else openCounter(value,{variant:value});
 }
 qInput.addEventListener("input", function(){
   state.q = qInput.value.trim();
   document.getElementById("qclear").style.display = state.q ? "block" : "none";
   render();
   showSuggest();
+  updateListURL();
 });
 qInput.addEventListener("focus", showSuggest);
 qInput.addEventListener("blur", function(){ setTimeout(hideSuggest, 120); });
@@ -1078,25 +1370,22 @@ qInput.addEventListener("keydown", function(e){
   if (e.key === "ArrowDown" || e.key === "ArrowUp"){
     e.preventDefault();
     sgIndex = e.key === "ArrowDown" ? Math.min(sgIndex + 1, items.length - 1) : Math.max(sgIndex - 1, 0);
-    items.forEach(function(it, i){ it.classList.toggle("active", i === sgIndex); });
-  } else if (e.key === "Enter" && sgIndex >= 0 && items[sgIndex]){
-    e.preventDefault(); pickSuggest(items[sgIndex].getAttribute("data-kind"), items[sgIndex].getAttribute("data-value"));
+    items.forEach(function(it, i){it.classList.toggle('active',i===sgIndex);it.setAttribute('aria-selected',String(i===sgIndex));});
+    qInput.setAttribute('aria-activedescendant',items[sgIndex].id);
+  } else if (e.key === "Enter" && (sgIndex >= 0 || items.length===1)){
+    var chosen=items[sgIndex>=0?sgIndex:0];
+    e.preventDefault(); pickSuggest(chosen.getAttribute('data-kind'),chosen.getAttribute('data-value'));
   } else if (e.key === "Escape"){
     hideSuggest();
   }
 });
 document.getElementById("qclear").addEventListener("click", function(){
-  qInput.value = ""; state.q = ""; this.style.display = "none"; hideSuggest(); render(); qInput.focus();
+  qInput.value = ""; state.q = ""; this.style.display = "none"; hideSuggest(); render();updateListURL();qInput.focus();
 });
 
 /* overlay close */
 document.getElementById("overlay").addEventListener("click", function(e){ if (e.target === this) closeSheet(); });
-document.addEventListener("keydown", function(e){
-  if (e.key !== "Escape") return;
-  if (document.getElementById("poverlay").classList.contains("open")) closePanel(); else closeSheet();
-});
-
-render();
+initialiseNavigation();
 </script>
 </body>
 </html>

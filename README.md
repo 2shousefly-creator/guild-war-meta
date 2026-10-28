@@ -2,6 +2,22 @@
 
 Vietnamese reference site for Major League 3v3. Cloudflare deploys the static `index.html` from `main`.
 
+## Lookup and navigation
+
+- Search accepts multiple names in any order, ignores case/diacritics, and treats spaces, commas, semicolons, `+` and `|` as separators. All terms must match the same team. Team/variant codes and primary/backup pets remain searchable.
+- Matchup links carry the exact offense variant, defense variant and opponent context. Variant-code suggestions expand the matching configuration instead of always opening configuration 1.
+- Detail URLs preserve the current search/category and selected configuration. Browser Back/Forward and the in-sheet Back button restore the preceding view, expanded cases and modal scroll position. Close returns to the list; a fresh shared link gets a list entry so closing it stays on the site.
+- Counter cases start collapsed on all screen sizes. Opening queues and recorded conditions remain visible in each summary; full formation/skill diagrams are expandable. Variant filters only show explicitly recorded matchups for that configuration.
+- Dialogs manage initial focus, Tab/Shift+Tab containment, nested-panel Escape, background `inert`, scroll locking and focus restoration. Search suggestions expose their selected option to assistive technology, and category tabs support arrow keys/Home/End.
+
+Example exact-pair URL:
+
+```text
+?view=attack&team=C41&variant=C239&against=P44&againstVariant=P38
+```
+
+Run `node scripts/check_dataset.cjs` to check data integrity, every visible configuration-specific matchup in both directions, multi-name search, exact-variant links, compact summaries, URL state and modal focus. The original snapshot still records 136 cases; the existing runtime excludes two explicitly untested cases, leaving 134 visible cases. UI changes do not alter the underlying data or skill libraries.
+
 ## Data reviewed on 27 October 2026
 
 - [7K Note / Pandoara](https://7k-note.pages.dev/g/4ZyeEGMZ?tab=targets): 43 enemy entries, 104 listed counter occurrences. Research references remain in the repository and are not linked from the public site.

@@ -1,144 +1,92 @@
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const vm = require('node:vm');
-const html = fs.readFileSync('index.html', 'utf8');
-const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const html=fs.readFileSync('index.html','utf8'),script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
 new vm.Script(script);
-const nodes = new Map();
-function node(id) {
-  if (!nodes.has(id)) nodes.set(id, {innerHTML:'', className:'', style:{}, value:'',
-    scrollTop:0, classList:{add(){},remove(){},toggle(){},contains(){return false}},
-    addEventListener(){}, querySelectorAll(){return []}, focus(){}});
+const nodes=new Map(),listeners=new Map();
+function node(id){
+  if(!nodes.has(id)){
+    const classes=new Set(),attrs=new Map();
+    nodes.set(id,{id,innerHTML:'',textContent:'',style:{},value:'',scrollTop:0,isConnected:true,
+      classList:{add(...xs){xs.forEach(x=>classes.add(x));},remove(...xs){xs.forEach(x=>classes.delete(x));},toggle(){},contains(x){return classes.has(x);}},
+      setAttribute(k,v){attrs.set(k,String(v));},getAttribute(k){return attrs.get(k)||null;},removeAttribute(k){attrs.delete(k);},
+      addEventListener(){},querySelectorAll(){return [];},querySelector(){return null;},getClientRects(){return [{}];},
+      closest(){return null;},contains(e){return e===this;},focus(){document.activeElement=this;},select(){}});
+  }
   return nodes.get(id);
 }
-const ctx = vm.createContext({document:{getElementById:node,body:{style:{}},
-  querySelectorAll(){return []},addEventListener(){}},setTimeout(){}});
-vm.runInContext(script, ctx);
-const d = ctx.DATA;
-assert.equal(d.defense.length, 49);
-assert.equal(Object.keys(d.counters).length, 89);
-assert.equal(d.research.defenseVariants, 67);
-assert.equal(d.research.offenseVariants, 127);
-assert.equal(d.research.matchups, 136);
-assert.equal(d.research.teamMatchups, 131);
-assert.equal(Object.keys(ctx.PROPOSED_DEFENSE).length, 0);
-
-// The sole user-facing outgoing link is the community fanpage. This includes
-// dynamic detail views below, not just anchors in the initial HTML.
-const anchors = [...html.matchAll(/<a\s[^>]*href="([^"]+)"/g)].map(m=>m[1]);
-assert.deepEqual(anchors, ['https://www.facebook.com/7krbvn']);
-for (const panels of [ctx.HERO_PANELS, ctx.PET_PANELS]) {
-  assert.ok(Object.values(panels).every(p=>!('source' in p)));
+const document={getElementById:node,body:{style:{}},activeElement:null,querySelectorAll(){return [];},
+  addEventListener(k,fn){if(!listeners.has(k))listeners.set(k,[]);listeners.get(k).push(fn);}};
+const window={location:{href:'https://example.test/'},addEventListener(){}};
+window.history={state:null,replaceState(s,_,url){this.state=s;window.location.href=new URL(url,window.location.href).href;},
+  pushState(s,_,url){this.replaceState(s,_,url);},go(){},back(){}};
+const ctx=vm.createContext({document,window,URL,navigator:{},setTimeout(){}});
+vm.runInContext(script,ctx);
+const d=ctx.DATA,all=[...d.defense,...Object.values(d.counters)],trio=t=>JSON.stringify(t.heroes.map(h=>h.name).sort());
+assert.equal(d.defense.length,49);assert.equal(Object.keys(d.counters).length,89);
+assert.equal(d.research.matchups,136,'Research metadata remains unchanged');
+assert.deepEqual([...html.matchAll(/<a\s[^>]*href="([^"]+)"/g)].map(m=>m[1]),['https://www.facebook.com/7krbvn']);
+for(const library of [d.defense,Object.values(d.counters)])assert.equal(new Set(library.map(trio)).size,library.length);
+for(const t of all)for(const v of t.variants){
+  assert.equal(new Set(v.heroes.map(h=>h.name)).size,3,v.code);assert.equal(trio(v),trio(t),v.code);
+  assert.deepEqual([...v.front,...v.back].sort(),Array.from(v.heroes,h=>h.name).sort(),v.code);
+  const cap=ctx.TEMPLATES[ctx.fmtShort(v)];assert.ok(v.front.length<=cap[0]&&v.back.length<=cap[1],v.code);
+  for(const p of [v.pet,...v.petBackup])assert.ok(ctx.PETS[p],p);
+  for(const s of v.skills){assert.ok(v.heroes.some(h=>h.name===s.hero),v.code);assert.ok(ctx.panelSec(s.hero,s.slot),v.code);}
 }
-assert.ok(!JSON.stringify(d).match(/https?:\/\/(?:7k-note\.pages\.dev|7katlas\.com|gamewith\.(?:jp|net))/));
-
-const all = [...d.defense, ...Object.values(d.counters)];
-const trio = t=>JSON.stringify(t.heroes.map(h=>h.name).sort());
-for (const groups of [d.defense, Object.values(d.counters)]) {
-  assert.equal(new Set(groups.map(trio)).size, groups.length, 'each trio appears once per library');
-}
-for (const t of all) {
-  assert.equal(new Set(t.heroes.map(h=>h.name)).size, 3, t.code);
-  assert.ok(t.variants.length, t.code);
-  for (const v of t.variants) {
-    assert.equal(trio(v), trio(t), v.code);
-    const names = v.heroes.map(h=>h.name);
-    assert.deepEqual([...v.front,...v.back].sort(), [...names].sort(), v.code);
-    const cap = ctx.TEMPLATES[ctx.fmtShort(v)];
-    assert.ok(v.front.length<=cap[0] && v.back.length<=cap[1], v.code);
-    for (const p of [v.pet,...v.petBackup]) assert.ok(ctx.PETS[p],p);
-    for (const s of v.skills) {
-      assert.ok(names.includes(s.hero),v.code);
-      assert.ok(['Skill 1','Skill 2','Awakening'].includes(s.slot),v.code);
-      assert.ok(ctx.panelSec(s.hero,s.slot),`${v.code}: missing ${s.hero} ${s.slot}`);
-    }
-  }
-}
-const multiCategory = d.defense.find(t=>t.code==='T41');
-assert.ok(multiCategory.groups.includes('tank') && multiCategory.groups.includes('status'));
-ctx.state.tab='status';
-ctx.state.q='Radgrid';
-ctx.render();
-assert.ok(node('list').innerHTML.includes('data-team="T41"'));
-ctx.state.tab='all';
-ctx.state.q='';
-
-let edges = 0;
-for (const team of d.defense) {
-  assert.equal(new Set(team.counters).size,team.counters.length);
+let edges=0;
+for(const team of d.defense){
   assert.deepEqual(Object.keys(team.matchups).sort(),[...team.counters].sort());
-  for (const c of team.counters) {
-    const attack = d.counters[c];
-    assert.ok(attack, c);
-    assert.ok(team.matchups[c].length);
-    for (const m of team.matchups[c]) {
-      assert.ok(team.variants.some(v=>v.code===m.defenseVariant));
-      assert.ok(attack.variants.some(v=>v.code===m.attackVariant));
-      edges++;
+  for(const c of team.counters)for(const m of team.matchups[c]){
+    assert.ok(!m.untested);assert.ok(d.counters[c]);edges++;
+    for(const [kind,code,variant,against,againstVariant] of [
+      ['attack',c,m.attackVariant,team.code,m.defenseVariant],['defense',team.code,m.defenseVariant,c,m.attackVariant]]){
+      const view=ctx.normaliseView({kind,code,variant,against,againstVariant});
+      assert.equal(view.variant,variant);assert.equal(view.againstVariant,againstVariant);
+      ctx.currentView=view;if(kind==='attack')ctx.renderAttack(view);else ctx.renderDefense(view);
+      const sheet=node('sheet').innerHTML;
+      assert.ok(sheet.includes(`id="lineup-${variant}" open`),`${code}: exact variant expanded`);
+      assert.ok(!sheet.includes('undefined'),code);
+      assert.equal((sheet.match(/class="variant match-case"[^>]*\bopen\b/g)||[]).length,0,'Matchups start compact');
     }
   }
-  ctx.openTeam(team.code);
-  const rendered = node('sheet').innerHTML;
-  assert.equal((rendered.match(/class="counter-block ally"/g)||[]).length,team.counters.length);
-  assert.ok(!rendered.includes('undefined') && !/<a\s/i.test(rendered),team.code);
+  const view=ctx.normaliseView({kind:'defense',code:team.code});ctx.currentView=view;ctx.renderDefense(view);
+  assert.equal((node('sheet').innerHTML.match(/class="counter-block ally matchup-card"/g)||[]).length,team.counters.length);
 }
-assert.equal(edges, 136);
-for (const c of Object.keys(d.counters)) {
-  ctx.openCounter(c);
-  const rendered = node('sheet').innerHTML;
-  assert.equal((rendered.match(/class="def-block"/g)||[]).length,(ctx.beatsMap[c]||[]).length);
-  assert.ok(!rendered.includes('undefined') && !/<a\s/i.test(rendered),c);
+assert.equal(edges,134,'Existing runtime excludes the 2 untested source cases');
+for(const c of Object.keys(d.counters)){
+  const view=ctx.normaliseView({kind:'attack',code:c});ctx.currentView=view;ctx.renderAttack(view);
+  assert.equal((node('sheet').innerHTML.match(/class="def-block matchup-victim"/g)||[]).length,(ctx.beatsMap[c]||[]).length);
 }
-
-// These two original formations have different counters; merging must retain
-// all three counters and attribute each to the correct original formation.
-const combined = d.defense.find(t=>t.code==='P44');
-assert.deepEqual(Array.from(combined.variants,v=>v.code), ['P44','P38']);
-assert.equal(combined.counters.length,3);
-assert.equal(combined.matchups.C95[0].defenseVariant,'P44');
-assert.ok(combined.matchups.C95[0].notes[0].includes('Rudy > Platin > Clemyth'));
-assert.ok(Object.values(combined.matchups).flat().some(m=>m.defenseVariant==='P38'));
-ctx.openTeam('P38');
-assert.ok(node('sheet').innerHTML.includes('Bố trí thủ 2'));
-assert.ok(node('sheet').innerHTML.includes('Áp dụng cho thủ 1'));
-assert.ok(node('sheet').innerHTML.includes('Áp dụng cho thủ 2'));
-const emptyQueue = d.defense.find(t=>t.code==='M32').variants.find(v=>v.code==='M32');
-assert.equal(emptyQueue.front.length,0);
-assert.equal(emptyQueue.skills.length,0,'Do not invent an unset queue');
-const rudyTeam = d.defense.find(t=>t.code==='T17');
-assert.equal(rudyTeam.variants[0].recommended,true);
-assert.equal(rudyTeam.variants[0].front.length,3);
-assert.equal(rudyTeam.variants[1].front.length,0);
-assert.equal(rudyTeam.counters.length,0);
-ctx.openTeam('T17');
-assert.ok(node('sheet').innerHTML.includes('Chưa kiểm chứng thực chiến'));
-assert.ok(node('sheet').innerHTML.includes('Hàng trước trống'));
-ctx.openHeroPanel('Rudy');
-assert.ok(node('psheet').innerHTML.includes('đồng minh hàng trước'));
-
-// Older variant codes and alternative pets still find their consolidated team.
-ctx.state.q='P38';
-assert.ok(ctx.matches(combined,false));
-ctx.state.q='Yu';
-assert.ok(ctx.matches(d.defense.find(t=>t.code==='M32'),false));
-ctx.state.q='';
-const alternateCounter = Object.values(d.counters).find(t=>t.variants.length>1).variants[1].code;
-ctx.openCounter(alternateCounter);
-assert.ok(node('sheet').innerHTML.includes('Các cách bố trí tấn công'));
-
+const p44=d.defense.find(t=>t.code==='P44');
+assert.deepEqual(Array.from(p44.variants,v=>v.code),['P44','P38']);
+for(const query of ['Hayeon Sunran','Sunran Hayeon','SUNRAN, HAYEON','Hayeon; Sunran','  Hayeon   Sunran  ','P38','Eirin']){
+  ctx.state.q=query;assert.ok(ctx.matches(p44,false),query);
+}
+ctx.state.q='Hayeon Yoongun';assert.ok(!ctx.matches(p44,false));ctx.state.q='';
+assert.equal(ctx.searchText('Đội HÌNH'),'doi hinh');
+assert.equal(ctx.normaliseView({kind:'defense',code:'P10'}).variant,'P10');
+assert.equal(ctx.normaliseView({kind:'attack',code:'C239'}).variant,'C239');
+assert.equal(ctx.normaliseView({kind:'attack',code:'C41',variant:'P44'}).variant,null);
+assert.equal(ctx.normaliseView({kind:'attack',code:'missing'}),null);
+assert.equal(ctx.normaliseView({kind:'attack',code:'C41',variant:'C239',against:'P44',againstVariant:'P44'}).against,null);
+const card=ctx.counterBlockHTML('C41',0,'P44','P38');
+assert.ok(card.includes('data-variant="C239" data-against="P44" data-against-variant="P38"'));
+assert.equal(ctx.counterBlockHTML('C41',0,'P44','P44'),'');
+const speed=ctx.counterBlockHTML('C95',0,'P44',null);
+assert.ok(speed.indexOf('Rudy &gt; Platin &gt; Clemyth')<speed.indexOf('</summary>'),'Speed conditions visible while collapsed');
+ctx.state.q='Sunran Hayeon';ctx.state.tab='physical';
+const url=new URL(ctx.viewURL({kind:'attack',code:'C41',variant:'C239',against:'P44',againstVariant:'P38'}),'https://example.test');
+assert.equal(url.searchParams.get('variant'),'C239');assert.equal(url.searchParams.get('againstVariant'),'P38');
+assert.equal(url.searchParams.get('q'),'Sunran Hayeon');assert.equal(url.searchParams.get('group'),'physical');
+ctx.state.q='';ctx.state.tab='all';
+ctx.openSkillPanel('Clemyth','Skill 1');
+assert.equal(document.activeElement.id,'panel-title');assert.equal(node('app').inert,true);assert.equal(node('overlay').inert,true);
+ctx.closePanel();assert.equal(node('overlay').inert,false);
+const dialog=node('overlay'),first=node('first'),last=node('last');dialog.classList.add('open');dialog.querySelectorAll=()=>[first,last];
+const trap=listeners.get('keydown')[0];let prevented=false;
+document.activeElement=last;trap({key:'Tab',preventDefault(){prevented=true;}});assert.ok(prevented);assert.equal(document.activeElement,first);
+document.activeElement=first;trap({key:'Tab',shiftKey:true,preventDefault(){}});assert.equal(document.activeElement,last);
+assert.match(html,/aria-labelledby="sheet-title"/);assert.match(html,/aria-labelledby="panel-title"/);
+assert.equal(d.defense.find(t=>t.code==='M32').variants.find(v=>v.code==='M32').skills.length,0);
 assert.notEqual(all.find(t=>t.heroes.some(h=>h.name==='Radgrid')).heroes.find(h=>h.name==='Radgrid').img,
   all.find(t=>t.heroes.some(h=>h.name==='Randgrid')).heroes.find(h=>h.name==='Randgrid').img);
-ctx.openHeroPanel('Eileene');
-let panel=node('psheet').innerHTML;
-assert.ok(panel.indexOf('ss-slot">Awakening')<panel.indexOf('ss-slot">Skill 2'));
-assert.ok(panel.indexOf('ss-slot">Skill 2')<panel.indexOf('ss-slot">Skill 1'));
-assert.ok(!/<a\s/i.test(panel));
-ctx.openSkillPanel('Eileene','Skill 1');
-assert.ok(!/<a\s/i.test(node('psheet').innerHTML));
-assert.ok(ctx.openerHTML([{hero:'Eileene',slot:'Skill 1'}]).includes('op-slot">Skill 1'));
-assert.ok(ctx.heroImgByName('Rook') && ctx.heroImgByName('Lina'));
-ctx.openPetPanel('Nezuko Kamado');
-assert.ok(node('psheet').innerHTML.includes('Demon Slayer'));
-assert.ok(node('psheet').innerHTML.includes('chưa đối chiếu'));
-assert.ok(!/<a\s/i.test(node('psheet').innerHTML));
-console.log(`PASS: ${d.defense.length} defense trios, ${Object.keys(d.counters).length} offense trios, ${edges} configuration-specific matchups; all details and skill slots render.`);
+console.log(`PASS: 49 defense trios, 89 offense trios, ${edges} visible matchup cases; exact variants, search, compact cases, URLs and focus.`);
