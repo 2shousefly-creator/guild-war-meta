@@ -16,7 +16,13 @@ Example exact-pair URL:
 ?view=attack&team=C41&variant=C239&against=P44&againstVariant=P38
 ```
 
-Run `node scripts/check_dataset.cjs` to check data integrity, every visible configuration-specific matchup in both directions, multi-name search, exact-variant links, compact summaries, URL state and modal focus. The original snapshot still records 136 cases; the existing runtime excludes two explicitly untested cases, leaving 134 visible cases. UI changes do not alter the underlying data or skill libraries.
+Run `node scripts/check_dataset.cjs` to check data integrity, every visible configuration-specific matchup in both directions, the 30 October update, multi-name search, exact-variant links, compact summaries, URL state and modal focus. The current merged dataset contains 141 configuration-specific cases; the runtime excludes two explicitly untested historical cases, leaving 139 visible cases.
+
+## Scoped update on 30 October 2026
+
+`data/note-2026-10-30.json` records two newly observed defense trios and nine newly observed configuration-specific offense matchups. The four older P25 matchups no longer listed for the reviewed 7K Note target were supported only by that older Note snapshot, so their P25 links are removed; the offense teams themselves remain in the library. The separate Atlas relationships are retained. Existing team and variant IDs remain stable.
+
+Stats, rings and gear displayed in the expandable reference-build section describe the individual recorded setups. They are examples associated with that exact matchup, not independently proven minimum requirements or measured win rates. The 30 October review covered these six targets; the other historical data retain their original review date. Source URLs stay in repository data and are not linked on the public site.
 
 ## Data reviewed on 27 October 2026
 
@@ -37,7 +43,7 @@ Visual order is **Awakening (if present), S2, S1**, from top to bottom. Two-icon
 
 The two compact source snapshots have a `names` dictionary. Note records contain a target ID followed by defense and counter records: `[front, back, formation, primaryPet, queue, backupPets, originalNote]`. Atlas records contain `[sourceTeamId, front, back, formation, pets, queue, usage]`. Name and pet references are dictionary indexes.
 
-Run from the repository root:
+Run from the repository root to rebuild both the historical data and the scoped 30 October supplement:
 
 ```sh
 python scripts/build_dataset.py
@@ -48,7 +54,7 @@ The builder groups teams by an unordered set of three heroes while preserving st
 
 T17 includes an explicitly untested Balanced suggestion with Rudy, Knox and Aris in front, so Rudy's front-row passive has recipients. Its recorded Basic layout is retained and labeled with the front-row limitation; no matchup is inferred for the suggestion.
 
-Thai conditions are summarized in Vietnamese beside each matchup. Original wording is retained in the repository snapshots. An option explicitly marked untested is displayed as such. Display order is not a win-rate ranking. The public page links only to the 7krbvn fanpage; external image URLs are retained for illustrations.
+Thai conditions are summarized in Vietnamese beside each matchup. Original wording is retained in the repository snapshots. Explicitly untested historical matchups are excluded from public counter lists. Display order is not a win-rate ranking. The public page links only to the 7krbvn fanpage; external image URLs are retained for illustrations.
 
 ## Illustrations and skill reference
 

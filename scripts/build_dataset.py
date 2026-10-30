@@ -1,4 +1,4 @@
-"""Rebuild the inline site dataset from the reviewed 27 October source snapshots.
+"""Rebuild the inline site dataset from the reviewed source snapshots.
 
 No runtime scraping: publishing index.html keeps the existing Cloudflare setup.
 Teams are grouped by their three heroes; different formations, pets, queues,
@@ -32,12 +32,39 @@ heroes = {h['name']: h for d in old['defense'] + list(old['counters'].values()) 
 heroes['Hellenia'] = {'name': 'Hellenia', 'img': 'chara_490.png'}
 heroes['Lina'] = {'name': 'Lina', 'img': 'chara_147.png'}
 heroes['Rook'] = {'name': 'Rook', 'img': 'chara_150.png'}
+heroes['Bai Jiao'] = {'name': 'Bai Jiao', 'img': 'chara_405.png'}
+heroes['Colt'] = {'name': 'Colt', 'img': 'chara_351.png'}
 for name, source, definitions in [
     ('Lina', 'https://gamewith.jp/sevenknights-rebirth/513560',
      [('s1', 'Hành khúc (行進曲)', 'skill_192.png'), ('s2', 'Giai điệu chữa lành (癒しの旋律)', 'skill_193.png'), ('pa', 'Bất hòa (不協和音)', 'skill_194.png')]),
     ('Rook', 'https://gamewith.jp/sevenknights-rebirth/513561',
      [('s1', 'Ném giáo (槍投げ)', 'skill_196.png'), ('s2', 'Dàn trận (陣形作り)', 'skill_197.png'), ('pa', 'Khiên công thành (攻城の盾)', 'skill_198.png')])]:
     panels[name] = {'source': source, 'secs': {k: {'n': n, 'i': i} for k, n, i in definitions}}
+
+# These panels describe base, enhanced and transcendence effects separately.
+# The local source references are not added as links to the public site.
+panels['Bai Jiao'] = {'type': 'Magic', 'secs': {
+    's1': {'n': 'Centipede Poison', 'i': 'skill_497.png', 'ct': 60, 'tg': '1 địch', 'dt': 'Magic', 'vp': [
+        [{'t': 'Cơ bản: 90% Magic Attack ×3; mỗi đòn có 60% xác suất gây Poison trong 3 lượt.'}],
+        [{'t': 'Cường hóa skill: sát thương 110% ×3 và thêm 100% xác suất gây Unable to Recover trong 4 lượt. Siêu việt 6: xác suất Poison 70% mỗi đòn.'}]]},
+    's2': {'n': 'Fiendish Decree', 'i': 'skill_498.png', 'ct': 60, 'tg': '1 địch và toàn đồng minh', 'dt': 'Magic', 'vp': [
+        [{'t': 'Cơ bản: 80% Magic Attack ×3; mỗi đòn có 60% xác suất gây Bleed trong 3 lượt. Giải 1 debuff cho toàn đồng minh.'}],
+        [{'t': 'Cường hóa skill: sát thương 110% ×3. Siêu việt 6: xác suất Bleed 70% mỗi đòn.'}]]},
+    'pa': {'n': 'Dark Incantations', 'i': 'skill_499.png', 'tg': 'Bản thân và toàn đồng minh', 'dt': 'none', 'vp': [
+        [{'t': 'Cơ bản: bản thân miễn mọi sát thương trong 2 lượt. Khi tấn công, hồi máu cho toàn đồng minh bằng 32% Magic Attack của bản thân 2 lần.'}],
+        [{'t': 'Cường hóa skill: miễn sát thương 3 lượt. Siêu việt 2: bản thân tăng Effect Probability 22%.'}]]}
+}}
+panels['Colt'] = {'type': 'Physical', 'secs': {
+    's1': {'n': "Quick n' Easy", 'i': 'skill_422.png', 'ct': 72, 'tg': '4 địch', 'dt': 'Physical', 'vp': [
+        [{'t': 'Cơ bản: 40% Physical Attack ×2; mỗi đòn có 35% xác suất gây Bomb trong 3 lượt.'}],
+        [{'t': 'Cường hóa skill: sát thương 50% ×2; xác suất Bomb 45% mỗi đòn.'}]]},
+    's2': {'n': 'Time for a Show', 'i': 'skill_423.png', 'ct': 104, 'tg': 'Toàn địch', 'dt': 'Physical', 'vp': [
+        [{'t': 'Cơ bản: 125% Physical Attack ×1; 50% xác suất gây Bomb trong 3 lượt; kích nổ Bomb ở 150% hiệu lực, tối đa 3 lượt. 100% xác suất giảm All Attack 13% trong 3 lượt.'}],
+        [{'t': 'Cường hóa skill: sát thương 150% ×1; giảm All Attack 18%.'}]]},
+    'pa': {'n': 'Wandering Gunslinger', 'i': 'skill_424.png', 'tg': 'Bản thân và toàn đồng minh', 'dt': 'none', 'vp': [
+        [{'t': 'Cơ bản: bản thân nhận Camouflage 2 lượt; cứ 7 Speed tăng 120 Attack, tối đa 1.080. Toàn đồng minh tăng Effect Hit Rate 28%.'}],
+        [{'t': 'Cường hóa skill: giới hạn Attack theo Speed là 1.320; Effect Hit Rate tăng 34%. Siêu việt 2: nhận Guts một lần và khi kích hoạt nhận khiên bằng 155% Physical Attack trong 3 lượt. Siêu việt 6: giảm 23 giây hồi skill khi một địch gục.'}]]}
+}}
 
 def fp(t, backup=True):
     return json.dumps([sorted(h['name'] for h in t['heroes']),
@@ -149,7 +176,7 @@ def add(t, kind):
     maps[kind][k] = t
     return t
 
-def edge(d, c, source, raw=''):
+def edge(d, c, source, raw='', notes=None, builds=None, updated=None):
     if c['code'] not in d['counters']:
         d['counters'].append(c['code'])
     m = d['matchups'].setdefault(c['code'], {'sources': [], 'notes': [], 'rawNotes': [], 'untested': False})
@@ -162,6 +189,13 @@ def edge(d, c, source, raw=''):
             m['rawNotes'].append(raw)
         if 'ยังไม่ได้ลอง' in raw:
             m['untested'] = True
+    for note in notes or []:
+        if note not in m['notes']:
+            m['notes'].append(note)
+    if builds:
+        m['builds'] = [{'hero': canon(b['hero']), 'details': b['details']} for b in builds]
+    if updated:
+        m['updatedAt'] = updated
 
 note = json.loads((ROOT / 'data/note-2026-10-27.json').read_text())
 note_groups = ('physical physical physical physical tank magic magic magic tank physical '
@@ -169,6 +203,8 @@ note_groups = ('physical physical physical physical tank magic magic magic tank 
                'physical physical physical physical physical physical physical tank magic physical '
                'magic tank physical physical physical tank magic tank physical tank tank').split()
 assert len(note_groups) == len(note['records'])
+supplement = json.loads((ROOT / 'data/note-2026-10-30.json').read_text())
+note_targets = {}
 for rec, group in zip(note['records'], note_groups):
     source = {'site': '7K Note', 'url': 'https://7k-note.pages.dev/g/4ZyeEGMZ/t/' + rec[0], 'label': 'Pandoara · ' + rec[0]}
     def decode(r, group):
@@ -177,8 +213,12 @@ for rec, group in zip(note['records'], note_groups):
                     [note['names'][pet]] + [note['names'][n] for n in backups],
                     [(note['names'][n], s) for n, s in q], source, group)
     d = add(decode(rec[1], group), 'defense')
+    note_targets[rec[0]] = d
     for r in rec[2:]:
         c = add(decode(r, group), 'counters')
+        removed = supplement['superseded'].get(rec[0], [])
+        if any(set(canon(n) for n in names) == set(h['name'] for h in c['heroes']) for names in removed):
+            continue
         edge(d, c, source, r[6])
 
 atlas = json.loads((ROOT / 'data/atlas-2026-10-27.json').read_text())
@@ -208,8 +248,28 @@ for ident, relations in json.loads((ROOT / 'data/atlas-matchups-2026-10-27.json'
         elif side == 'defense' and 'd' in current and 'c' in other:
             edge(current['d'], other['c'], current['source'])
 
+# Apply the scoped 30 October review after the historical imports. This keeps
+# established IDs stable and attaches each configuration-specific matchup only
+# to the target that was actually observed.
+for target in supplement['targets']:
+    source = {'site': '7K Note', 'url': 'https://7k-note.pages.dev/g/4ZyeEGMZ/t/' + target['id'],
+              'label': 'Pandoara · ' + target['id']}
+    def decode_update(r):
+        return team(r['front'], r['back'], r['formation'], [r['pet']] + r['backup'], r['skills'], source, target['group'])
+    if 'defense' in target:
+        d = add(decode_update(target['defense']), 'defense')
+        d['addedOn'] = supplement['reviewed']
+    else:
+        d = note_targets[target['id']]
+    d['updatedAt'] = supplement['reviewed']
+    for attack in target['attacks']:
+        c = add(decode_update(attack), 'counters')
+        edge(d, c, source, notes=attack['notes'], builds=attack['builds'], updated=supplement['reviewed'])
+
 data['research'] = {'reviewed': '2026-10-27', 'atlasHeroSummaryDate': '2026-10-21',
-                    'noteTargets': 43, 'noteMatchups': sum(len(r) - 2 for r in note['records']),
+                    'noteTargets': len(note['records']) + sum('defense' in t for t in supplement['targets']),
+                    'noteMatchups': sum(len(r) - 2 for r in note['records']) - sum(map(len, supplement['superseded'].values())) + sum(len(t['attacks']) for t in supplement['targets']),
+                    'noteSupplementReviewed': supplement['reviewed'],
                     'atlasMajorTeams': 48, 'atlasMatchupTeamsReviewed': 10,
                     'defenseVariants': len(data['defense']), 'offenseVariants': len(data['counters']),
                     'matchups': sum(len(d['counters']) for d in data['defense'])}
@@ -229,7 +289,7 @@ def public_variant(t):
             if k not in ('sources', 'counters', 'matchups')}
 
 expected_edges = {
-    (d['code'], c): (tuple(d['matchups'][c]['notes']), d['matchups'][c]['untested'])
+    (d['code'], c): (tuple(d['matchups'][c]['notes']), d['matchups'][c]['untested'], d['matchups'][c].get('builds', []))
     for d in data['defense'] for c in d['counters']}
 grouped = {'defense': [], 'counters': {}}
 def_groups, ctr_groups, ctr_by_variant = {}, {}, {}
@@ -253,6 +313,10 @@ for t in data['defense']:
         def_groups[key] = g
     g = def_groups[key]
     g['variants'].append(public_variant(t))
+    if t.get('updatedAt'):
+        g['updatedAt'] = max(g.get('updatedAt', ''), t['updatedAt'])
+    if t.get('addedOn'):
+        g['addedOn'] = t['addedOn']
     if t['group'] not in g['groups']:
         g['groups'].append(t['group'])
     for counter_code in t['counters']:
@@ -260,9 +324,13 @@ for t in data['defense']:
         if counter_group not in g['counters']:
             g['counters'].append(counter_group)
         m = t['matchups'][counter_code]
-        g['matchups'].setdefault(counter_group, []).append({
+        record = {
             'defenseVariant': t['code'], 'attackVariant': counter_code,
-            'notes': copy.deepcopy(m['notes']), 'untested': m['untested']})
+            'notes': copy.deepcopy(m['notes']), 'untested': m['untested']}
+        for field in ('builds', 'updatedAt'):
+            if field in m:
+                record[field] = copy.deepcopy(m[field])
+        g['matchups'].setdefault(counter_group, []).append(record)
 
 research = copy.deepcopy(data['research'])
 research.update({'defenseTeams': len(grouped['defense']),
@@ -273,7 +341,7 @@ assert sum(len(g['variants']) for g in grouped['defense']) == len(data['defense'
 assert sum(len(g['variants']) for g in grouped['counters'].values()) == len(data['counters'])
 assert sum(len(edges) for g in grouped['defense'] for edges in g['matchups'].values()) == research['matchups']
 actual_edges = {
-    (m['defenseVariant'], m['attackVariant']): (tuple(m['notes']), m['untested'])
+    (m['defenseVariant'], m['attackVariant']): (tuple(m['notes']), m['untested'], m.get('builds', []))
     for g in grouped['defense'] for edges in g['matchups'].values() for m in edges}
 assert actual_edges == expected_edges, 'Grouping must preserve each exact matchup and its conditions.'
 

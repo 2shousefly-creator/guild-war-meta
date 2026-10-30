@@ -1,0 +1,498 @@
+{
+  "reviewed": "2026-10-30",
+  "scope": "Two new defense entries and the seven newly recorded offense matchups from four reviewed existing targets; hero equipment and stats are reference setups, not proven minimums.",
+  "superseded": {
+    "XMJPSixPsc": [
+      [
+        "Juri",
+        "Tanjiro",
+        "Yeonhee"
+      ],
+      [
+        "Radgrid",
+        "Eileene",
+        "Silvesta"
+      ],
+      [
+        "Juri",
+        "Silvesta",
+        "Yeonhee"
+      ],
+      [
+        "Melia",
+        "Skuld",
+        "Yoongun"
+      ]
+    ]
+  },
+  "targets": [
+    {
+      "id": "ANkCEbT3BL",
+      "group": "physical",
+      "defense": {
+        "front": [
+          "Clemyth"
+        ],
+        "back": [
+          "Zenitsu",
+          "Dellons"
+        ],
+        "formation": "Balanced",
+        "pet": "Eirin",
+        "backup": [],
+        "skills": []
+      },
+      "attacks": [
+        {
+          "front": [
+            "Giyu"
+          ],
+          "back": [
+            "Shinobu",
+            "Trude"
+          ],
+          "formation": "Attack",
+          "pet": "Ruu",
+          "backup": [],
+          "skills": [
+            [
+              "Shinobu",
+              "S2"
+            ],
+            [
+              "Shinobu",
+              "S1"
+            ],
+            [
+              "Trude",
+              "S2"
+            ]
+          ],
+          "notes": [],
+          "builds": [
+            {
+              "hero": "Shinobu",
+              "details": "ATK 5.000; Weakness Hit Chance 100%; Effect Hit Rate 65%. Nhẫn ghi nhận: Authority, Immortality; bộ ghi nhận: Bounty Tracker. Áo có thể ưu tiên tấn công hoặc giảm sát thương."
+            },
+            {
+              "hero": "Trude",
+              "details": "ATK 4.100; Weakness Hit Chance 80%; Block Rate 40%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Authority, Concentration, Protection; bộ ghi nhận: Bounty Tracker, Vanguard."
+            },
+            {
+              "hero": "Giyu",
+              "details": "Block Rate 44%; Damage Taken Reduction 32%. Ưu tiên block và chỉ số chống chịu; bộ ghi nhận: Paladin. Nhẫn ghi nhận: Resurrection 5–6 sao có thể dùng khi gặp đội thủ nhanh; cũng liệt kê Immortality và Authority."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8vpyxcVCAL",
+      "group": "magic",
+      "defense": {
+        "front": [],
+        "back": [
+          "Dongyoung",
+          "Shinobu",
+          "Silvesta"
+        ],
+        "formation": "Basic",
+        "pet": "Yu",
+        "backup": [
+          "Yeonji"
+        ],
+        "skills": [
+          [
+            "Shinobu",
+            "S2"
+          ],
+          [
+            "Silvesta",
+            "S2"
+          ],
+          [
+            "Silvesta",
+            "S1"
+          ]
+        ]
+      },
+      "attacks": [
+        {
+          "front": [
+            "Hellenia"
+          ],
+          "back": [
+            "Pallanus",
+            "Hayeon"
+          ],
+          "formation": "Attack",
+          "pet": "Jeb",
+          "backup": [
+            "Karam"
+          ],
+          "skills": [
+            [
+              "Hayeon",
+              "S2"
+            ],
+            [
+              "Pallanus",
+              "S1"
+            ],
+            [
+              "Pallanus",
+              "S2"
+            ]
+          ],
+          "notes": [
+            "Nếu đội thủ mở đầu bằng Shinobu S2, dùng Hayeon S2 trước. Nếu không, dùng Pallanus S1 trước. Nên thử đội trước khi đánh thật."
+          ],
+          "builds": [
+            {
+              "hero": "Pallanus",
+              "details": "Ưu tiên sát thương, tăng ATK hoặc Crit Damage. Nhẫn ghi nhận: Resurrection; bộ ghi nhận: Assassin."
+            },
+            {
+              "hero": "Hayeon",
+              "details": "MATK 2.161; DEF 2.316; HP 14.347; Speed 19; Block Rate 70%; Effect Hit Rate 24%; Effect Resistance 35%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Resurrection, Immortality; bộ ghi nhận: Paladin."
+            },
+            {
+              "hero": "Hellenia",
+              "details": "ATK 1.856; DEF 2.751; HP 12.177; Speed 32; Block Rate 80%; Effect Hit Rate 20%; Effect Resistance 55%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Resurrection, Authority, Bulwark; bộ ghi nhận: Paladin."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3LZMb7xvTj",
+      "group": "magic",
+      "attacks": [
+        {
+          "front": [
+            "Orkah"
+          ],
+          "back": [
+            "Sunran",
+            "Hayeon"
+          ],
+          "formation": "Balanced",
+          "pet": "Jeo",
+          "backup": [
+            "Eirin",
+            "Yu"
+          ],
+          "skills": [
+            [
+              "Orkah",
+              "S1"
+            ],
+            [
+              "Sunran",
+              "S2"
+            ],
+            [
+              "Sunran",
+              "S1"
+            ]
+          ],
+          "notes": [],
+          "builds": [
+            {
+              "hero": "Sunran",
+              "details": "Crit Rate 60%; Speed 101; Effect Hit Rate từ khoảng 40%. Bộ ghi nhận: Vanguard."
+            },
+            {
+              "hero": "Hayeon",
+              "details": "Ưu tiên Speed và Effect Hit Rate; Damage Taken Reduction 32%. Bộ ghi nhận: Paladin, Orchestrator."
+            },
+            {
+              "hero": "Orkah",
+              "details": "Effect Resistance 100%; ưu tiên Speed và Weakness Hit Chance. Bộ ghi nhận: Bounty Tracker, Assassin."
+            }
+          ]
+        },
+        {
+          "front": [
+            "Giyu"
+          ],
+          "back": [
+            "Gelidus",
+            "Hayeon"
+          ],
+          "formation": "Attack",
+          "pet": "Ruu",
+          "backup": [],
+          "skills": [
+            [
+              "Hayeon",
+              "S2"
+            ],
+            [
+              "Gelidus",
+              "S1"
+            ],
+            [
+              "Hayeon",
+              "S1"
+            ]
+          ],
+          "notes": [
+            "Gelidus C6."
+          ],
+          "builds": [
+            {
+              "hero": "Gelidus",
+              "details": "Ghi chú: Effect Hit Rate trên 50% và có thêm kháng hiệu ứng. Mẫu hiển thị: ATK 2.681; DEF 1.953; HP 10.868; Speed 25; Block 68%; Effect Hit Rate 70%; Effect Resistance 0%; Damage Taken Reduction 42%. Nhẫn ghi nhận: Resurrection, Authority, Health; bộ ghi nhận: Orchestrator."
+            },
+            {
+              "hero": "Hayeon",
+              "details": "Ghi chú: Effect Hit Rate trên 60%, Effect Resistance trên 50%. Mẫu hiển thị: MATK 2.136; DEF 2.349; HP 15.706; Speed 23; Block 68%; Effect Hit Rate 39%; Effect Resistance 100%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Resurrection, Immortality; bộ ghi nhận: Orchestrator."
+            },
+            {
+              "hero": "Giyu",
+              "details": "Block Rate 44%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Resurrection, Immortality, Authority; bộ ghi nhận: Paladin."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UjAyf9qTnk",
+      "group": "magic",
+      "attacks": [
+        {
+          "front": [
+            "Sunran"
+          ],
+          "back": [
+            "Zenitsu",
+            "Tanjiro"
+          ],
+          "formation": "Balanced",
+          "pet": "Eirin",
+          "backup": [],
+          "skills": [
+            [
+              "Zenitsu",
+              "S1"
+            ],
+            [
+              "Zenitsu",
+              "S2"
+            ],
+            [
+              "Tanjiro",
+              "S2"
+            ]
+          ],
+          "notes": [
+            "Cần giành lượt đi trước. Nên chỉnh ATK của Sunran cao hơn phía đối thủ."
+          ],
+          "builds": [
+            {
+              "hero": "Zenitsu",
+              "details": "ATK 5.450; DEF 1.275; HP 7.144; Speed 57; Crit Rate 77%; Crit Damage 174%; Weakness Hit Chance 86%; Effect Hit Rate 51%. Nhẫn ghi nhận: Authority, Resurrection; bộ ghi nhận: Assassin, Bounty Tracker."
+            },
+            {
+              "hero": "Tanjiro",
+              "details": "ATK 4.083; DEF 1.342; HP 8.442; Speed 65; Crit Rate 77%; Crit Damage 222%; Effect Hit Rate 30%; Effect Resistance 100%. Nhẫn ghi nhận: Immortality, Authority; bộ ghi nhận: Assassin."
+            },
+            {
+              "hero": "Sunran",
+              "details": "Ghi chú: ưu tiên ATK cao hơn phía đối thủ. Mẫu: ATK 9.244; DEF 1.442; HP 8.657; Speed 29; Crit Rate 39%; Crit Damage 186%. Nhẫn ghi nhận: Authority, Roar; bộ ghi nhận: Vanguard."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cFn39snCJe",
+      "group": "tank",
+      "attacks": [
+        {
+          "front": [
+            "Radgrid"
+          ],
+          "back": [
+            "Eileene",
+            "Bai Jiao"
+          ],
+          "formation": "Attack",
+          "pet": "Pike",
+          "backup": [
+            "Jeb",
+            "Ruu"
+          ],
+          "skills": [
+            [
+              "Eileene",
+              "S1"
+            ],
+            [
+              "Bai Jiao",
+              "S1"
+            ],
+            [
+              "Bai Jiao",
+              "S2"
+            ]
+          ],
+          "notes": [
+            "Eileene: Effect Resistance 50%, Effect Hit Rate 100% và HP thấp nhất đội. Bai Jiao: Effect Resistance từ 75%, HP không thấp hơn Eileene."
+          ],
+          "builds": [
+            {
+              "hero": "Eileene",
+              "details": "Ghi chú: Effect Resistance 50%, Effect Hit Rate 100% và HP thấp nhất đội. Bộ ghi nhận: Spellweaver, Orchestrator."
+            },
+            {
+              "hero": "Bai Jiao",
+              "details": "Ưu tiên kháng hiệu ứng từ 75% và HP không thấp hơn Eileene. Nhẫn ghi nhận: Resurrection; bộ ghi nhận: Orchestrator."
+            },
+            {
+              "hero": "Radgrid",
+              "details": "Ưu tiên Defense và Block Rate. Nhẫn ghi nhận: Resurrection; bộ ghi nhận: Guardian, Paladin."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "XMJPSixPsc",
+      "group": "physical",
+      "attacks": [
+        {
+          "front": [
+            "Radgrid"
+          ],
+          "back": [
+            "Aris",
+            "Giyu"
+          ],
+          "formation": "Attack",
+          "pet": "Ruu",
+          "backup": [],
+          "skills": [
+            [
+              "Giyu",
+              "S2"
+            ],
+            [
+              "Aris",
+              "S2"
+            ],
+            [
+              "Giyu",
+              "S1"
+            ]
+          ],
+          "notes": [],
+          "builds": [
+            {
+              "hero": "Aris",
+              "details": "ATK 3.686; DEF 1.452; HP 9.587; Speed 25; Weakness Hit Chance 100%; Block 50%; Damage Taken Reduction 42%. Nhẫn ghi nhận: Authority; bộ ghi nhận: Bounty Tracker."
+            },
+            {
+              "hero": "Giyu",
+              "details": "Ưu tiên Defense; kháng hiệu ứng tùy chọn. Mẫu: ATK 3.012; DEF 2.217; HP 11.109; Speed 29; Block 44%; Effect Resistance 70%; Damage Taken Reduction 42%. Nhẫn ghi nhận: Resurrection, Bulwark; bộ ghi nhận: Paladin."
+            },
+            {
+              "hero": "Radgrid",
+              "details": "ATK 1.621; DEF 3.224; HP 13.698; Speed 19; Block 38%; Effect Resistance 40%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Resurrection, Authority, Bulwark; bộ ghi nhận: Paladin."
+            }
+          ]
+        },
+        {
+          "front": [
+            "Colt"
+          ],
+          "back": [
+            "Ballista",
+            "Sunran"
+          ],
+          "formation": "Balanced",
+          "pet": "Jeo",
+          "backup": [],
+          "skills": [
+            [
+              "Sunran",
+              "S2"
+            ],
+            [
+              "Sunran",
+              "S1"
+            ],
+            [
+              "Ballista",
+              "S2"
+            ]
+          ],
+          "notes": [
+            "Sunran: ưu tiên ATK cao hơn phía đối thủ."
+          ],
+          "builds": [
+            {
+              "hero": "Ballista",
+              "details": "ATK 4.555; DEF 1.134; HP 7.300; Speed 29; Crit Rate 100%; Crit Damage 156%; Weakness Hit Chance 100%. Nhẫn ghi nhận: Authority, Immortality; bộ ghi nhận: Bounty Tracker."
+            },
+            {
+              "hero": "Sunran",
+              "details": "Ghi chú: ưu tiên ATK cao hơn phía đối thủ. Mẫu: ATK 9.244; DEF 1.442; HP 8.657; Speed 29; Crit Rate 39%; Crit Damage 186%. Nhẫn ghi nhận: Authority, Roar; bộ ghi nhận: Vanguard."
+            },
+            {
+              "hero": "Colt",
+              "details": "Speed 29; Crit Rate 5%; Crit Damage 150%; Effect Hit Rate 100%; Effect Resistance 100%; Damage Taken Reduction 32%. Nhẫn ghi nhận: Immortality, Roar; bộ ghi nhận: Vanguard."
+            }
+          ]
+        },
+        {
+          "front": [
+            "Giyu"
+          ],
+          "back": [
+            "Aris",
+            "Clemyth"
+          ],
+          "formation": "Attack",
+          "pet": "Pike",
+          "backup": [
+            "Karam",
+            "Jeb"
+          ],
+          "skills": [
+            [
+              "Giyu",
+              "S2"
+            ],
+            [
+              "Clemyth",
+              "S1"
+            ],
+            [
+              "Aris",
+              "S2"
+            ]
+          ],
+          "notes": [
+            "Nếu dùng Karam, ghi chú đội hình nói giảm Block thêm 20."
+          ],
+          "builds": [
+            {
+              "hero": "Aris",
+              "details": "Block Rate 78%. Nhẫn ghi nhận: Authority, Immortality; bộ ghi nhận: Guardian."
+            },
+            {
+              "hero": "Clemyth",
+              "details": "Block Rate 44%; Effect Resistance 80%. Nhẫn ghi nhận: Authority, Immortality, Tenacity; bộ ghi nhận: Paladin."
+            },
+            {
+              "hero": "Giyu",
+              "details": "Block Rate 44%. Nhẫn ghi nhận: Resurrection, Immortality, Authority; bộ ghi nhận: Paladin."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

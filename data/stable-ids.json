@@ -121,7 +121,9 @@
     "[[\"Aris\", \"Clemyth\", \"Rudy\"], \"Balanced (3-2)\", [\"Aris\", \"Clemyth\", \"Rudy\"], [], \"Pike\", [[\"Clemyth\", \"Skill 1\"], [\"Rudy\", \"Skill 1\"], [\"Aris\", \"Skill 2\"]], [\"Ruu\"]]": "T48",
     "[[\"Aris\", \"Radgrid\", \"Sun Wukong\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Aris\", \"Sun Wukong\"], \"Ruu\", [[\"Sun Wukong\", \"Skill 2\"], [\"Aris\", \"Skill 2\"], [\"Aris\", \"Skill 1\"]], [\"Karam\"]]": "T31",
     "[[\"Gelidus\", \"Radgrid\", \"Sun Wukong\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Gelidus\", \"Sun Wukong\"], \"Ruu\", [[\"Sun Wukong\", \"Skill 2\"], [\"Sun Wukong\", \"Skill 1\"], [\"Gelidus\", \"Skill 2\"]], [\"Karam\"]]": "T32",
-    "[[\"Aris\", \"Gelidus\", \"Radgrid\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Aris\", \"Gelidus\"], \"Ruu\", [[\"Gelidus\", \"Skill 2\"], [\"Aris\", \"Skill 2\"]], [\"Merparrow\"]]": "T10"
+    "[[\"Aris\", \"Gelidus\", \"Radgrid\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Aris\", \"Gelidus\"], \"Ruu\", [[\"Gelidus\", \"Skill 2\"], [\"Aris\", \"Skill 2\"]], [\"Merparrow\"]]": "T10",
+    "[[\"Clemyth\", \"Dellons\", \"Zenitsu Agatsuma\"], \"Balanced (3-2)\", [\"Clemyth\"], [\"Dellons\", \"Zenitsu Agatsuma\"], \"Eirin\", [], []]": "P60",
+    "[[\"Dongyoung\", \"Shinobu Kocho\", \"Silvesta\"], \"Basic (2-3)\", [], [\"Dongyoung\", \"Shinobu Kocho\", \"Silvesta\"], \"Yu\", [[\"Shinobu Kocho\", \"Skill 2\"], [\"Silvesta\", \"Skill 2\"], [\"Silvesta\", \"Skill 1\"]], [\"Yeonji\"]]": "M42"
   },
   "counters": {
     "[[\"Dongyoung\", \"Shinobu Kocho\", \"Yoongun\"], \"Balanced (3-2)\", [\"Dongyoung\"], [\"Shinobu Kocho\", \"Yoongun\"], \"Yeonji\", [[\"Shinobu Kocho\", \"Skill 2\"], [\"Yoongun\", \"Skill 2\"], [\"Yoongun\", \"Skill 1\"]], []]": "C2",
@@ -361,13 +363,22 @@
     "[[\"Gelidus\", \"Radgrid\", \"Sun Wukong\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Gelidus\", \"Sun Wukong\"], \"Ruu\", [[\"Sun Wukong\", \"Skill 2\"], [\"Sun Wukong\", \"Skill 1\"], [\"Gelidus\", \"Skill 2\"]], [\"Karam\"]]": "C252",
     "[[\"Aris\", \"Gelidus\", \"Radgrid\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Aris\", \"Gelidus\"], \"Ruu\", [[\"Gelidus\", \"Skill 2\"], [\"Aris\", \"Skill 2\"]], [\"Merparrow\"]]": "C253",
     "[[\"Gelidus\", \"Hayeon\", \"Radgrid\"], \"Basic (2-3)\", [\"Hayeon\", \"Radgrid\"], [\"Gelidus\"], \"Merparrow\", [[\"Hayeon\", \"Skill 2\"], [\"Gelidus\", \"Skill 2\"], [\"Gelidus\", \"Skill 1\"]], []]": "C254",
-    "[[\"Gelidus\", \"Hayeon\", \"Hellenia\"], \"Basic (2-3)\", [\"Hayeon\", \"Hellenia\"], [\"Gelidus\"], \"Merparrow\", [[\"Hellenia\", \"Skill 2\"], [\"Hayeon\", \"Skill 2\"], [\"Gelidus\", \"Skill 2\"]], []]": "C255"
+    "[[\"Gelidus\", \"Hayeon\", \"Hellenia\"], \"Basic (2-3)\", [\"Hayeon\", \"Hellenia\"], [\"Gelidus\"], \"Merparrow\", [[\"Hellenia\", \"Skill 2\"], [\"Hayeon\", \"Skill 2\"], [\"Gelidus\", \"Skill 2\"]], []]": "C255",
+    "[[\"Giyu Tomioka\", \"Shinobu Kocho\", \"Trude\"], \"Attack (1-4)\", [\"Giyu Tomioka\"], [\"Shinobu Kocho\", \"Trude\"], \"Ruu\", [[\"Shinobu Kocho\", \"Skill 2\"], [\"Shinobu Kocho\", \"Skill 1\"], [\"Trude\", \"Skill 2\"]], []]": "C256",
+    "[[\"Hayeon\", \"Hellenia\", \"Pallanus\"], \"Attack (1-4)\", [\"Hellenia\"], [\"Hayeon\", \"Pallanus\"], \"Jeb\", [[\"Hayeon\", \"Skill 2\"], [\"Pallanus\", \"Skill 1\"], [\"Pallanus\", \"Skill 2\"]], [\"Karam\"]]": "C257",
+    "[[\"Hayeon\", \"Orkah\", \"Sunran\"], \"Balanced (3-2)\", [\"Orkah\"], [\"Hayeon\", \"Sunran\"], \"Jeo\", [[\"Orkah\", \"Skill 1\"], [\"Sunran\", \"Skill 2\"], [\"Sunran\", \"Skill 1\"]], [\"Eirin\", \"Yu\"]]": "C258",
+    "[[\"Gelidus\", \"Giyu Tomioka\", \"Hayeon\"], \"Attack (1-4)\", [\"Giyu Tomioka\"], [\"Gelidus\", \"Hayeon\"], \"Ruu\", [[\"Hayeon\", \"Skill 2\"], [\"Gelidus\", \"Skill 1\"], [\"Hayeon\", \"Skill 1\"]], []]": "C259",
+    "[[\"Sunran\", \"Tanjiro Kamado\", \"Zenitsu Agatsuma\"], \"Balanced (3-2)\", [\"Sunran\"], [\"Tanjiro Kamado\", \"Zenitsu Agatsuma\"], \"Eirin\", [[\"Zenitsu Agatsuma\", \"Skill 1\"], [\"Zenitsu Agatsuma\", \"Skill 2\"], [\"Tanjiro Kamado\", \"Skill 2\"]], []]": "C260",
+    "[[\"Bai Jiao\", \"Eileene\", \"Radgrid\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Bai Jiao\", \"Eileene\"], \"Pike\", [[\"Eileene\", \"Skill 1\"], [\"Bai Jiao\", \"Skill 1\"], [\"Bai Jiao\", \"Skill 2\"]], [\"Jeb\", \"Ruu\"]]": "C261",
+    "[[\"Aris\", \"Giyu Tomioka\", \"Radgrid\"], \"Attack (1-4)\", [\"Radgrid\"], [\"Aris\", \"Giyu Tomioka\"], \"Ruu\", [[\"Giyu Tomioka\", \"Skill 2\"], [\"Aris\", \"Skill 2\"], [\"Giyu Tomioka\", \"Skill 1\"]], []]": "C262",
+    "[[\"Ballista\", \"Colt\", \"Sunran\"], \"Balanced (3-2)\", [\"Colt\"], [\"Ballista\", \"Sunran\"], \"Jeo\", [[\"Sunran\", \"Skill 2\"], [\"Sunran\", \"Skill 1\"], [\"Ballista\", \"Skill 2\"]], []]": "C263",
+    "[[\"Aris\", \"Clemyth\", \"Giyu Tomioka\"], \"Attack (1-4)\", [\"Giyu Tomioka\"], [\"Aris\", \"Clemyth\"], \"Pike\", [[\"Giyu Tomioka\", \"Skill 2\"], [\"Clemyth\", \"Skill 1\"], [\"Aris\", \"Skill 2\"]], [\"Jeb\", \"Karam\"]]": "C264"
   },
   "next": {
-    "P": 60,
-    "M": 42,
+    "P": 61,
+    "M": 43,
     "T": 49,
     "ST": 2,
-    "C": 256
+    "C": 265
   }
 }
